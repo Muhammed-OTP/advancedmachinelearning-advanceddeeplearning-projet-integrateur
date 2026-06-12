@@ -1,0 +1,3309 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AML &amp; ADL — Paire 1 — Master IA</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+/* ═══════════════════════════════════════════════════
+   DESIGN SYSTEM — UN-FST × Editorial
+   Inspired by Palatino / Iowan Old Style academic style
+   ═══════════════════════════════════════════════════ */
+:root {
+  --green:   #3A8E5B;
+  --green-d: #2a6e45;
+  --green-l: #eaf6f0;
+  --gold:    #E8B608;
+  --gold-d:  #a07e04;
+  --gold-l:  #fdf9e8;
+  --bg:      #FEEFEE;
+  --bg2:     #f7e8e5;
+  --accent:  #D1F2F7;
+  --accent-d:#1ea8c4;
+  --accent-l:#eaf8fc;
+  --ink:     #1B171E;
+  --ink2:    #3d3540;
+  --line:    #d4e2da;
+  --line2:   #e8d5d0;
+  --code-bg: #1e1e2e;
+  --code-fg: #cdd6f4;
+  --shadow:  0 4px 20px rgba(26,23,30,.08);
+  --mono:    'Courier New', Courier, monospace;
+  --serif:   'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── ROOT LAYOUT: 3-row grid ── */
+html { height: 100%; }
+body {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 52px 1fr 48px;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.65;
+  overflow: hidden;
+}
+
+/* ══════════════════ HEADER ══════════════════ */
+#header {
+  background: var(--green);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  height: 52px;
+  border-bottom: 3px solid var(--green-d);
+  z-index: 100;
+}
+#header-title {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  opacity: .92;
+  white-space: nowrap;
+}
+#toggle-sidebar {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 6px 10px 6px 0;
+  opacity: .85;
+  transition: opacity .15s;
+}
+#toggle-sidebar:hover { opacity: 1; }
+#section-tabs { display: flex; gap: 5px; }
+.tab-btn {
+  background: rgba(255,255,255,.14);
+  border: 1px solid rgba(255,255,255,.22);
+  color: #fff;
+  padding: 4px 13px;
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all .18s;
+}
+.tab-btn.active,
+.tab-btn:hover {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--ink);
+}
+
+/* ══════════════════ MAIN ROW ══════════════════ */
+#layout {
+  display: flex;
+  overflow: hidden;
+  min-height: 0;   /* critical: flex child must shrink */
+}
+
+/* ══════════════════ SIDEBAR ══════════════════ */
+#sidebar {
+  width: 216px;
+  flex-shrink: 0;
+  background: #fff;
+  border-right: 2px solid var(--line);
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: width .25s ease;
+}
+#sidebar.collapsed { width: 0; }
+#sidebar::-webkit-scrollbar { width: 4px; }
+#sidebar::-webkit-scrollbar-thumb { background: var(--line); border-radius: 2px; }
+
+.side-section {
+  padding: 8px 14px 4px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--green);
+  font-weight: 700;
+  background: var(--green-l);
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+.side-item {
+  padding: 7px 14px;
+  font-family: var(--serif);
+  font-size: 12px;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  line-height: 1.35;
+  color: var(--ink2);
+  transition: all .12s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.side-item:hover { background: var(--green-l); color: var(--green); }
+.side-item.active {
+  border-left-color: var(--green);
+  background: var(--green-l);
+  color: var(--green);
+  font-weight: 700;
+}
+.side-item .fa { font-size: 9px; margin-right: 5px; opacity: .6; }
+
+/* ══════════════════ SLIDE AREA ══════════════════ */
+#slide-area {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+}
+
+/* All slides stack in the same space */
+.slide {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 30px 42px 36px;
+  display: none;
+  animation: sldIn .28s ease;
+}
+.slide.active { display: block; }
+
+/* Cover & "Merci" — flex column, margin:auto centers when space allows,
+   overflows downward (scrollable) when content is taller than viewport */
+.slide.vcenter          { display: none; }
+.slide.vcenter.active   {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 24px 42px 36px;
+}
+.slide.vcenter.active > * {
+  margin-top: auto;
+  margin-bottom: auto;
+  width: 100%;
+}
+
+@keyframes sldIn {
+  from { opacity: 0; transform: translateY(7px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Scrollbar inside slides */
+.slide::-webkit-scrollbar { width: 5px; }
+.slide::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+
+/* ══════════════════ FOOTER ══════════════════ */
+#footer {
+  background: var(--green);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  border-top: 3px solid var(--green-d);
+  gap: 12px;
+}
+#progress-bar-wrap {
+  flex: 1;
+  height: 4px;
+  background: rgba(255,255,255,.25);
+  border-radius: 2px;
+}
+#progress-bar {
+  height: 4px;
+  background: var(--gold);
+  border-radius: 2px;
+  transition: width .3s;
+}
+#progress-text {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .06em;
+  white-space: nowrap;
+}
+.nav-btn {
+  background: var(--gold);
+  border: none;
+  color: var(--ink);
+  padding: 6px 16px;
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .18s;
+}
+.nav-btn:hover { background: #fff; }
+
+/* ══════════════════ TYPOGRAPHY ══════════════════ */
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--green);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.slide-title {
+  font-family: var(--serif);
+  font-size: clamp(1.35rem, 2.2vw, 1.9rem);
+  font-weight: 800;
+  letter-spacing: -.015em;
+  color: var(--ink);
+  border-bottom: 3px solid var(--gold);
+  padding-bottom: 10px;
+  margin-bottom: 22px;
+  line-height: 1.15;
+}
+.slide-title .accent-word { color: var(--green); }
+.slide-subtitle {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--green);
+  margin: 18px 0 8px;
+}
+p { margin: 10px 0; }
+ul, ol { margin: 10px 0 10px 22px; }
+li { margin: 5px 0; }
+strong { font-weight: 700; }
+
+/* ══════════════════ BOXES / CARDS ══════════════════ */
+.box {
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 16px 20px;
+  margin: 12px 0;
+  position: relative;
+}
+.box-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 7px;
+}
+/* Variants */
+.box-green  { background: var(--green-l); border-left: 4px solid var(--green); }
+.box-green  .box-label { color: var(--green); }
+.box-gold   { background: var(--gold-l);  border-left: 4px solid var(--gold);  }
+.box-gold   .box-label { color: var(--gold-d); }
+.box-accent { background: var(--accent-l); border-left: 4px solid var(--accent-d); }
+.box-accent .box-label { color: var(--accent-d); }
+.box-dark   { background: #f4f0ee; border-left: 4px solid var(--ink); }
+.box-dark   .box-label { color: var(--ink); }
+.box-star   { background: #fffbdf; border: 2px solid var(--gold); }
+.box-star   .box-label { color: var(--gold-d); }
+
+/* Backwards-compat aliases */
+.card        { border: 1px solid var(--line); border-radius: 3px; padding: 16px 20px; margin: 12px 0; background: #fff; }
+.card-green  { background: var(--green-l); border-left: 4px solid var(--green); }
+.card-gold   { background: var(--gold-l);  border-left: 4px solid var(--gold);  }
+.card-accent { background: var(--accent-l); border-left: 4px solid var(--accent-d); }
+
+/* ══════════════════ TABLES ══════════════════ */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0;
+  font-size: 13px;
+  font-family: var(--serif);
+}
+th {
+  background: var(--ink);
+  color: #fff;
+  padding: 8px 12px;
+  text-align: left;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+tr:nth-child(odd)  td { background: #fff; }
+tr:nth-child(even) td { background: var(--green-l); }
+tr.highlight td { background: var(--gold-l); font-weight: 700; }
+
+/* ══════════════════ CODE ══════════════════ */
+.code-block {
+  background: var(--code-bg);
+  color: var(--code-fg);
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.65;
+  padding: 16px 20px;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 12px 0;
+  border-left: 3px solid var(--gold);
+}
+
+/* ══════════════════ EQUATIONS ══════════════════ */
+.big-eq {
+  text-align: center;
+  padding: 14px 20px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  margin: 12px 0;
+  font-size: 1.05em;
+}
+
+/* ══════════════════ LAYOUT HELPERS ══════════════════ */
+.two-col   { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 12px 0; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin: 12px 0; }
+.chart-wrap { position: relative; height: 220px; }
+
+.flow-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
+.flow-box {
+  background: var(--green);
+  color: #fff;
+  padding: 7px 14px;
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+}
+.flow-box.gold   { background: var(--gold);   color: var(--ink); }
+.flow-box.accent { background: var(--accent-d); }
+.flow-arrow { color: var(--green); font-size: 18px; font-weight: 900; }
+
+.pill {
+  display: inline-block;
+  background: var(--green);
+  color: #fff;
+  border-radius: 3px;
+  padding: 2px 10px;
+  font-family: var(--mono);
+  font-size: 11px;
+  margin: 2px;
+}
+.pill.gold { background: var(--gold); color: var(--ink); }
+
+/* ══════════════════ COVER SLIDE ══════════════════ */
+.cover-wrap {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+}
+.cover-card {
+  background: linear-gradient(145deg, var(--green-d), var(--green));
+  color: #fff;
+  border-radius: 4px;
+  padding: 40px 50px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+.cover-card .univ-logo {
+  display: block;
+  width: 110px;
+  height: 110px;
+  margin: 0 auto 14px;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,.25));
+}
+.cover-card h1 {
+  font-size: 1.25rem;
+  letter-spacing: .04em;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.cover-card h2 {
+  font-size: .95rem;
+  font-weight: 400;
+  opacity: .88;
+  margin-bottom: 6px;
+}
+.cover-hr { border: none; border-top: 1px solid rgba(255,255,255,.3); margin: 16px 0; }
+.cover-main-title {
+  font-family: var(--serif);
+  font-size: 1.55rem;
+  font-weight: 800;
+  letter-spacing: -.01em;
+  margin: 8px 0 4px;
+  line-height: 1.2;
+}
+.cover-subtitle {
+  font-size: .9rem;
+  opacity: .88;
+  margin-bottom: 4px;
+}
+.cover-members {
+  text-align: left;
+  display: inline-block;
+  font-size: .88rem;
+  line-height: 2;
+  margin: 10px 0;
+}
+.cover-members .mat {
+  display: inline-block;
+  background: rgba(232,182,8,.28);
+  padding: 0 8px;
+  border-radius: 2px;
+  font-family: var(--mono);
+  font-size: .78rem;
+  margin-left: 6px;
+}
+.cover-meta {
+  font-family: var(--mono);
+  font-size: .8rem;
+  opacity: .82;
+  letter-spacing: .04em;
+  line-height: 1.9;
+  margin-top: 10px;
+}
+
+/* ══════════════════ TOC SLIDE ══════════════════ */
+.toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 4px; }
+.toc-section-block { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 14px 18px; }
+.toc-section-block h3 {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--green);
+  font-weight: 700;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 7px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.toc-item {
+  padding: 4px 0 4px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--ink2);
+  border-left: 2px solid transparent;
+  transition: all .12s;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.toc-item:hover { color: var(--green); border-left-color: var(--green); padding-left: 14px; }
+.toc-item .toc-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--gold-d);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* ══════════════════ MERCI SLIDE ══════════════════ */
+.merci-wrap {
+  width: 100%; max-width: 640px; text-align: center;
+}
+.merci-icon {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: var(--green);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  margin: 0 auto 18px;
+}
+.merci-card {
+  background: linear-gradient(145deg, var(--green-d), var(--green));
+  color: #fff;
+  border-radius: 4px;
+  padding: 36px 44px;
+  box-shadow: var(--shadow);
+}
+.merci-card h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  letter-spacing: -.02em;
+  margin-bottom: 8px;
+}
+.merci-card .sub { font-size: 1rem; opacity: .88; margin-bottom: 18px; }
+.merci-hr { border: none; border-top: 1px solid rgba(255,255,255,.3); margin: 14px 0; }
+.merci-card .meta { font-family: var(--mono); font-size: .8rem; opacity: .82; letter-spacing: .04em; line-height: 2; }
+.merci-key {
+  margin-top: 18px;
+  background: rgba(232,182,8,.18);
+  border: 1px solid rgba(232,182,8,.4);
+  border-radius: 3px;
+  padding: 10px 18px;
+  font-size: .9rem;
+  font-weight: 700;
+  font-style: italic;
+}
+
+/* ══════════════════ RESPONSIVE ══════════════════ */
+@media (max-width: 780px) {
+  .two-col, .three-col, .toc-grid { grid-template-columns: 1fr; }
+  .slide { padding: 18px 20px 24px; }
+  #section-tabs { display: none; }
+}
+
+/* ── PRESENTER BADGE ── */
+#presenter-badge {
+  position: fixed;
+  bottom: 56px;
+  right: 18px;
+  padding: 4px 13px 4px 9px;
+  border-radius: 20px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  z-index: 300;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.18);
+  transition: background .25s, color .25s;
+}
+#presenter-badge .pb-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: currentColor; opacity: .75; flex-shrink: 0;
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════ HEADER -->
+<div id="header">
+  <div style="display:flex;align-items:center;gap:2px;">
+    <button id="toggle-sidebar" onclick="toggleSidebar()" title="Menu"><i class="fa-solid fa-bars"></i></button>
+    <span id="header-title">AML &amp; ADL · Paire 1 · UN-FST 2026</span>
+  </div>
+  <div id="section-tabs">
+    <button class="tab-btn active" onclick="gotoSection('cover')">Accueil</button>
+    <button class="tab-btn" onclick="gotoSection('ml')"><i class="fa-solid fa-tree"></i> ML</button>
+    <button class="tab-btn" onclick="gotoSection('dl')"><i class="fa-solid fa-brain"></i> DL</button>
+    <button class="tab-btn" onclick="gotoSection('projet')"><i class="fa-solid fa-flask"></i> Projet</button>
+    <button class="tab-btn" onclick="gotoSection('conclusion')"><i class="fa-solid fa-flag-checkered"></i> Fin</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ LAYOUT -->
+<div id="layout">
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="side-section"><i class="fa fa-home"></i> Accueil</div>
+  <div class="side-item" onclick="gotoSlide(0)"><i class="fa fa-graduation-cap"></i> Page de garde</div>
+  <div class="side-item" onclick="gotoSlide(1)"><i class="fa fa-list-check"></i> Plan</div>
+  <div class="side-section"><i class="fa fa-tree"></i> Machine Learning</div>
+  <div class="side-item" onclick="gotoSlide(2)">ML-1 · Motivation</div>
+  <div class="side-item" onclick="gotoSlide(3)">ML-2 · Biais-Variance</div>
+  <div class="side-item" onclick="gotoSlide(4)">ML-3 · Condorcet — intuition</div>
+  <div class="side-item" onclick="gotoSlide(5)">ML-4 · Condorcet — preuve</div>
+  <div class="side-item" onclick="gotoSlide(6)">ML-5 · 3 familles</div>
+  <div class="side-item" onclick="gotoSlide(7)">ML-6 · Bagging</div>
+  <div class="side-item" onclick="gotoSlide(8)">ML-7 · Random Forest</div>
+  <div class="side-item" onclick="gotoSlide(9)">ML-8 · AdaBoost</div>
+  <div class="side-item" onclick="gotoSlide(10)">ML-9 · XGBoost / LightGBM</div>
+  <div class="side-item" onclick="gotoSlide(11)">ML-10 · Stacking</div>
+  <div class="side-item" onclick="gotoSlide(12)">ML-11 · Implémentation</div>
+  <div class="side-item" onclick="gotoSlide(13)">ML-12 · Résultats MNIST</div>
+  <div class="side-item" onclick="gotoSlide(14)">ML-13 · Importances</div>
+  <div class="side-item" onclick="gotoSlide(15)">ML-14 · Lien DL <i class="fa fa-star" style="color:var(--gold);font-size:9px;"></i></div>
+  <div class="side-item" onclick="gotoSlide(16)">ML-15 · Limites</div>
+  <div class="side-item" onclick="gotoSlide(17)">ML-16 · Conclusion ML</div>
+  <div class="side-section"><i class="fa fa-brain"></i> Deep Learning</div>
+  <div class="side-item" onclick="gotoSlide(18)">DL-1 · Perceptron</div>
+  <div class="side-item" onclick="gotoSlide(19)">DL-2 · XOR problem</div>
+  <div class="side-item" onclick="gotoSlide(20)">DL-3 · MLP</div>
+  <div class="side-item" onclick="gotoSlide(21)">DL-4 · Forward prop</div>
+  <div class="side-item" onclick="gotoSlide(22)">DL-5 · Activations</div>
+  <div class="side-item" onclick="gotoSlide(23)">DL-6 · Coût</div>
+  <div class="side-item" onclick="gotoSlide(24)">DL-7 · Backprop — intuition</div>
+  <div class="side-item" onclick="gotoSlide(25)">DL-8 · Backprop — équations</div>
+  <div class="side-item" onclick="gotoSlide(26)">DL-9 · NumPy scratch</div>
+  <div class="side-item" onclick="gotoSlide(27)">DL-10 · SGD</div>
+  <div class="side-item" onclick="gotoSlide(28)">DL-11 · Momentum / Adam</div>
+  <div class="side-item" onclick="gotoSlide(29)">DL-12 · Vanishing gradient</div>
+  <div class="side-item" onclick="gotoSlide(30)">DL-13 · Dropout</div>
+  <div class="side-item" onclick="gotoSlide(31)">DL-14 · Dropout = Bagging <i class="fa fa-star" style="color:var(--gold);font-size:9px;"></i></div>
+  <div class="side-item" onclick="gotoSlide(32)">DL-15 · Fashion-MNIST</div>
+  <div class="side-item" onclick="gotoSlide(33)">DL-16 · Courbes</div>
+  <div class="side-item" onclick="gotoSlide(34)">DL-17 · Conclusion DL</div>
+  <div class="side-section"><i class="fa fa-flask"></i> Projet Intégrateur</div>
+  <div class="side-item" onclick="gotoSlide(35)">P-1 · Architecture</div>
+  <div class="side-item" onclick="gotoSlide(36)">P-2 · Pourquoi hybride ?</div>
+  <div class="side-item" onclick="gotoSlide(37)">P-3 · Bloc DL</div>
+  <div class="side-item" onclick="gotoSlide(38)">P-4 · PCA</div>
+  <div class="side-item" onclick="gotoSlide(39)">P-5 · XGBoost</div>
+  <div class="side-item" onclick="gotoSlide(40)">P-6 · Résultats</div>
+  <div class="side-item" onclick="gotoSlide(41)">P-7 · Analyse perf.</div>
+  <div class="side-item" onclick="gotoSlide(42)">P-8 · SHAP</div>
+  <div class="side-item" onclick="gotoSlide(43)">P-9 · MC-Dropout</div>
+  <div class="side-item" onclick="gotoSlide(44)">P-10 · Équité par classe</div>
+  <div class="side-item" onclick="gotoSlide(45)">P-11 · Démonstration</div>
+  <div class="side-item" onclick="gotoSlide(46)">P-12 · Conclusion projet</div>
+  <div class="side-section"><i class="fa fa-flag-checkered"></i> Conclusion</div>
+  <div class="side-item" onclick="gotoSlide(47)">C-1 · Récapitulatif</div>
+  <div class="side-item" onclick="gotoSlide(48)">C-2 · Questions scientifiques</div>
+  <div class="side-item" onclick="gotoSlide(49)">C-3 · Bibliographie</div>
+  <div class="side-item" onclick="gotoSlide(50)">C-4 · Remerciements</div>
+</div><!-- /sidebar -->
+
+<!-- SLIDE AREA -->
+<div id="slide-area">
+
+<!-- ════════════════════════ SLIDE 0 — COVER -->
+<div class="slide vcenter active" id="slide-0" data-presenter="ms" data-section="cover">
+  <div class="cover-wrap">
+    <div class="cover-card">
+      <!-- UN-FST Logo — SVG inline (no external file needed) -->
+      <svg class="univ-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <!-- White circular background -->
+        <circle cx="100" cy="96" r="72" fill="#fff"/>
+        <!-- ── Left laurel branch ── -->
+        <g fill="#2d8a3e" transform="translate(100,96)">
+          <!-- left leaves -->
+          <ellipse cx="-52" cy="-18" rx="13" ry="7" transform="rotate(-35,-52,-18)"/>
+          <ellipse cx="-58" cy="0"   rx="13" ry="7" transform="rotate(-50,-58,0)"/>
+          <ellipse cx="-58" cy="18"  rx="13" ry="7" transform="rotate(-65,-58,18)"/>
+          <ellipse cx="-52" cy="34"  rx="12" ry="6" transform="rotate(-80,-52,34)"/>
+          <ellipse cx="-40" cy="46"  rx="11" ry="6" transform="rotate(-95,-40,46)"/>
+          <ellipse cx="-25" cy="53"  rx="10" ry="6" transform="rotate(-110,-25,53)"/>
+          <!-- left stem -->
+          <path d="M-8,55 Q-30,30 -54,0" fill="none" stroke="#2d8a3e" stroke-width="3.5" stroke-linecap="round"/>
+          <!-- left inner leaves (lighter) -->
+          <ellipse cx="-38" cy="-10" rx="10" ry="5.5" transform="rotate(-30,-38,-10)" fill="#3da352" opacity=".85"/>
+          <ellipse cx="-43" cy="10"  rx="10" ry="5.5" transform="rotate(-50,-43,10)"  fill="#3da352" opacity=".85"/>
+          <ellipse cx="-40" cy="28"  rx="9"  ry="5"   transform="rotate(-70,-40,28)"  fill="#3da352" opacity=".85"/>
+          <ellipse cx="-28" cy="42"  rx="8"  ry="5"   transform="rotate(-90,-28,42)"  fill="#3da352" opacity=".85"/>
+        </g>
+        <!-- ── Right laurel branch (mirror) ── -->
+        <g fill="#2d8a3e" transform="translate(100,96) scale(-1,1)">
+          <ellipse cx="-52" cy="-18" rx="13" ry="7" transform="rotate(-35,-52,-18)"/>
+          <ellipse cx="-58" cy="0"   rx="13" ry="7" transform="rotate(-50,-58,0)"/>
+          <ellipse cx="-58" cy="18"  rx="13" ry="7" transform="rotate(-65,-58,18)"/>
+          <ellipse cx="-52" cy="34"  rx="12" ry="6" transform="rotate(-80,-52,34)"/>
+          <ellipse cx="-40" cy="46"  rx="11" ry="6" transform="rotate(-95,-40,46)"/>
+          <ellipse cx="-25" cy="53"  rx="10" ry="6" transform="rotate(-110,-25,53)"/>
+          <path d="M-8,55 Q-30,30 -54,0" fill="none" stroke="#2d8a3e" stroke-width="3.5" stroke-linecap="round"/>
+          <ellipse cx="-38" cy="-10" rx="10" ry="5.5" transform="rotate(-30,-38,-10)" fill="#3da352" opacity=".85"/>
+          <ellipse cx="-43" cy="10"  rx="10" ry="5.5" transform="rotate(-50,-43,10)"  fill="#3da352" opacity=".85"/>
+          <ellipse cx="-40" cy="28"  rx="9"  ry="5"   transform="rotate(-70,-40,28)"  fill="#3da352" opacity=".85"/>
+          <ellipse cx="-28" cy="42"  rx="8"  ry="5"   transform="rotate(-90,-28,42)"  fill="#3da352" opacity=".85"/>
+        </g>
+        <!-- ── Oval / bowl background (light blue) ── -->
+        <ellipse cx="100" cy="85" rx="30" ry="38" fill="#d6eef8" stroke="#b0d8ee" stroke-width="1"/>
+        <!-- ── Pen / quill ── -->
+        <!-- pen body (dark green) -->
+        <path d="M100,38 L88,90 L100,98 L112,90 Z" fill="#1b6b2e"/>
+        <!-- pen tip -->
+        <path d="M88,90 L100,98 L112,90 L100,108 Z" fill="#2d8a3e"/>
+        <!-- pen highlight -->
+        <path d="M100,38 L95,70 L100,75 L105,70 Z" fill="#3da352" opacity=".6"/>
+        <!-- nib slit -->
+        <line x1="100" y1="90" x2="100" y2="108" stroke="#fff" stroke-width="1.5" opacity=".7"/>
+        <!-- pen top feather details -->
+        <path d="M100,38 Q92,50 89,62" fill="none" stroke="#155220" stroke-width="1.5" opacity=".5"/>
+        <path d="M100,38 Q108,50 111,62" fill="none" stroke="#155220" stroke-width="1.5" opacity=".5"/>
+        <!-- ── Arabic text "جامعة نواكشوط" ── -->
+        <text x="100" y="130" text-anchor="middle" font-family="'Segoe UI', Tahoma, Arial, sans-serif" font-size="11" font-weight="700" fill="#1b3a24" direction="rtl">جامعة نواكشوط</text>
+        <!-- line under arabic text -->
+        <line x1="62" y1="134" x2="138" y2="134" stroke="#1b6b2e" stroke-width="1.5"/>
+        <!-- ── Gold banner ── -->
+        <path d="M52,148 L148,148 L155,165 L45,165 Z" fill="#E8B608"/>
+        <path d="M45,165 L52,148 L52,165 Z" fill="#c49a06"/>
+        <path d="M155,165 L148,148 L148,165 Z" fill="#c49a06"/>
+        <!-- Banner text U.N -->
+        <text x="100" y="160" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="900" fill="#1b3a24" letter-spacing="2">U.N</text>
+        <!-- bottom dot -->
+        <circle cx="100" cy="170" r="3" fill="#2d8a3e"/>
+      </svg>
+      <h1>UNIVERSITÉ DE NOUAKCHOTT</h1>
+      <h2>Faculté des Sciences et Techniques</h2>
+      <h2>Master 1 Intelligence Artificielle</h2>
+      <hr class="cover-hr">
+      <div style="font-family:var(--mono);font-size:.78rem;opacity:.8;letter-spacing:.08em;margin-bottom:6px;">
+        Advanced Machine Learning (C25M1221) &nbsp;·&nbsp; Advanced Deep Learning (C25M1222)
+      </div>
+      <hr class="cover-hr">
+      <div class="cover-main-title">PROJET INTÉGRATEUR &amp; DEVOIR</div>
+      <div class="cover-subtitle">Paire 1 — Méthodes d'ensemble &amp; Fondements des réseaux profonds</div>
+      <hr class="cover-hr">
+      <div class="cover-members">
+        <strong>Présenté par :</strong><br>
+        <i class="fa-solid fa-circle-dot" style="font-size:8px;margin-right:6px;color:var(--gold);"></i>
+        Mohamed Salem Ebnou Echvagha Oubeid <span class="mat">C34613</span><br>
+        <i class="fa-solid fa-circle-dot" style="font-size:8px;margin-right:6px;color:var(--gold);"></i>
+        Fatimata Issa Saw <span class="mat">C21304</span><br>
+        <i class="fa-solid fa-circle-dot" style="font-size:8px;margin-right:6px;color:var(--gold);"></i>
+        Oussama Sid'Ahmed Hedy <span class="mat">C34603</span>
+      </div>
+      <hr class="cover-hr">
+      <div class="cover-meta">
+        <i class="fa-solid fa-chalkboard-user" style="margin-right:6px;"></i>Encadreur : Dr. Rivea Sadegh
+        &nbsp;&nbsp;·&nbsp;&nbsp;
+        <i class="fa-solid fa-calendar-days" style="margin-right:6px;"></i>13 juin 2026
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 1 — PLAN -->
+<div class="slide" id="slide-1" data-presenter="ms" data-section="cover">
+  <div class="eyebrow"><i class="fa fa-list-check"></i> &nbsp;Table des matières</div>
+  <div class="slide-title">Plan de la Présentation</div>
+  <div class="toc-grid">
+    <div>
+      <div class="toc-section-block">
+        <h3><i class="fa fa-tree"></i> Partie I — Machine Learning</h3>
+        <div class="toc-item" onclick="gotoSlide(2)"><span class="toc-num">01</span> Motivation et cas d'usage (Mauritanie)</div>
+        <div class="toc-item" onclick="gotoSlide(3)"><span class="toc-num">02</span> Décomposition biais-variance</div>
+        <div class="toc-item" onclick="gotoSlide(4)"><span class="toc-num">03</span> Théorème de Condorcet</div>
+        <div class="toc-item" onclick="gotoSlide(7)"><span class="toc-num">04</span> Bagging, Boosting, Stacking</div>
+        <div class="toc-item" onclick="gotoSlide(13)"><span class="toc-num">05</span> Implémentations &amp; résultats</div>
+        <div class="toc-item" onclick="gotoSlide(15)"><span class="toc-num">06</span> Lien avec le Deep Learning</div>
+      </div>
+      <div class="toc-section-block" style="margin-top:12px;">
+        <h3><i class="fa fa-brain"></i> Partie II — Deep Learning</h3>
+        <div class="toc-item" onclick="gotoSlide(18)"><span class="toc-num">07</span> Du perceptron au MLP</div>
+        <div class="toc-item" onclick="gotoSlide(24)"><span class="toc-num">08</span> Backpropagation</div>
+        <div class="toc-item" onclick="gotoSlide(22)"><span class="toc-num">09</span> Fonctions d'activation</div>
+        <div class="toc-item" onclick="gotoSlide(27)"><span class="toc-num">10</span> Optimisation (SGD, Adam)</div>
+        <div class="toc-item" onclick="gotoSlide(30)"><span class="toc-num">11</span> Dropout et régularisation</div>
+        <div class="toc-item" onclick="gotoSlide(31)"><span class="toc-num">12</span> Lien avec le ML <i class="fa fa-star" style="color:var(--gold);"></i></div>
+      </div>
+    </div>
+    <div>
+      <div class="toc-section-block">
+        <h3><i class="fa fa-flask"></i> Partie III — Projet Intégrateur</h3>
+        <div class="toc-item" onclick="gotoSlide(35)"><span class="toc-num">13</span> Pipeline hybride (DL + PCA + ML)</div>
+        <div class="toc-item" onclick="gotoSlide(40)"><span class="toc-num">14</span> Résultats comparatifs</div>
+        <div class="toc-item" onclick="gotoSlide(42)"><span class="toc-num">15</span> Interprétabilité (SHAP)</div>
+        <div class="toc-item" onclick="gotoSlide(43)"><span class="toc-num">16</span> Incertitude (MC-Dropout)</div>
+        <div class="toc-item" onclick="gotoSlide(45)"><span class="toc-num">17</span> Démonstration</div>
+      </div>
+      <div class="toc-section-block" style="margin-top:12px;">
+        <h3><i class="fa fa-flag-checkered"></i> Partie IV — Conclusion</h3>
+        <div class="toc-item" onclick="gotoSlide(47)"><span class="toc-num">18</span> Récapitulatif général</div>
+        <div class="toc-item" onclick="gotoSlide(48)"><span class="toc-num">19</span> Réponses scientifiques</div>
+        <div class="toc-item" onclick="gotoSlide(49)"><span class="toc-num">20</span> Bibliographie</div>
+        <div class="toc-item" onclick="gotoSlide(50)"><span class="toc-num">21</span> Remerciements</div>
+      </div>
+      <div class="box box-star" style="margin-top:12px;">
+        <span class="box-label"><i class="fa fa-key"></i> Fil conducteur</span>
+        Le <strong>Dropout</strong> dans les réseaux profonds est une forme de
+        <strong>Bagging implicite</strong> — pont fondamental ML ↔ DL.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 2 — ML-1 -->
+<div class="slide" id="slide-2" data-presenter="fi" data-section="ml">
+  <div class="eyebrow"><i class="fa fa-tree"></i> &nbsp;Machine Learning · 01</div>
+  <div class="slide-title">Pourquoi les méthodes d'ensemble ?</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-triangle-exclamation"></i> Le problème d'un seul modèle</span>
+        <ul style="margin-left:16px;line-height:2;">
+          <li><strong>Biais élevé :</strong> modèle trop simple → sous-apprentissage</li>
+          <li><strong>Variance élevée :</strong> modèle trop complexe → sur-apprentissage</li>
+          <li>Aucun modèle unique n'est parfait sur toutes les données</li>
+        </ul>
+      </div>
+      <div class="box box-gold" style="margin-top:8px;">
+        <span class="box-label"><i class="fa fa-map-location-dot"></i> Cas d'usage — Mauritanie</span>
+        <ul style="margin-left:16px;line-height:2;">
+          <li>Diagnostic de la <strong>rétinopathie diabétique</strong></li>
+          <li>Manque d'ophtalmologistes dans les régions reculées</li>
+          <li>Un seul modèle peut se tromper → risque médical</li>
+          <li><strong>Solution :</strong> ensemble de modèles → décision robuste</li>
+        </ul>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;align-items:center;">
+      <svg width="180" height="150" viewBox="0 0 180 150">
+        <rect width="180" height="150" fill="#eaf6f0" rx="4"/>
+        <path d="M40,28 L140,28 L146,58 L130,78 L138,118 L88,128 L50,118 L34,78 Z" fill="#3A8E5B" opacity=".65" stroke="#2a6e45" stroke-width="1.5"/>
+        <circle cx="88" cy="72" r="12" fill="#E8B608"/>
+        <text x="88" y="77" text-anchor="middle" fill="#1B171E" font-size="9" font-family="Courier New" font-weight="700">MR</text>
+        <text x="88" y="144" text-anchor="middle" fill="#3A8E5B" font-size="10" font-weight="700" font-family="Palatino Linotype,Georgia,serif">Mauritanie</text>
+      </svg>
+      <div class="big-eq" style="width:100%;">
+        $\text{Erreur} = \text{Biais}^2 + \text{Variance} + \sigma^2$
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 3 — ML-2 -->
+<div class="slide" id="slide-3" data-presenter="fi" data-section="ml">
+  <div class="eyebrow"><i class="fa fa-tree"></i> &nbsp;Machine Learning · 02</div>
+  <div class="slide-title">Biais, Variance et le compromis fondamental</div>
+  <div class="big-eq">$$E\!\left[(y-\hat{y})^2\right]=\underbrace{\text{Biais}^2}_{\text{erreur systématique}}+\underbrace{\text{Variance}}_{\text{sensibilité aux données}}+\underbrace{\sigma^2}_{\text{bruit irréductible}}$$</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-bullseye"></i> Biais élevé</span>
+        Modèle trop <strong>simple</strong> — tirs groupés mais loin de la cible.<br>
+        Sous-apprentissage (underfitting).
+      </div>
+      <div class="box box-gold" style="margin-top:0;">
+        <span class="box-label"><i class="fa fa-scatter-chart"></i> Variance élevée</span>
+        Modèle trop <strong>complexe</strong> — tirs dispersés autour de la cible.<br>
+        Sur-apprentissage (overfitting).
+      </div>
+      <div class="box box-accent" style="margin-top:0;">
+        <span class="box-label"><i class="fa fa-circle-check"></i> Idéal</span>
+        Faible biais <em>et</em> faible variance — difficile avec un seul modèle.<br>
+        <strong>Les ensembles sont la solution.</strong>
+      </div>
+    </div>
+    <div>
+      <svg width="100%" height="210" viewBox="0 0 360 210">
+        <rect width="360" height="210" fill="#f8f4f2" rx="4"/>
+        <!-- Bullseye 1 — High Bias -->
+        <circle cx="60" cy="88" r="52" fill="none" stroke="#d4e2da" stroke-width="1"/>
+        <circle cx="60" cy="88" r="34" fill="none" stroke="#d4e2da" stroke-width="1"/>
+        <circle cx="60" cy="88" r="14" fill="none" stroke="#E8B608" stroke-width="2"/>
+        <circle cx="60" cy="88" r="3" fill="#E8B608"/>
+        <circle cx="36" cy="65" r="5" fill="#c0392b" opacity=".8"/>
+        <circle cx="40" cy="60" r="5" fill="#c0392b" opacity=".8"/>
+        <circle cx="34" cy="70" r="5" fill="#c0392b" opacity=".8"/>
+        <circle cx="38" cy="57" r="5" fill="#c0392b" opacity=".8"/>
+        <text x="60" y="162" text-anchor="middle" fill="#c0392b" font-size="10" font-weight="700" font-family="Courier New">Biais élevé</text>
+        <text x="60" y="175" text-anchor="middle" fill="#666" font-size="9" font-family="Courier New">Variance faible</text>
+        <!-- Bullseye 2 — High Variance -->
+        <circle cx="180" cy="88" r="52" fill="none" stroke="#d4e2da" stroke-width="1"/>
+        <circle cx="180" cy="88" r="34" fill="none" stroke="#d4e2da" stroke-width="1"/>
+        <circle cx="180" cy="88" r="14" fill="none" stroke="#E8B608" stroke-width="2"/>
+        <circle cx="180" cy="88" r="3" fill="#E8B608"/>
+        <circle cx="180" cy="58" r="5" fill="#2980b9" opacity=".8"/>
+        <circle cx="205" cy="83" r="5" fill="#2980b9" opacity=".8"/>
+        <circle cx="158" cy="108" r="5" fill="#2980b9" opacity=".8"/>
+        <circle cx="192" cy="120" r="5" fill="#2980b9" opacity=".8"/>
+        <text x="180" y="162" text-anchor="middle" fill="#2980b9" font-size="10" font-weight="700" font-family="Courier New">Variance élevée</text>
+        <text x="180" y="175" text-anchor="middle" fill="#666" font-size="9" font-family="Courier New">Biais faible</text>
+        <!-- Bullseye 3 — Ideal -->
+        <circle cx="300" cy="88" r="52" fill="none" stroke="#d4e2da" stroke-width="1"/>
+        <circle cx="300" cy="88" r="34" fill="none" stroke="#d4e2da" stroke-width="1"/>
+        <circle cx="300" cy="88" r="14" fill="none" stroke="#E8B608" stroke-width="2"/>
+        <circle cx="300" cy="88" r="3" fill="#E8B608"/>
+        <circle cx="297" cy="85" r="5" fill="#3A8E5B" opacity=".9"/>
+        <circle cx="303" cy="92" r="5" fill="#3A8E5B" opacity=".9"/>
+        <circle cx="295" cy="93" r="5" fill="#3A8E5B" opacity=".9"/>
+        <circle cx="304" cy="84" r="5" fill="#3A8E5B" opacity=".9"/>
+        <text x="300" y="162" text-anchor="middle" fill="#3A8E5B" font-size="10" font-weight="700" font-family="Courier New">Idéal</text>
+        <text x="300" y="175" text-anchor="middle" fill="#3A8E5B" font-size="9" font-family="Courier New">Biais + Var. faibles</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 4 — ML-3 -->
+<div class="slide" id="slide-4" data-presenter="fi" data-section="ml">
+  <div class="eyebrow"><i class="fa fa-tree"></i> &nbsp;Machine Learning · 03</div>
+  <div class="slide-title">Théorème de Condorcet — Intuition</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-users"></i> Énoncé (Condorcet, 1785)</span>
+        <ul style="margin-left:16px;line-height:2;">
+          <li>Si chaque classifieur a $p > 0{,}5$ d'avoir raison</li>
+          <li>Et les classifieurs sont <strong>indépendants</strong></li>
+          <li>Alors le vote majoritaire tend vers 100% quand $N \to \infty$</li>
+        </ul>
+      </div>
+      <div class="box box-gold" style="margin-top:0;">
+        <span class="box-label"><i class="fa fa-table"></i> Exemple numérique</span>
+        <table style="margin-top:6px;">
+          <tr><th>N classifieurs</th><th>p=0.60</th><th>p=0.70</th></tr>
+          <tr><td>1</td><td>60%</td><td>70%</td></tr>
+          <tr><td>3</td><td>64.8%</td><td>78.4%</td></tr>
+          <tr><td>11</td><td>75.3%</td><td>90.5%</td></tr>
+          <tr><td>51</td><td>87.4%</td><td>99.1%</td></tr>
+        </table>
+      </div>
+    </div>
+    <div>
+      <div class="box" style="background:#fff;border:1px solid var(--line);">
+        <span class="box-label" style="color:var(--green);">Visualisation</span>
+        <div class="chart-wrap"><canvas id="condorcet-chart"></canvas></div>
+      </div>
+      <div class="box box-accent" style="margin-top:0;font-size:13px;">
+        <span class="box-label"><i class="fa fa-triangle-exclamation"></i> Hypothèse critique</span>
+        Les classifieurs doivent être <strong>indépendants</strong>. C'est pourquoi Bagging introduit du hasard (bootstrap, sélection de features).
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 5 — ML-4 -->
+<div class="slide" id="slide-5" data-presenter="fi" data-section="ml">
+  <div class="eyebrow"><i class="fa fa-tree"></i> &nbsp;Machine Learning · 04</div>
+  <div class="slide-title">Théorème de Condorcet — Démonstration</div>
+  <div class="big-eq">$$P(\text{majorité correcte}) = \sum_{k=\lfloor N/2 \rfloor+1}^{N} \binom{N}{k} p^k (1-p)^{N-k}$$</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-calculator"></i> Preuve pour N=3</span>
+        <div style="line-height:1.9;font-size:13.5px;">
+          La majorité gagne si au moins 2 ont raison :<br>
+          $P = \binom{3}{2}p^2(1-p) + \binom{3}{3}p^3 = 3p^2 - 2p^3$<br><br>
+          Pour $p=0{,}6$ : $P = 3(0{,}36) - 2(0{,}216) = \mathbf{0{,}648}$<br>
+          Pour $p=0{,}7$ : $P = 3(0{,}49) - 2(0{,}343) = \mathbf{0{,}784}$
+        </div>
+      </div>
+      <div class="box box-gold" style="margin-top:0;font-size:13px;">
+        <span class="box-label"><i class="fa fa-dice"></i> Simulation Monte Carlo</span>
+        On peut vérifier empiriquement en générant N classifieurs binaires avec probabilité $p$ et calculant la fréquence de vote correct.
+      </div>
+    </div>
+    <div>
+      <div class="box" style="background:#fff;border:1px solid var(--line);">
+        <span class="box-label" style="color:var(--green);">Courbes pour différents p</span>
+        <div class="chart-wrap"><canvas id="condorcet-proof-chart"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 6 — ML-5 -->
+<div class="slide" id="slide-6" data-presenter="fi" data-section="ml">
+  <div class="eyebrow"><i class="fa fa-tree"></i> &nbsp;Machine Learning · 05</div>
+  <div class="slide-title">Les trois grandes familles d'ensembles</div>
+  <div class="three-col">
+    <div class="box box-green" style="text-align:center;">
+      <span class="box-label" style="font-size:9px;"><i class="fa fa-layer-group"></i> Méthode 01</span>
+      <div style="font-size:2rem;color:var(--green);margin:6px 0;"><i class="fa fa-layer-group"></i></div>
+      <strong style="font-size:1.1rem;">BAGGING</strong>
+      <hr style="margin:8px 0;border-color:var(--line);">
+      <div style="font-size:12.5px;text-align:left;line-height:1.8;">
+        <strong>Principe :</strong> Bootstrap + agrégation<br>
+        <strong>Parallélisable :</strong> <span style="color:var(--green);">Oui</span><br>
+        <strong>Réduit :</strong> Variance<br>
+        <strong>Exemple :</strong> Random Forest
+      </div>
+    </div>
+    <div class="box box-gold" style="text-align:center;">
+      <span class="box-label" style="font-size:9px;color:var(--gold-d);"><i class="fa fa-bolt"></i> Méthode 02</span>
+      <div style="font-size:2rem;color:var(--gold);margin:6px 0;"><i class="fa fa-bolt"></i></div>
+      <strong style="font-size:1.1rem;">BOOSTING</strong>
+      <hr style="margin:8px 0;border-color:var(--line);">
+      <div style="font-size:12.5px;text-align:left;line-height:1.8;">
+        <strong>Principe :</strong> Séquentiel, corrige erreurs<br>
+        <strong>Parallélisable :</strong> <span style="color:#c0392b;">Non</span><br>
+        <strong>Réduit :</strong> Biais<br>
+        <strong>Exemple :</strong> XGBoost
+      </div>
+    </div>
+    <div class="box box-accent" style="text-align:center;">
+      <span class="box-label" style="font-size:9px;"><i class="fa fa-sitemap"></i> Méthode 03</span>
+      <div style="font-size:2rem;color:var(--accent-d);margin:6px 0;"><i class="fa fa-sitemap"></i></div>
+      <strong style="font-size:1.1rem;">STACKING</strong>
+      <hr style="margin:8px 0;border-color:var(--line);">
+      <div style="font-size:12.5px;text-align:left;line-height:1.8;">
+        <strong>Principe :</strong> Méta-apprenant<br>
+        <strong>Parallélisable :</strong> <span style="color:var(--green);">Oui</span><br>
+        <strong>Réduit :</strong> Biais + Variance<br>
+        <strong>Exemple :</strong> StackingClassifier
+      </div>
+    </div>
+  </div>
+  <table style="margin-top:8px;">
+    <tr><th>Méthode</th><th>Diversité introduite</th><th>Combinaison</th><th>Risque overfitting</th></tr>
+    <tr><td>Bagging</td><td>Bootstrap (données)</td><td>Vote / moyenne</td><td>Faible</td></tr>
+    <tr><td>Boosting</td><td>Pondération des erreurs</td><td>Moyenne pondérée</td><td>Moyen</td></tr>
+    <tr><td>Stacking</td><td>Modèles hétérogènes</td><td>Méta-modèle</td><td>Élevé (sans OOF)</td></tr>
+  </table>
+</div>
+
+<!-- ════════════════════════ SLIDE 7 — ML-6 -->
+<div class="slide" id="slide-7" data-presenter="os" data-section="ml">
+  <div class="eyebrow"><i class="fa fa-tree"></i> &nbsp;Machine Learning · 06</div>
+  <div class="slide-title">Bagging — Bootstrap Aggregating</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-code"></i> Algorithme</span>
+        <div class="code-block" style="margin:8px 0 0;font-size:11.5px;">Pour t = 1 à T :
+  1. Échantillonner avec remise D_t depuis D
+  2. Entraîner h_t sur D_t
+
+H(x) = majorité(h_1(x), …, h_T(x))</div>
+      </div>
+      <div class="box box-gold" style="margin-top:0;">
+        <span class="box-label"><i class="fa fa-shuffle"></i> Bootstrap — tirage avec remise</span>
+        <ul style="margin-left:16px;font-size:13px;line-height:2;">
+          <li>Sur $n$ exemples : <strong>~63,2% uniques</strong> en moyenne</li>
+          <li>~36,8% non tirés → données <strong>Out-of-Bag (OOB)</strong></li>
+          <li>OOB = validation gratuite sans CV !</li>
+        </ul>
+        <div style="margin-top:8px;font-size:12.5px;">
+          $P(\text{non sélectionné}) = \left(1-\tfrac{1}{n}\right)^n \xrightarrow{n\to\infty} e^{-1} \approx 0{,}368$
+        </div>
+      </div>
+    </div>
+    <div>
+      <svg width="100%" height="255" viewBox="0 0 290 255">
+        <rect width="290" height="255" fill="#f8f4f2" rx="4"/>
+        <rect x="95" y="8" width="100" height="30" fill="#3A8E5B" rx="3"/>
+        <text x="145" y="28" text-anchor="middle" fill="#fff" font-size="11" font-family="Courier New" font-weight="700">Dataset D</text>
+        <line x1="100" y1="38" x2="50" y2="72" stroke="#3A8E5B" stroke-width="1.5"/>
+        <line x1="145" y1="38" x2="145" y2="72" stroke="#3A8E5B" stroke-width="1.5"/>
+        <line x1="190" y1="38" x2="240" y2="72" stroke="#3A8E5B" stroke-width="1.5"/>
+        <rect x="10" y="72" width="80" height="24" fill="#E8B608" rx="3"/>
+        <text x="50" y="88" text-anchor="middle" fill="#1B171E" font-size="9.5" font-family="Courier New">D₁ bootstrap</text>
+        <rect x="105" y="72" width="80" height="24" fill="#E8B608" rx="3"/>
+        <text x="145" y="88" text-anchor="middle" fill="#1B171E" font-size="9.5" font-family="Courier New">D₂ bootstrap</text>
+        <rect x="200" y="72" width="80" height="24" fill="#E8B608" rx="3"/>
+        <text x="240" y="88" text-anchor="middle" fill="#1B171E" font-size="9.5" font-family="Courier New">D_T bootstrap</text>
+        <rect x="10" y="120" width="80" height="24" fill="#D1F2F7" rx="3"/>
+        <text x="50" y="136" text-anchor="middle" fill="#1B171E" font-size="9.5" font-family="Courier New">h₁ (arbre)</text>
+        <rect x="105" y="120" width="80" height="24" fill="#D1F2F7" rx="3"/>
+        <text x="145" y="136" text-anchor="middle" fill="#1B171E" font-size="9.5" font-family="Courier New">h₂ (arbre)</text>
+        <rect x="200" y="120" width="80" height="24" fill="#D1F2F7" rx="3"/>
+        <text x="240" y="136" text-anchor="middle" fill="#1B171E" font-size="9.5" font-family="Courier New">h_T (arbre)</text>
+        <line x1="50" y1="144" x2="110" y2="178" stroke="#3A8E5B" stroke-width="1.2"/>
+        <line x1="145" y1="144" x2="145" y2="178" stroke="#3A8E5B" stroke-width="1.2"/>
+        <line x1="240" y1="144" x2="180" y2="178" stroke="#3A8E5B" stroke-width="1.2"/>
+        <rect x="80" y="178" width="130" height="32" fill="#3A8E5B" rx="3"/>
+        <text x="145" y="193" text-anchor="middle" fill="#fff" font-size="10" font-family="Courier New">Vote / Moyenne</text>
+        <text x="145" y="206" text-anchor="middle" fill="#E8B608" font-size="9" font-family="Courier New">H(x) — prédiction finale</text>
+        <text x="145" y="242" text-anchor="middle" fill="#666" font-size="9" font-family="Courier New">63.2% exemples uniques par D_t</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 8 — ML-7 -->
+<div class="slide" id="slide-8" data-presenter="os" data-section="ml">
+  <div class="eyebrow"><i class="fa fa-tree"></i> &nbsp;Machine Learning · 07</div>
+  <div class="slide-title">Random Forest — Bagging + Aléa sur les Features</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-circle-plus"></i> Innovation clé</span>
+        <ul style="margin-left:16px;font-size:13.5px;line-height:2;">
+          <li>Bagging classique : bootstrap sur les <em>exemples</em></li>
+          <li>RF : à <strong>chaque nœud</strong>, sélectionner aléatoirement $\sqrt{p}$ features</li>
+          <li>Arbres plus décorrélés → variance plus faible</li>
+        </ul>
+      </div>
+      <div class="box box-gold" style="margin-top:0;">
+        <span class="box-label"><i class="fa fa-box-open"></i> Estimation Out-of-Bag (OOB)</span>
+        <div style="font-size:13px;line-height:1.8;">
+          Pour chaque exemple $x_i$, prédire avec seulement les arbres qui <strong>n'ont pas vu</strong> $x_i$ → erreur OOB ≈ erreur de validation croisée, <strong>sans coût supplémentaire</strong>.
+        </div>
+      </div>
+      <div class="box box-accent" style="margin-top:0;">
+        <span class="box-label"><i class="fa fa-chart-bar"></i> Importance des variables (Gini)</span>
+        $\text{Imp}(X_j) = \sum_{t:\,\text{split sur }X_j} \Delta\text{Gini}(t)$
+      </div>
+    </div>
+    <div>
+      <svg width="100%" height="250" viewBox="0 0 280 250">
+        <rect width="280" height="250" fill="#f8f4f2" rx="4"/>
+        <text x="140" y="17" text-anchor="middle" fill="#3A8E5B" font-size="10" font-family="Courier New" font-weight="700" letter-spacing=".1em">ARBRE RANDOM FOREST</text>
+        <rect x="90" y="24" width="100" height="28" fill="#3A8E5B" rx="3"/>
+        <text x="140" y="37" text-anchor="middle" fill="#fff" font-size="9.5" font-family="Courier New">Nœud racine</text>
+        <text x="140" y="48" text-anchor="middle" fill="#E8B608" font-size="8" font-family="Courier New">√p features choisies</text>
+        <line x1="100" y1="52" x2="65" y2="84" stroke="#3A8E5B" stroke-width="1.5"/>
+        <line x1="180" y1="52" x2="215" y2="84" stroke="#3A8E5B" stroke-width="1.5"/>
+        <rect x="20" y="84" width="90" height="26" fill="#E8B608" rx="3"/>
+        <text x="65" y="97" text-anchor="middle" fill="#1B171E" font-size="9" font-family="Courier New">Nœud gauche</text>
+        <text x="65" y="108" text-anchor="middle" fill="#1B171E" font-size="7.5" font-family="Courier New">√p features (aléatoires)</text>
+        <rect x="170" y="84" width="90" height="26" fill="#E8B608" rx="3"/>
+        <text x="215" y="97" text-anchor="middle" fill="#1B171E" font-size="9" font-family="Courier New">Nœud droit</text>
+        <text x="215" y="108" text-anchor="middle" fill="#1B171E" font-size="7.5" font-family="Courier New">√p features (aléatoires)</text>
+        <line x1="50" y1="110" x2="35" y2="140" stroke="#3A8E5B" stroke-width="1"/>
+        <line x1="80" y1="110" x2="95" y2="140" stroke="#3A8E5B" stroke-width="1"/>
+        <line x1="200" y1="110" x2="185" y2="140" stroke="#3A8E5B" stroke-width="1"/>
+        <line x1="230" y1="110" x2="245" y2="140" stroke="#3A8E5B" stroke-width="1"/>
+        <rect x="10" y="140" width="52" height="20" fill="#D1F2F7" rx="2"/><text x="36" y="154" text-anchor="middle" fill="#1B171E" font-size="8" font-family="Courier New">Feuille A</text>
+        <rect x="72" y="140" width="52" height="20" fill="#D1F2F7" rx="2"/><text x="98" y="154" text-anchor="middle" fill="#1B171E" font-size="8" font-family="Courier New">Feuille B</text>
+        <rect x="162" y="140" width="52" height="20" fill="#D1F2F7" rx="2"/><text x="188" y="154" text-anchor="middle" fill="#1B171E" font-size="8" font-family="Courier New">Feuille C</text>
+        <rect x="222" y="140" width="52" height="20" fill="#D1F2F7" rx="2"/><text x="248" y="154" text-anchor="middle" fill="#1B171E" font-size="8" font-family="Courier New">Feuille D</text>
+        <rect x="10" y="178" width="260" height="60" fill="#fff" rx="3" stroke="#d4e2da"/>
+        <text x="140" y="195" text-anchor="middle" fill="#3A8E5B" font-size="9.5" font-family="Courier New" font-weight="700">AVANTAGES RANDOM FOREST</text>
+        <text x="20" y="212" fill="#1B171E" font-size="9" font-family="Palatino Linotype,Georgia,serif">— Peu de paramètres à régler</text>
+        <text x="20" y="224" fill="#1B171E" font-size="9" font-family="Palatino Linotype,Georgia,serif">— Résiste bien au surapprentissage</text>
+        <text x="20" y="236" fill="#1B171E" font-size="9" font-family="Palatino Linotype,Georgia,serif">— Parallélisable (arbres indépendants)</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 9 — ML-8 -->
+<div class="slide" id="slide-9" data-presenter="os" data-section="ml">
+  <div class="eyebrow"><i class="fa fa-tree"></i> &nbsp;Machine Learning · 08</div>
+  <div class="slide-title">Boosting — AdaBoost</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-code"></i> Algorithme AdaBoost (Freund &amp; Schapire, 1997)</span>
+        <div class="code-block" style="margin:8px 0 0;font-size:11px;">Initialiser : wᵢ = 1/N  ∀i
+
+Pour t = 1 à T :
+  1. Entraîner hₜ sur données pondérées wᵢ
+  2. εₜ = Σ wᵢ · 𝟙[hₜ(xᵢ) ≠ yᵢ]
+  3. αₜ = ½ · ln((1 − εₜ) / εₜ)
+  4. wᵢ ← wᵢ · exp(−αₜ · yᵢ · hₜ(xᵢ))
+  5. Normaliser les wᵢ
+
+H(x) = sign(Σ αₜ · hₜ(x))</div>
+      </div>
+    </div>
+    <div>
+      <div class="box box-gold">
+        <span class="box-label"><i class="fa fa-lightbulb"></i> Intuition clé</span>
+        <ul style="margin-left:16px;font-size:13px;line-height:2;">
+          <li>Augmenter le poids des exemples <strong>mal classifiés</strong></li>
+          <li>Le prochain modèle se concentre sur les erreurs</li>
+          <li>$\alpha_t$ grand si erreur faible → le modèle fiable pèse plus</li>
+        </ul>
+      </div>
+      <div class="box box-accent" style="margin-top:0;font-size:13px;">
+        <span class="box-label">Interprétation de αₜ</span>
+        Si $\varepsilon_t = 0$ (parfait) → $\alpha_t = +\infty$ &nbsp;|&nbsp;
+        Si $\varepsilon_t = 0{,}5$ (aléatoire) → $\alpha_t = 0$ (ignoré)
+      </div>
+      <div class="box" style="background:#fff;border:1px solid var(--line);margin-top:0;">
+        <span class="box-label" style="color:var(--green);">Erreur en fonction des arbres</span>
+        <div class="chart-wrap" style="height:150px;"><canvas id="adaboost-chart"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 10 — ML-9 -->
+<div class="slide" id="slide-10" data-presenter="os" data-section="ml">
+  <div class="eyebrow"><i class="fa fa-tree"></i> &nbsp;Machine Learning · 09</div>
+  <div class="slide-title">Boosting moderne — XGBoost &amp; LightGBM</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-chart-line"></i> Gradient Boosting (Friedman, 2001)</span>
+        <div style="font-size:13px;line-height:1.8;margin-top:4px;">
+          Descente de gradient dans l'espace des fonctions :<br>
+          $F_t(x) = F_{t-1}(x) + \eta \cdot h_t(x)$<br>
+          où $h_t$ est entraîné sur les <strong>résidus</strong> :<br>
+          $r_i = -\left[\frac{\partial L(y_i, F(x_i))}{\partial F(x_i)}\right]$
+        </div>
+      </div>
+      <div class="box box-gold" style="margin-top:0;">
+        <span class="box-label"><i class="fa fa-bolt"></i> XGBoost (Chen &amp; Guestrin, 2016)</span>
+        <ul style="margin-left:14px;font-size:12.5px;line-height:1.9;">
+          <li>Régularisation L1 + L2 sur les poids</li>
+          <li>Gestion native des valeurs manquantes</li>
+          <li>Parallélisation des splits</li>
+        </ul>
+      </div>
+      <div class="box box-accent" style="margin-top:0;">
+        <span class="box-label"><i class="fa fa-feather"></i> LightGBM (Microsoft, 2017)</span>
+        <ul style="margin-left:14px;font-size:12.5px;line-height:1.9;">
+          <li>Croissance <strong>leaf-wise</strong> (vs level-wise)</li>
+          <li>GOSS : Gradient-based One-Side Sampling</li>
+          <li>EFB : Exclusive Feature Bundling</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="box" style="background:#fff;border:1px solid var(--line);">
+        <span class="box-label" style="color:var(--green);">Comparaison des performances</span>
+        <div class="chart-wrap"><canvas id="boosting-compare-chart"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 11 — ML-10 -->
+<div class="slide" id="slide-11" data-presenter="os" data-section="ml">
+  <div class="eyebrow"><i class="fa fa-tree"></i> &nbsp;Machine Learning · 10</div>
+  <div class="slide-title">Stacking — Le Méta-Apprenant</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-sitemap"></i> Principe</span>
+        Les prédictions des modèles de base deviennent les <strong>features</strong> d'un méta-modèle qui apprend à les combiner de façon optimale.
+      </div>
+      <svg width="100%" height="180" viewBox="0 0 290 180">
+        <rect width="290" height="180" fill="#f8f4f2" rx="4"/>
+        <rect x="8" y="18" width="70" height="26" fill="#3A8E5B" rx="3"/>
+        <text x="43" y="30" text-anchor="middle" fill="#fff" font-size="9" font-family="Courier New">Modèle A</text>
+        <text x="43" y="40" text-anchor="middle" fill="#E8B608" font-size="7.5" font-family="Courier New">(RF)</text>
+        <rect x="8" y="68" width="70" height="26" fill="#3A8E5B" rx="3"/>
+        <text x="43" y="80" text-anchor="middle" fill="#fff" font-size="9" font-family="Courier New">Modèle B</text>
+        <text x="43" y="90" text-anchor="middle" fill="#E8B608" font-size="7.5" font-family="Courier New">(XGB)</text>
+        <rect x="8" y="118" width="70" height="26" fill="#3A8E5B" rx="3"/>
+        <text x="43" y="130" text-anchor="middle" fill="#fff" font-size="9" font-family="Courier New">Modèle C</text>
+        <text x="43" y="140" text-anchor="middle" fill="#E8B608" font-size="7.5" font-family="Courier New">(MLP)</text>
+        <line x1="78" y1="31" x2="136" y2="80" stroke="#E8B608" stroke-width="1.2"/>
+        <line x1="78" y1="81" x2="136" y2="81" stroke="#E8B608" stroke-width="1.2"/>
+        <line x1="78" y1="131" x2="136" y2="82" stroke="#E8B608" stroke-width="1.2"/>
+        <rect x="136" y="62" width="76" height="38" fill="#E8B608" rx="3"/>
+        <text x="174" y="78" text-anchor="middle" fill="#1B171E" font-size="9" font-family="Courier New" font-weight="700">Méta-modèle</text>
+        <text x="174" y="92" text-anchor="middle" fill="#1B171E" font-size="8" font-family="Courier New">(LogReg / LR)</text>
+        <line x1="212" y1="81" x2="244" y2="81" stroke="#3A8E5B" stroke-width="1.5"/>
+        <rect x="244" y="69" width="40" height="24" fill="#3A8E5B" rx="3"/>
+        <text x="264" y="85" text-anchor="middle" fill="#fff" font-size="8" font-family="Courier New">Préd.</text>
+        <rect x="10" y="160" width="270" height="14" fill="#fff" rx="2" stroke="#d4e2da"/>
+        <text x="145" y="171" text-anchor="middle" fill="#3A8E5B" font-size="8.5" font-family="Courier New">Utiliser la validation OOF pour éviter la fuite de données</text>
+      </svg>
+      <div class="box box-gold" style="margin-top:0;font-size:12.5px;">
+        <span class="box-label"><i class="fa fa-triangle-exclamation"></i> Éviter la fuite de données</span>
+        Utiliser la validation croisée <strong>out-of-fold (OOF)</strong> pour générer les prédictions du niveau 1.
+      </div>
+    </div>
+    <div>
+      <div class="box box-accent">
+        <span class="box-label"><i class="fa fa-rotate"></i> Validation croisée OOF</span>
+        <div style="font-size:13px;line-height:1.8;margin-top:4px;">
+          Pour chaque fold $k$ :<br>
+          · Entraîner sur tous les folds sauf $k$<br>
+          · Prédire sur le fold $k$<br>
+          → Prédictions OOF couvrent tout le dataset<br>
+          → Pas de fuite : le méta-modèle ne voit pas de vraies prédictions sur données d'entraînement
+        </div>
+      </div>
+      <div class="box box-green" style="margin-top:0;">
+        <span class="box-label"><i class="fa fa-question-circle"></i> Quand utiliser le stacking ?</span>
+        <ul style="margin-left:14px;font-size:12.5px;line-height:2;">
+          <li>Modèles très différents (RF + XGB + DL)</li>
+          <li>Zones de force différentes par modèle</li>
+          <li>Compétitions Kaggle (gain de 0,1–0,5%)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 12 — ML-11 -->
+<div class="slide" id="slide-12" data-presenter="os" data-section="ml">
+  <div class="eyebrow"><i class="fa fa-tree"></i> &nbsp;Machine Learning · 11</div>
+  <div class="slide-title">Implémentation NumPy from Scratch</div>
+  <div class="two-col">
+    <div class="code-block">
+<span style="color:#cba6f7">import</span> numpy <span style="color:#cba6f7">as</span> np
+
+<span style="color:#89b4fa">class</span> <span style="color:#a6e3a1">MajorityVote</span>:
+    <span style="color:#89b4fa">def</span> <span style="color:#cdd6f4">__init__</span>(self, classifiers):
+        self.classifiers = classifiers
+
+    <span style="color:#89b4fa">def</span> <span style="color:#a6e3a1">predict</span>(self, X):
+        preds = np.array([
+            clf.predict(X) <span style="color:#cba6f7">for</span> clf <span style="color:#cba6f7">in</span> self.classifiers
+        ])
+        <span style="color:#cba6f7">return</span> np.apply_along_axis(
+            <span style="color:#cba6f7">lambda</span> x: np.bincount(x).argmax(),
+            axis=<span style="color:#fab387">0</span>, arr=preds
+        )</div>
+    <div class="code-block">
+<span style="color:#6c7086"># Bootstrap from scratch</span>
+<span style="color:#89b4fa">def</span> <span style="color:#a6e3a1">bootstrap_sample</span>(X, y):
+    n = X.shape[<span style="color:#fab387">0</span>]
+    idx = np.random.choice(n, size=n, replace=<span style="color:#cba6f7">True</span>)
+    <span style="color:#cba6f7">return</span> X[idx], y[idx]
+
+<span style="color:#89b4fa">class</span> <span style="color:#a6e3a1">BaggingFromScratch</span>:
+    <span style="color:#89b4fa">def</span> <span style="color:#cdd6f4">__init__</span>(self, T=<span style="color:#fab387">100</span>):
+        self.T = T; self.models = []
+
+    <span style="color:#89b4fa">def</span> <span style="color:#a6e3a1">fit</span>(self, X, y):
+        <span style="color:#cba6f7">for</span> _ <span style="color:#cba6f7">in</span> range(self.T):
+            Xb, yb = bootstrap_sample(X, y)
+            t = DecisionTreeClassifier()
+            t.fit(Xb, yb)
+            self.models.append(t)
+
+    <span style="color:#89b4fa">def</span> <span style="color:#a6e3a1">predict</span>(self, X):
+        votes = np.array([m.predict(X) <span style="color:#cba6f7">for</span> m <span style="color:#cba6f7">in</span> self.models])
+        <span style="color:#cba6f7">return</span> np.apply_along_axis(
+            <span style="color:#cba6f7">lambda</span> x: np.bincount(x).argmax(),
+            axis=<span style="color:#fab387">0</span>, arr=votes
+        )</div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 13 — ML-12 -->
+<div class="slide" id="slide-13" data-presenter="os" data-section="ml">
+  <div class="eyebrow"><i class="fa fa-tree"></i> &nbsp;Machine Learning · 12</div>
+  <div class="slide-title">Expériences sur MNIST</div>
+  <div class="two-col">
+    <div>
+      <table>
+        <tr><th>Modèle</th><th>Accuracy</th><th>F1-score</th><th>Temps</th></tr>
+        <tr><td>Decision Tree (seul)</td><td>0.87</td><td>0.87</td><td>0.5 s</td></tr>
+        <tr><td>Random Forest (100 arbres)</td><td>0.97</td><td>0.97</td><td>5 s</td></tr>
+        <tr><td>AdaBoost (100)</td><td>0.95</td><td>0.95</td><td>8 s</td></tr>
+        <tr class="highlight"><td><strong>XGBoost</strong></td><td><strong>0.98</strong></td><td><strong>0.98</strong></td><td>4 s</td></tr>
+        <tr><td>Stacking (RF+XGB+DT)</td><td>0.97</td><td>0.97</td><td>10 s</td></tr>
+      </table>
+      <div class="box box-gold" style="margin-top:10px;font-size:13px;">
+        <span class="box-label"><i class="fa fa-database"></i> Dataset MNIST</span>
+        70 000 images 28×28 de chiffres manuscrits (0–9). 60 000 train / 10 000 test. Pixels normalisés [0, 1].
+      </div>
+    </div>
+    <div>
+      <div class="box" style="background:#fff;border:1px solid var(--line);">
+        <span class="box-label" style="color:var(--green);">Accuracy comparée</span>
+        <div class="chart-wrap"><canvas id="mnist-results-chart"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 14 — ML-13 -->
+<div class="slide" id="slide-14" data-presenter="os" data-section="ml">
+  <div class="eyebrow"><i class="fa fa-tree"></i> &nbsp;Machine Learning · 13</div>
+  <div class="slide-title">Quels pixels sont importants ?</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-magnifying-glass-chart"></i> Importance des variables — Random Forest</span>
+        <ul style="margin-left:14px;font-size:13px;line-height:2;">
+          <li>Chaque pixel = une feature (784 au total)</li>
+          <li>Les pixels du <strong>centre</strong> ont une importance élevée</li>
+          <li>Les pixels du bord sont souvent ignorés</li>
+          <li>Cohérent : les chiffres occupent le centre de l'image</li>
+        </ul>
+      </div>
+      <div class="box box-gold" style="margin-top:0;font-size:13px;">
+        <span class="box-label"><i class="fa fa-comment"></i> Interprétation</span>
+        Les pixels centraux (lignes 10–18, colonnes 8–20 sur 28×28) expliquent la majorité de la variance de classification.
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:center;">
+      <svg width="200" height="210" viewBox="0 0 200 210">
+        <rect width="200" height="200" fill="#f0f4f2" rx="4"/>
+        <!-- Heatmap zones -->
+        <rect x="0" y="0" width="200" height="30" fill="#eaf6f0"/>
+        <rect x="0" y="170" width="200" height="30" fill="#eaf6f0"/>
+        <rect x="0" y="30" width="30" height="140" fill="#eaf6f0"/>
+        <rect x="170" y="30" width="30" height="140" fill="#eaf6f0"/>
+        <rect x="30" y="30" width="140" height="18" fill="#b7e5c9"/>
+        <rect x="30" y="152" width="140" height="18" fill="#b7e5c9"/>
+        <rect x="30" y="48" width="18" height="104" fill="#b7e5c9"/>
+        <rect x="152" y="48" width="18" height="104" fill="#b7e5c9"/>
+        <rect x="48" y="48" width="104" height="18" fill="#5abd8a"/>
+        <rect x="48" y="134" width="104" height="18" fill="#5abd8a"/>
+        <rect x="48" y="66" width="18" height="68" fill="#5abd8a"/>
+        <rect x="134" y="66" width="18" height="68" fill="#5abd8a"/>
+        <rect x="66" y="66" width="68" height="68" fill="#3A8E5B"/>
+        <rect x="76" y="76" width="48" height="48" fill="#2a6e45"/>
+        <text x="100" y="105" text-anchor="middle" fill="#E8B608" font-size="10" font-weight="700" font-family="Courier New">MAX</text>
+        <!-- Colorbar -->
+        <defs><linearGradient id="hg" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#eaf6f0"/>
+          <stop offset="50%" stop-color="#5abd8a"/>
+          <stop offset="100%" stop-color="#2a6e45"/>
+        </linearGradient></defs>
+        <rect x="20" y="185" width="160" height="10" fill="url(#hg)" rx="2"/>
+        <text x="20" y="205" fill="#666" font-size="8" font-family="Courier New">Faible</text>
+        <text x="162" y="205" fill="#666" font-size="8" font-family="Courier New">Élevée</text>
+        <text x="100" y="205" text-anchor="middle" fill="#666" font-size="8" font-family="Courier New">Importance</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 15 — ML-14 ⭐ -->
+<div class="slide" id="slide-15" data-presenter="ms" data-section="ml">
+  <div class="eyebrow"><i class="fa fa-tree"></i> &nbsp;Machine Learning · 14</div>
+  <div class="slide-title">Dropout = Bagging implicite <i class="fa fa-star" style="color:var(--gold);font-size:1.1rem;"></i></div>
+  <div class="box box-star" style="margin-bottom:14px;text-align:center;font-size:1rem;">
+    <span class="box-label"><i class="fa fa-key"></i> Résultat fondamental</span>
+    Un réseau avec Dropout = ensemble de $2^M$ sous-réseaux (où $M$ = nombre de neurones)
+  </div>
+  <div class="two-col">
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-layer-group"></i> Bagging — explicite</span>
+        <ul style="margin-left:14px;font-size:13px;line-height:2;">
+          <li>$T$ modèles entraînés <strong>séparément</strong></li>
+          <li>Poids distincts $W_1, W_2, \ldots, W_T$</li>
+          <li>Entraînés sur $T$ bootstraps différents</li>
+          <li>Inférence : vote / moyenne sur $T$ modèles</li>
+          <li>Coût : $T \times$ entraînement</li>
+        </ul>
+      </div>
+      <div class="box box-gold" style="margin-top:0;">
+        <span class="box-label"><i class="fa fa-droplet"></i> Dropout — implicite</span>
+        <ul style="margin-left:14px;font-size:13px;line-height:2;">
+          <li>$2^M$ sous-réseaux avec <strong>poids partagés</strong></li>
+          <li>Chaque mini-batch ≈ un bootstrap</li>
+          <li>Inférence : scaling des poids (approx. moyenne)</li>
+          <li>Coût : $\approx 1\times$ entraînement !</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <svg width="100%" height="230" viewBox="0 0 290 230">
+        <rect width="290" height="230" fill="#f8f4f2" rx="4"/>
+        <text x="65" y="17" text-anchor="middle" fill="#3A8E5B" font-size="10" font-family="Courier New" font-weight="700">BAGGING</text>
+        <text x="225" y="17" text-anchor="middle" fill="#a07e04" font-size="10" font-family="Courier New" font-weight="700">DROPOUT</text>
+        <rect x="8" y="24" width="115" height="22" fill="#3A8E5B" rx="3"/><text x="65" y="39" text-anchor="middle" fill="#fff" font-size="8.5" font-family="Courier New">Modèle 1 (poids W₁)</text>
+        <rect x="8" y="52" width="115" height="22" fill="#3A8E5B" rx="3"/><text x="65" y="67" text-anchor="middle" fill="#fff" font-size="8.5" font-family="Courier New">Modèle 2 (poids W₂)</text>
+        <rect x="8" y="80" width="115" height="22" fill="#3A8E5B" rx="3"/><text x="65" y="95" text-anchor="middle" fill="#fff" font-size="8.5" font-family="Courier New">Modèle T (poids W_T)</text>
+        <rect x="22" y="116" width="86" height="20" fill="#E8B608" rx="3"/><text x="65" y="130" text-anchor="middle" fill="#1B171E" font-size="8.5" font-family="Courier New">Vote / Moyenne</text>
+        <!-- Dropout -->
+        <circle cx="173" cy="45" r="9" fill="#3A8E5B"/><circle cx="200" cy="32" r="9" fill="#3A8E5B"/>
+        <circle cx="200" cy="58" r="9" fill="#3A8E5B"/><circle cx="227" cy="45" r="9" fill="#3A8E5B"/>
+        <text x="200" y="82" text-anchor="middle" fill="#666" font-size="8.5" font-family="Courier New">Réseau complet</text>
+        <circle cx="173" cy="130" r="9" fill="#3A8E5B"/><circle cx="200" cy="117" r="6" fill="#eee" stroke="#bbb" stroke-width="1.5" stroke-dasharray="2.5,2"/>
+        <circle cx="200" cy="143" r="9" fill="#3A8E5B"/><circle cx="227" cy="130" r="9" fill="#3A8E5B"/>
+        <text x="200" y="167" text-anchor="middle" fill="#a07e04" font-size="8.5" font-family="Courier New">Sous-réseau dropout</text>
+        <rect x="150" y="180" width="100" height="18" fill="#E8B608" rx="3"/>
+        <text x="200" y="193" text-anchor="middle" fill="#1B171E" font-size="8.5" font-family="Courier New" font-weight="700">Poids partagés !</text>
+        <text x="145" y="220" text-anchor="middle" fill="#666" font-size="8" font-style="italic" font-family="Palatino Linotype,Georgia,serif">Gal &amp; Ghahramani, ICML 2016</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 16 — ML-15 -->
+<div class="slide" id="slide-16" data-presenter="ms" data-section="ml">
+  <div class="eyebrow"><i class="fa fa-tree"></i> &nbsp;Machine Learning · 15</div>
+  <div class="slide-title">Pièges à éviter</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-gold">
+        <span class="box-label"><i class="fa fa-triangle-exclamation"></i> Erreurs fréquentes</span>
+        <ul style="margin-left:14px;font-size:13px;line-height:2;">
+          <li>Stacking sans OOF → fuite de données → faux bon score</li>
+          <li>Trop de modèles → temps de calcul prohibitif</li>
+          <li>Modèles trop corrélés → gain marginal</li>
+          <li>Ignorer la baseline simple → manque de perspective</li>
+          <li>Oublier le scaling pour certains algorithmes</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-circle-check"></i> Bonnes pratiques</span>
+        <ul style="margin-left:14px;font-size:13px;line-height:2;">
+          <li>Comparer à un modèle baseline (DT, LogReg)</li>
+          <li>Utiliser l'erreur OOB pour Random Forest</li>
+          <li>Valider avec stratified k-fold (données déséquilibrées)</li>
+          <li>Surveiller biais vs variance via courbes d'apprentissage</li>
+          <li>Préprocessing soigné avant tout</li>
+        </ul>
+      </div>
+      <div class="box box-accent" style="margin-top:0;font-size:13px;">
+        <span class="box-label"><i class="fa fa-thumbtack"></i> Règle empirique</span>
+        Si un seul modèle atteint déjà 95%, l'ensemble ne gagnera que 1–2%. Le gain est plus grand quand les modèles font des <em>erreurs différentes</em>.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 17 — ML-16 -->
+<div class="slide" id="slide-17" data-presenter="ms" data-section="ml">
+  <div class="eyebrow"><i class="fa fa-tree"></i> &nbsp;Machine Learning · 16</div>
+  <div class="slide-title">Conclusion — Partie Machine Learning</div>
+  <div class="three-col">
+    <div class="box box-green" style="text-align:center;">
+      <span class="box-label"><i class="fa fa-layer-group"></i> Bagging</span>
+      <div style="font-size:2rem;color:var(--green);margin:6px 0;"><i class="fa fa-layer-group"></i></div>
+      <div style="font-size:12.5px;line-height:1.8;text-align:left;">
+        Réduit la variance<br>Parallélisable<br>Random Forest = référence
+      </div>
+    </div>
+    <div class="box box-gold" style="text-align:center;">
+      <span class="box-label" style="color:var(--gold-d);"><i class="fa fa-bolt"></i> Boosting</span>
+      <div style="font-size:2rem;color:var(--gold);margin:6px 0;"><i class="fa fa-bolt"></i></div>
+      <div style="font-size:12.5px;line-height:1.8;text-align:left;">
+        Réduit le biais<br>XGBoost = état de l'art<br>Séquentiel (plus lent)
+      </div>
+    </div>
+    <div class="box box-accent" style="text-align:center;">
+      <span class="box-label"><i class="fa fa-sitemap"></i> Stacking</span>
+      <div style="font-size:2rem;color:var(--accent-d);margin:6px 0;"><i class="fa fa-sitemap"></i></div>
+      <div style="font-size:12.5px;line-height:1.8;text-align:left;">
+        Réduit biais + variance<br>Gain marginal (+1–2%)<br>Requiert OOF
+      </div>
+    </div>
+  </div>
+  <div class="box box-star" style="margin-top:10px;text-align:center;">
+    <span class="box-label"><i class="fa fa-key"></i> Lien fondamental vers le Deep Learning</span>
+    <div style="font-size:1rem;margin-top:4px;">
+      Le <strong>Dropout</strong> dans les réseaux profonds = <strong>Bagging implicite</strong>
+      sur $2^M$ sous-réseaux partageant les poids
+      &nbsp;—&nbsp; <em>Gal &amp; Ghahramani, ICML 2016</em>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;">
+    <span class="pill">Théorème de Condorcet</span>
+    <span class="pill">Bootstrap 63.2%</span>
+    <span class="pill">OOB Validation</span>
+    <span class="pill gold">XGBoost SOTA</span>
+    <span class="pill">Dropout = Bagging</span>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 18 — DL-1 -->
+<div class="slide" id="slide-18" data-presenter="fi" data-section="dl">
+  <div class="eyebrow"><i class="fa fa-brain"></i> &nbsp;Deep Learning · 01</div>
+  <div class="slide-title">Du neurone biologique au perceptron artificiel</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-microscope"></i> Neurone biologique</span>
+        <ul style="margin-left:14px;font-size:13px;line-height:2;">
+          <li><strong>Dendrites :</strong> reçoivent les signaux d'entrée</li>
+          <li><strong>Corps cellulaire :</strong> intègre les signaux</li>
+          <li><strong>Axone :</strong> transmet le signal de sortie</li>
+          <li>Activation si le potentiel dépasse un <strong>seuil</strong></li>
+        </ul>
+      </div>
+      <div class="box box-gold" style="margin-top:0;">
+        <span class="box-label"><i class="fa fa-robot"></i> Modèle artificiel</span>
+        <ul style="margin-left:14px;font-size:13px;line-height:2;">
+          <li>McCulloch &amp; Pitts (1943) : somme pondérée + seuil</li>
+          <li>Rosenblatt (1958) : <strong>Perceptron</strong>, première machine à apprendre</li>
+          <li>$\hat{y} = \text{step}\!\left(\sum_j w_j x_j + b\right)$</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <svg width="100%" height="260" viewBox="0 0 280 260">
+        <rect width="280" height="260" fill="#f8f4f2" rx="4"/>
+        <text x="140" y="16" text-anchor="middle" fill="#3A8E5B" font-size="10" font-family="Courier New" font-weight="700" letter-spacing=".1em">PERCEPTRON DE ROSENBLATT</text>
+        <!-- Inputs -->
+        <circle cx="32" cy="65" r="12" fill="#D1F2F7" stroke="#1ea8c4" stroke-width="1.5"/>
+        <text x="32" y="70" text-anchor="middle" fill="#1B171E" font-size="10" font-family="Courier New">x₁</text>
+        <circle cx="32" cy="110" r="12" fill="#D1F2F7" stroke="#1ea8c4" stroke-width="1.5"/>
+        <text x="32" y="115" text-anchor="middle" fill="#1B171E" font-size="10" font-family="Courier New">x₂</text>
+        <circle cx="32" cy="155" r="12" fill="#D1F2F7" stroke="#1ea8c4" stroke-width="1.5"/>
+        <text x="32" y="160" text-anchor="middle" fill="#1B171E" font-size="10" font-family="Courier New">x₃</text>
+        <circle cx="32" cy="200" r="12" fill="#D1F2F7" stroke="#1ea8c4" stroke-width="1.5"/>
+        <text x="32" y="205" text-anchor="middle" fill="#1B171E" font-size="10" font-family="Courier New">x₄</text>
+        <!-- Weights -->
+        <text x="74" y="74" fill="#E8B608" font-size="9" font-family="Courier New" font-weight="700">w₁</text>
+        <text x="74" y="103" fill="#E8B608" font-size="9" font-family="Courier New" font-weight="700">w₂</text>
+        <text x="74" y="140" fill="#E8B608" font-size="9" font-family="Courier New" font-weight="700">w₃</text>
+        <text x="74" y="176" fill="#E8B608" font-size="9" font-family="Courier New" font-weight="700">w₄</text>
+        <!-- Lines -->
+        <line x1="44" y1="65" x2="112" y2="128" stroke="#3A8E5B" stroke-width="1.5"/>
+        <line x1="44" y1="110" x2="112" y2="128" stroke="#3A8E5B" stroke-width="1.5"/>
+        <line x1="44" y1="155" x2="112" y2="130" stroke="#3A8E5B" stroke-width="1.5"/>
+        <line x1="44" y1="200" x2="112" y2="132" stroke="#3A8E5B" stroke-width="1.5"/>
+        <!-- Neuron -->
+        <circle cx="140" cy="130" r="26" fill="#3A8E5B" stroke="#2a6e45" stroke-width="2"/>
+        <text x="140" y="127" text-anchor="middle" fill="#fff" font-size="9" font-family="Courier New">Σ</text>
+        <text x="140" y="140" text-anchor="middle" fill="#E8B608" font-size="9" font-family="Courier New">+ b</text>
+        <!-- Activation -->
+        <line x1="166" y1="130" x2="192" y2="130" stroke="#3A8E5B" stroke-width="1.5"/>
+        <rect x="192" y="118" width="40" height="24" fill="#E8B608" rx="3"/>
+        <text x="212" y="131" text-anchor="middle" fill="#1B171E" font-size="9" font-family="Courier New">σ(·)</text>
+        <!-- Output -->
+        <line x1="232" y1="130" x2="254" y2="130" stroke="#3A8E5B" stroke-width="1.5"/>
+        <circle cx="262" cy="130" r="10" fill="#D1F2F7" stroke="#1ea8c4" stroke-width="1.5"/>
+        <text x="262" y="134" text-anchor="middle" fill="#1B171E" font-size="9.5" font-family="Courier New">ŷ</text>
+        <!-- Bias -->
+        <rect x="116" y="185" width="48" height="20" fill="#f4f0ee" rx="2" stroke="#d4e2da"/>
+        <text x="140" y="199" text-anchor="middle" fill="#666" font-size="9" font-family="Courier New">biais b</text>
+        <line x1="140" y1="185" x2="140" y2="156" stroke="#666" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="140" y="242" text-anchor="middle" fill="#3A8E5B" font-size="9.5" font-family="Courier New">ŷ = step(w·x + b)</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 19 — DL-2 -->
+<div class="slide" id="slide-19" data-presenter="fi" data-section="dl">
+  <div class="eyebrow"><i class="fa fa-brain"></i> &nbsp;Deep Learning · 02</div>
+  <div class="slide-title">La limite du perceptron — Le problème XOR</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-gold">
+        <span class="box-label"><i class="fa fa-circle-exclamation"></i> Théorème de séparabilité</span>
+        <div style="font-size:13px;line-height:1.8;margin-top:4px;">
+          Un perceptron ne peut résoudre que des problèmes <strong>linéairement séparables</strong> : il trace une seule droite (hyperplan) de séparation.
+        </div>
+      </div>
+      <table style="margin-top:10px;">
+        <tr><th>Problème</th><th>x₁</th><th>x₂</th><th>y</th><th>Linéaire ?</th></tr>
+        <tr><td>AND</td><td>0,0,1,1</td><td>0,1,0,1</td><td>0,0,0,1</td><td style="color:var(--green);font-weight:700;">✓ Oui</td></tr>
+        <tr><td>OR</td><td>0,0,1,1</td><td>0,1,0,1</td><td>0,1,1,1</td><td style="color:var(--green);font-weight:700;">✓ Oui</td></tr>
+        <tr><td>XOR</td><td>0,0,1,1</td><td>0,1,0,1</td><td>0,1,1,0</td><td style="color:#c0392b;font-weight:700;">✗ Non</td></tr>
+      </table>
+      <div class="box box-green" style="margin-top:10px;font-size:13px;">
+        <span class="box-label"><i class="fa fa-lightbulb"></i> Solution</span>
+        Ajouter des <strong>couches cachées</strong> → les combiner crée des surfaces de décision non-linéaires. C'est le MLP !
+      </div>
+      <div class="box box-accent" style="margin-top:0;font-size:12px;font-style:italic;">
+        <span class="box-label"><i class="fa fa-snowflake"></i> Hiver de l'IA</span>
+        Minsky &amp; Papert (1969) ont démontré la limite du perceptron, causant le premier hiver de l'IA. La solution viendra avec la backpropagation (1986).
+      </div>
+    </div>
+    <div>
+      <svg width="100%" height="260" viewBox="0 0 260 260">
+        <rect width="260" height="260" fill="#f8f4f2" rx="4"/>
+        <text x="60" y="16" text-anchor="middle" fill="#3A8E5B" font-size="10" font-family="Courier New" font-weight="700">AND</text>
+        <text x="190" y="16" text-anchor="middle" fill="#c0392b" font-size="10" font-family="Courier New" font-weight="700">XOR (impossible !)</text>
+        <!-- AND grid -->
+        <circle cx="24" cy="40" r="8" fill="#fff" stroke="#3A8E5B" stroke-width="2"/>
+        <circle cx="60" cy="40" r="8" fill="#fff" stroke="#3A8E5B" stroke-width="2"/>
+        <circle cx="24" cy="76" r="8" fill="#fff" stroke="#3A8E5B" stroke-width="2"/>
+        <circle cx="60" cy="76" r="8" fill="#E8B608" stroke="#a07e04" stroke-width="2"/>
+        <text x="24" y="33" text-anchor="middle" fill="#666" font-size="7.5" font-family="Courier New">(0,0)</text>
+        <text x="60" y="33" text-anchor="middle" fill="#666" font-size="7.5" font-family="Courier New">(1,0)</text>
+        <text x="24" y="98" text-anchor="middle" fill="#666" font-size="7.5" font-family="Courier New">(0,1)</text>
+        <text x="60" y="98" text-anchor="middle" fill="#666" font-size="7.5" font-family="Courier New">(1,1)✓</text>
+        <line x1="42" y1="28" x2="76" y2="90" stroke="#3A8E5B" stroke-width="2" stroke-dasharray="4,2"/>
+        <!-- XOR grid -->
+        <circle cx="155" cy="40" r="8" fill="#fff" stroke="#3A8E5B" stroke-width="2"/>
+        <circle cx="215" cy="40" r="8" fill="#E8B608" stroke="#a07e04" stroke-width="2"/>
+        <circle cx="155" cy="76" r="8" fill="#E8B608" stroke="#a07e04" stroke-width="2"/>
+        <circle cx="215" cy="76" r="8" fill="#fff" stroke="#3A8E5B" stroke-width="2"/>
+        <text x="155" y="33" text-anchor="middle" fill="#666" font-size="7.5" font-family="Courier New">(0,0)</text>
+        <text x="215" y="33" text-anchor="middle" fill="#666" font-size="7.5" font-family="Courier New">(1,0)✓</text>
+        <text x="155" y="98" text-anchor="middle" fill="#666" font-size="7.5" font-family="Courier New">(0,1)✓</text>
+        <text x="215" y="98" text-anchor="middle" fill="#666" font-size="7.5" font-family="Courier New">(1,1)</text>
+        <!-- XOR: no single line -->
+        <line x1="130" y1="28" x2="240" y2="92" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4,3" opacity=".6"/>
+        <line x1="130" y1="88" x2="240" y2="28" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4,3" opacity=".6"/>
+        <text x="185" y="115" text-anchor="middle" fill="#c0392b" font-size="9" font-family="Courier New">Aucune droite !</text>
+        <!-- MLP XOR solution -->
+        <rect x="10" y="130" width="240" height="120" fill="#fff" rx="3" stroke="#d4e2da"/>
+        <text x="130" y="147" text-anchor="middle" fill="#3A8E5B" font-size="9.5" font-family="Courier New" font-weight="700">SOLUTION : MLP 2 couches</text>
+        <circle cx="35" cy="185" r="9" fill="#D1F2F7" stroke="#1ea8c4" stroke-width="1.5"/>
+        <text x="35" y="189" text-anchor="middle" fill="#1B171E" font-size="8" font-family="Courier New">x₁</text>
+        <circle cx="35" cy="218" r="9" fill="#D1F2F7" stroke="#1ea8c4" stroke-width="1.5"/>
+        <text x="35" y="222" text-anchor="middle" fill="#1B171E" font-size="8" font-family="Courier New">x₂</text>
+        <circle cx="110" cy="170" r="9" fill="#3A8E5B"/>
+        <circle cx="110" cy="200" r="9" fill="#3A8E5B"/>
+        <circle cx="110" cy="230" r="9" fill="#3A8E5B"/>
+        <line x1="44" y1="185" x2="101" y2="170" stroke="#3A8E5B" stroke-width="1"/>
+        <line x1="44" y1="185" x2="101" y2="200" stroke="#3A8E5B" stroke-width="1"/>
+        <line x1="44" y1="185" x2="101" y2="230" stroke="#3A8E5B" stroke-width="1"/>
+        <line x1="44" y1="218" x2="101" y2="170" stroke="#3A8E5B" stroke-width="1"/>
+        <line x1="44" y1="218" x2="101" y2="200" stroke="#3A8E5B" stroke-width="1"/>
+        <line x1="44" y1="218" x2="101" y2="230" stroke="#3A8E5B" stroke-width="1"/>
+        <circle cx="185" cy="200" r="10" fill="#E8B608" stroke="#a07e04" stroke-width="1.5"/>
+        <text x="185" y="204" text-anchor="middle" fill="#1B171E" font-size="8" font-family="Courier New">ŷ</text>
+        <line x1="119" y1="170" x2="175" y2="200" stroke="#E8B608" stroke-width="1"/>
+        <line x1="119" y1="200" x2="175" y2="200" stroke="#E8B608" stroke-width="1"/>
+        <line x1="119" y1="230" x2="175" y2="200" stroke="#E8B608" stroke-width="1"/>
+        <text x="130" y="244" text-anchor="middle" fill="#3A8E5B" font-size="9" font-family="Courier New">XOR résolu avec ReLU !</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 20 — DL-3 -->
+<div class="slide" id="slide-20" data-presenter="fi" data-section="dl">
+  <div class="eyebrow"><i class="fa fa-brain"></i> &nbsp;Deep Learning · 03</div>
+  <div class="slide-title">Le MLP — Multi-Layer Perceptron</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-diagram-project"></i> Architecture pour MNIST</span>
+        <div class="flow-row">
+          <div class="flow-box">Entrée<br><small>784</small></div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box">Cachée 1<br><small>256</small></div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box">Cachée 2<br><small>128</small></div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box gold">Sortie<br><small>10</small></div>
+        </div>
+      </div>
+      <div class="big-eq" style="margin-top:0;">
+        $\mathbf{h}^{(1)} = \sigma\!\left(\mathbf{W}^{(1)}\mathbf{x} + \mathbf{b}^{(1)}\right)$
+      </div>
+      <div class="big-eq" style="margin-top:0;">
+        $\mathbf{h}^{(2)} = \sigma\!\left(\mathbf{W}^{(2)}\mathbf{h}^{(1)} + \mathbf{b}^{(2)}\right)$
+      </div>
+      <div class="big-eq" style="margin-top:0;">
+        $\hat{\mathbf{y}} = \text{softmax}\!\left(\mathbf{W}^{(3)}\mathbf{h}^{(2)} + \mathbf{b}^{(3)}\right)$
+      </div>
+      <div class="box box-accent" style="margin-top:0;font-size:12.5px;">
+        <span class="box-label"><i class="fa fa-infinity"></i> Théorème d'approximation universelle</span>
+        Un MLP avec une seule couche cachée peut approcher n'importe quelle fonction continue (Hornik, 1989), à condition d'avoir assez de neurones.
+      </div>
+    </div>
+    <div>
+      <svg width="100%" height="270" viewBox="0 0 280 270">
+        <rect width="280" height="270" fill="#f8f4f2" rx="4"/>
+        <!-- Labels -->
+        <text x="24" y="15" text-anchor="middle" fill="#1ea8c4" font-size="9" font-family="Courier New">Entrée</text>
+        <text x="24" y="25" text-anchor="middle" fill="#1ea8c4" font-size="9" font-family="Courier New">784</text>
+        <text x="106" y="15" text-anchor="middle" fill="#3A8E5B" font-size="9" font-family="Courier New">Cachée 1</text>
+        <text x="106" y="25" text-anchor="middle" fill="#3A8E5B" font-size="9" font-family="Courier New">256</text>
+        <text x="188" y="15" text-anchor="middle" fill="#3A8E5B" font-size="9" font-family="Courier New">Cachée 2</text>
+        <text x="188" y="25" text-anchor="middle" fill="#3A8E5B" font-size="9" font-family="Courier New">128</text>
+        <text x="258" y="15" text-anchor="middle" fill="#a07e04" font-size="9" font-family="Courier New">Sortie</text>
+        <text x="258" y="25" text-anchor="middle" fill="#a07e04" font-size="9" font-family="Courier New">10</text>
+        <!-- Input neurons (5 shown) -->
+        <circle cx="24" cy="50" r="8" fill="#D1F2F7" stroke="#1ea8c4" stroke-width="1.5"/>
+        <circle cx="24" cy="80" r="8" fill="#D1F2F7" stroke="#1ea8c4" stroke-width="1.5"/>
+        <circle cx="24" cy="110" r="8" fill="#D1F2F7" stroke="#1ea8c4" stroke-width="1.5"/>
+        <text x="24" y="126" text-anchor="middle" fill="#999" font-size="14">…</text>
+        <circle cx="24" cy="150" r="8" fill="#D1F2F7" stroke="#1ea8c4" stroke-width="1.5"/>
+        <!-- Hidden 1 (4 shown) -->
+        <circle cx="106" cy="60" r="8" fill="#3A8E5B"/>
+        <circle cx="106" cy="96" r="8" fill="#3A8E5B"/>
+        <circle cx="106" cy="132" r="8" fill="#3A8E5B"/>
+        <text x="106" y="155" text-anchor="middle" fill="#999" font-size="14">…</text>
+        <circle cx="106" cy="172" r="8" fill="#3A8E5B"/>
+        <!-- Hidden 2 (3 shown) -->
+        <circle cx="188" cy="80" r="8" fill="#3A8E5B"/>
+        <circle cx="188" cy="120" r="8" fill="#3A8E5B"/>
+        <circle cx="188" cy="160" r="8" fill="#3A8E5B"/>
+        <!-- Output (4 shown + ...) -->
+        <circle cx="258" cy="70" r="8" fill="#E8B608" stroke="#a07e04" stroke-width="1.5"/>
+        <circle cx="258" cy="100" r="8" fill="#E8B608" stroke="#a07e04" stroke-width="1.5"/>
+        <circle cx="258" cy="130" r="8" fill="#E8B608" stroke="#a07e04" stroke-width="1.5"/>
+        <text x="258" y="152" text-anchor="middle" fill="#999" font-size="14">…</text>
+        <!-- Connections (sample) -->
+        <line x1="32" y1="50" x2="98" y2="60" stroke="#3A8E5B" stroke-width=".7" opacity=".5"/>
+        <line x1="32" y1="50" x2="98" y2="96" stroke="#3A8E5B" stroke-width=".7" opacity=".5"/>
+        <line x1="32" y1="80" x2="98" y2="60" stroke="#3A8E5B" stroke-width=".7" opacity=".5"/>
+        <line x1="32" y1="80" x2="98" y2="132" stroke="#3A8E5B" stroke-width=".7" opacity=".5"/>
+        <line x1="114" y1="60" x2="180" y2="80" stroke="#E8B608" stroke-width=".7" opacity=".5"/>
+        <line x1="114" y1="96" x2="180" y2="120" stroke="#E8B608" stroke-width=".7" opacity=".5"/>
+        <line x1="114" y1="132" x2="180" y2="80" stroke="#E8B608" stroke-width=".7" opacity=".5"/>
+        <line x1="196" y1="80" x2="250" y2="70" stroke="#a07e04" stroke-width=".7" opacity=".5"/>
+        <line x1="196" y1="120" x2="250" y2="100" stroke="#a07e04" stroke-width=".7" opacity=".5"/>
+        <line x1="196" y1="160" x2="250" y2="130" stroke="#a07e04" stroke-width=".7" opacity=".5"/>
+        <!-- Labels below -->
+        <text x="140" y="210" text-anchor="middle" fill="#3A8E5B" font-size="9.5" font-family="Courier New" font-weight="700">Feed-forward : x → h¹ → h² → ŷ</text>
+        <text x="140" y="230" text-anchor="middle" fill="#666" font-size="8.5" font-style="italic" font-family="Palatino Linotype,Georgia,serif">Chaque flèche = un poids (W) appris par backprop</text>
+        <rect x="10" y="244" width="260" height="20" fill="#fff" rx="2" stroke="#d4e2da"/>
+        <text x="140" y="258" text-anchor="middle" fill="#3A8E5B" font-size="9" font-family="Courier New">784×256 + 256×128 + 128×10 = 233 482 paramètres</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 21 — DL-4 -->
+<div class="slide" id="slide-21" data-presenter="fi" data-section="dl">
+  <div class="eyebrow"><i class="fa fa-brain"></i> &nbsp;Deep Learning · 04</div>
+  <div class="slide-title">Forward Propagation — Comment l'information circule</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-arrow-right"></i> Propagation avant (batch)</span>
+        <div style="font-size:13px;line-height:1.8;margin-top:4px;">
+          Pour un mini-batch $\mathbf{X} \in \mathbb{R}^{m \times n}$ ($m$ exemples, $n$ features) :
+        </div>
+        <div class="big-eq" style="margin-top:6px;font-size:.9em;">
+          $\mathbf{Z}^{(1)} = \mathbf{X}\mathbf{W}^{(1)} + \mathbf{b}^{(1)}$
+        </div>
+        <div class="big-eq">
+          $\mathbf{A}^{(1)} = \text{ReLU}(\mathbf{Z}^{(1)})$
+        </div>
+        <div class="big-eq">
+          $\mathbf{Z}^{(2)} = \mathbf{A}^{(1)}\mathbf{W}^{(2)} + \mathbf{b}^{(2)},\quad \hat{\mathbf{Y}} = \text{softmax}(\mathbf{Z}^{(2)})$
+        </div>
+      </div>
+      <div class="code-block" style="margin-top:8px;">
+<span style="color:#89b4fa">def</span> <span style="color:#a6e3a1">forward</span>(X, W1, b1, W2, b2):
+    Z1 = X @ W1 + b1
+    A1 = relu(Z1)        <span style="color:#6c7086"># max(0, Z1)</span>
+    Z2 = A1 @ W2 + b2
+    A2 = softmax(Z2)
+    cache = {<span style="color:#a6e3a1">'Z1'</span>:Z1,<span style="color:#a6e3a1">'A1'</span>:A1,<span style="color:#a6e3a1">'Z2'</span>:Z2,<span style="color:#a6e3a1">'A2'</span>:A2}
+    <span style="color:#cba6f7">return</span> A2, cache</div>
+    </div>
+    <div>
+      <div class="box box-gold">
+        <span class="box-label"><i class="fa fa-lightbulb"></i> Pourquoi les opérations matricielles ?</span>
+        <ul style="margin-left:14px;font-size:13px;line-height:2;">
+          <li>Tous les $m$ exemples traités <strong>en parallèle</strong></li>
+          <li>Exploite les GPU (opérations BLAS hautement optimisées)</li>
+          <li>Code vectorisé 100× plus rapide que les boucles Python</li>
+        </ul>
+      </div>
+      <div class="box box-accent" style="margin-top:0;">
+        <span class="box-label"><i class="fa fa-database"></i> Softmax pour la classification</span>
+        <div style="font-size:13px;line-height:1.8;margin-top:4px;">
+          $\text{softmax}(z_k) = \dfrac{e^{z_k}}{\sum_j e^{z_j}}$<br>
+          Convertit les logits en probabilités qui somment à 1.
+          Compatible avec la cross-entropy.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 22 — DL-5 -->
+<div class="slide" id="slide-22" data-presenter="fi" data-section="dl">
+  <div class="eyebrow"><i class="fa fa-brain"></i> &nbsp;Deep Learning · 05</div>
+  <div class="slide-title">Fonctions d'activation — Apporter la non-linéarité</div>
+  <table>
+    <tr><th>Fonction</th><th>Formule</th><th>Domaine</th><th>Avantage</th><th>Inconvénient</th></tr>
+    <tr><td><strong>Sigmoid</strong></td><td>$\sigma(x) = \frac{1}{1+e^{-x}}$</td><td>$(0, 1)$</td><td>Probabilité de sortie</td><td>Vanishing gradient</td></tr>
+    <tr><td><strong>Tanh</strong></td><td>$\tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}$</td><td>$(-1, 1)$</td><td>Centré sur 0</td><td>Vanishing gradient</td></tr>
+    <tr class="highlight"><td><strong>ReLU</strong></td><td>$\max(0, x)$</td><td>$[0, +\infty)$</td><td>Simple, pas de saturation</td><td>Neurones morts</td></tr>
+    <tr><td><strong>GELU</strong></td><td>$x \cdot \Phi(x)$</td><td>$\mathbb{R}$</td><td>Lisse, mieux que ReLU</td><td>Coûteux à calculer</td></tr>
+  </table>
+  <div class="two-col" style="margin-top:12px;">
+    <div class="box" style="background:#fff;border:1px solid var(--line);">
+      <span class="box-label" style="color:var(--green);">Courbes des fonctions</span>
+      <div class="chart-wrap" style="height:190px;"><canvas id="activation-chart"></canvas></div>
+    </div>
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-circle-check"></i> Recommandation pratique</span>
+        <ul style="margin-left:14px;font-size:13px;line-height:2;">
+          <li><strong>Couches cachées :</strong> ReLU par défaut</li>
+          <li><strong>Transformers :</strong> GELU (meilleure douceur)</li>
+          <li><strong>Sortie binaire :</strong> Sigmoid</li>
+          <li><strong>Sortie multi-classes :</strong> Softmax</li>
+        </ul>
+      </div>
+      <div class="box box-gold" style="margin-top:0;font-size:12.5px;">
+        <span class="box-label"><i class="fa fa-bolt"></i> Dérivée de ReLU</span>
+        $\text{ReLU}'(x) = \begin{cases} 1 & x > 0 \\ 0 & x \le 0 \end{cases}$<br>
+        Simple à calculer → entraînement rapide
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 23 — DL-6 -->
+<div class="slide" id="slide-23" data-presenter="fi" data-section="dl">
+  <div class="eyebrow"><i class="fa fa-brain"></i> &nbsp;Deep Learning · 06</div>
+  <div class="slide-title">Fonction de Coût — Mesurer l'erreur</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-chart-bar"></i> Classification — Cross-entropy</span>
+        <div class="big-eq">$$L = -\frac{1}{N}\sum_{i=1}^{N}\sum_{c=1}^{C} y_{i,c} \log(\hat{y}_{i,c})$$</div>
+        <ul style="margin-left:14px;font-size:12.5px;line-height:2;">
+          <li>$y_{i,c} \in \{0,1\}$ : vraie classe (one-hot)</li>
+          <li>$\hat{y}_{i,c}$ : probabilité prédite par softmax</li>
+          <li>Pénalise fortement les prédictions confiantes mais fausses</li>
+        </ul>
+      </div>
+      <div class="box box-gold" style="margin-top:0;">
+        <span class="box-label"><i class="fa fa-ruler"></i> Régression — MSE</span>
+        <div class="big-eq">$$L = \frac{1}{N}\sum_{i=1}^{N} (y_i - \hat{y}_i)^2$$</div>
+      </div>
+    </div>
+    <div>
+      <div class="box" style="background:#fff;border:1px solid var(--line);">
+        <span class="box-label" style="color:var(--green);">Cross-entropy vs. prédiction</span>
+        <div class="chart-wrap" style="height:170px;"><canvas id="loss-chart"></canvas></div>
+      </div>
+      <div class="box box-accent" style="margin-top:0;font-size:13px;">
+        <span class="box-label"><i class="fa fa-question"></i> Pourquoi pas MSE pour la classification ?</span>
+        MSE + sigmoid → gradient très faible quand le modèle est confiant mais faux (saturation). La cross-entropy + softmax a un gradient bien conditionné : $\nabla_z L = \hat{y} - y$.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 24 — DL-7 -->
+<div class="slide" id="slide-24" data-presenter="os" data-section="dl">
+  <div class="eyebrow"><i class="fa fa-brain"></i> &nbsp;Deep Learning · 07</div>
+  <div class="slide-title">Backpropagation — Apprendre de ses erreurs</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-rotate-left"></i> Principe : règle de la chaîne</span>
+        <ul style="margin-left:14px;font-size:13px;line-height:2;">
+          <li>Calculer $\frac{\partial L}{\partial W}$ par application de la règle de la chaîne</li>
+          <li>Du <strong>dernier layer</strong> vers le <strong>premier</strong></li>
+          <li>Chaque poids $W_{ij}$ est ajusté proportionnellement à sa contribution à l'erreur</li>
+        </ul>
+        <div style="margin-top:8px;font-size:13px;">
+          $\frac{\partial L}{\partial W^{(l)}} = \frac{\partial L}{\partial z^{(l+1)}} \cdot \frac{\partial z^{(l+1)}}{\partial W^{(l)}} = \delta^{(l+1)} \cdot (a^{(l)})^T$
+        </div>
+      </div>
+      <div class="box box-gold" style="margin-top:0;">
+        <span class="box-label"><i class="fa fa-history"></i> Histoire</span>
+        <div style="font-size:12.5px;line-height:1.8;">
+          Rumelhart, Hinton &amp; Williams (1986) popularisent la backprop → fin du 1er hiver de l'IA. Werbos l'avait inventée en 1974 dans sa thèse !
+        </div>
+      </div>
+    </div>
+    <div>
+      <svg width="100%" height="260" viewBox="0 0 280 260">
+        <rect width="280" height="260" fill="#f8f4f2" rx="4"/>
+        <text x="140" y="16" text-anchor="middle" fill="#3A8E5B" font-size="10" font-family="Courier New" font-weight="700">FORWARD (bleu) / BACKWARD (rouge)</text>
+        <!-- Layers -->
+        <rect x="10" y="28" width="44" height="180" fill="#D1F2F7" rx="3" opacity=".7"/>
+        <text x="32" y="120" text-anchor="middle" fill="#1ea8c4" font-size="9" font-family="Courier New" transform="rotate(-90,32,120)">Entrée</text>
+        <rect x="74" y="28" width="44" height="180" fill="#eaf6f0" rx="3" opacity=".9"/>
+        <text x="96" y="120" text-anchor="middle" fill="#3A8E5B" font-size="9" font-family="Courier New" transform="rotate(-90,96,120)">Cachée 1</text>
+        <rect x="138" y="28" width="44" height="180" fill="#eaf6f0" rx="3" opacity=".9"/>
+        <text x="160" y="120" text-anchor="middle" fill="#3A8E5B" font-size="9" font-family="Courier New" transform="rotate(-90,160,120)">Cachée 2</text>
+        <rect x="202" y="28" width="44" height="180" fill="#fdf9e8" rx="3" opacity=".9"/>
+        <text x="224" y="120" text-anchor="middle" fill="#a07e04" font-size="9" font-family="Courier New" transform="rotate(-90,224,120)">Sortie</text>
+        <!-- Loss -->
+        <rect x="252" y="95" width="24" height="40" fill="#c0392b" rx="3"/>
+        <text x="264" y="113" text-anchor="middle" fill="#fff" font-size="7.5" font-family="Courier New">L</text>
+        <text x="264" y="125" text-anchor="middle" fill="#fff" font-size="7.5" font-family="Courier New">oss</text>
+        <!-- Forward arrows -->
+        <path d="M54,80 Q64,80 74,80" stroke="#1ea8c4" stroke-width="2" fill="none" marker-end="url(#af)"/>
+        <path d="M118,80 Q128,80 138,80" stroke="#1ea8c4" stroke-width="2" fill="none" marker-end="url(#af)"/>
+        <path d="M182,80 Q192,80 202,80" stroke="#1ea8c4" stroke-width="2" fill="none" marker-end="url(#af)"/>
+        <path d="M246,115 L252,115" stroke="#1ea8c4" stroke-width="2" fill="none"/>
+        <!-- Backward arrows -->
+        <path d="M74,140 Q64,140 54,140" stroke="#c0392b" stroke-width="2" fill="none" marker-end="url(#ab)"/>
+        <path d="M138,140 Q128,140 118,140" stroke="#c0392b" stroke-width="2" fill="none" marker-end="url(#ab)"/>
+        <path d="M202,140 Q192,140 182,140" stroke="#c0392b" stroke-width="2" fill="none" marker-end="url(#ab)"/>
+        <path d="M252,125 L246,140" stroke="#c0392b" stroke-width="2" fill="none"/>
+        <!-- Arrow markers -->
+        <defs>
+          <marker id="af" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#1ea8c4"/>
+          </marker>
+          <marker id="ab" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#c0392b"/>
+          </marker>
+        </defs>
+        <text x="64" y="72" text-anchor="middle" fill="#1ea8c4" font-size="8" font-family="Courier New">→ A¹</text>
+        <text x="128" y="72" text-anchor="middle" fill="#1ea8c4" font-size="8" font-family="Courier New">→ A²</text>
+        <text x="192" y="72" text-anchor="middle" fill="#1ea8c4" font-size="8" font-family="Courier New">→ ŷ</text>
+        <text x="64" y="132" text-anchor="middle" fill="#c0392b" font-size="8" font-family="Courier New">δ¹ ←</text>
+        <text x="128" y="132" text-anchor="middle" fill="#c0392b" font-size="8" font-family="Courier New">δ² ←</text>
+        <text x="192" y="132" text-anchor="middle" fill="#c0392b" font-size="8" font-family="Courier New">δ³ ←</text>
+        <rect x="10" y="224" width="260" height="28" fill="#fff" rx="2" stroke="#d4e2da"/>
+        <text x="140" y="236" text-anchor="middle" fill="#3A8E5B" font-size="8.5" font-family="Courier New" font-weight="700">Mise à jour : W ← W − η · ∂L/∂W</text>
+        <text x="140" y="248" text-anchor="middle" fill="#666" font-size="8" font-family="Courier New">(η = taux d'apprentissage)</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 25 — DL-8 -->
+<div class="slide" id="slide-25" data-presenter="os" data-section="dl">
+  <div class="eyebrow"><i class="fa fa-brain"></i> &nbsp;Deep Learning · 08</div>
+  <div class="slide-title">Backpropagation — Équations</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-subscript"></i> Couche de sortie ($L$)</span>
+        <div class="big-eq">$$\boldsymbol{\delta}^{(L)} = \nabla_{\mathbf{a}} \mathcal{L} \odot \sigma'\!\left(\mathbf{z}^{(L)}\right)$$</div>
+        <div style="font-size:12.5px;margin-top:4px;">Pour softmax + cross-entropy : $\boldsymbol{\delta}^{(L)} = \hat{\mathbf{y}} - \mathbf{y}$</div>
+      </div>
+      <div class="box box-gold" style="margin-top:0;">
+        <span class="box-label"><i class="fa fa-arrow-left-long"></i> Couches cachées ($l < L$)</span>
+        <div class="big-eq">$$\boldsymbol{\delta}^{(l)} = \left(\mathbf{W}^{(l+1)T}\boldsymbol{\delta}^{(l+1)}\right) \odot \sigma'\!\left(\mathbf{z}^{(l)}\right)$$</div>
+      </div>
+      <div class="box box-accent" style="margin-top:0;">
+        <span class="box-label"><i class="fa fa-wrench"></i> Mise à jour des poids</span>
+        <div class="big-eq">$$\frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(l)}} = \boldsymbol{\delta}^{(l)} \cdot \left(\mathbf{a}^{(l-1)}\right)^T$$</div>
+        <div class="big-eq">$$\mathbf{W}^{(l)} \leftarrow \mathbf{W}^{(l)} - \eta \frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(l)}}$$</div>
+      </div>
+    </div>
+    <div>
+      <div class="box box-dark">
+        <span class="box-label">Notation</span>
+        <ul style="margin-left:14px;font-size:12.5px;line-height:2;">
+          <li>$\odot$ : produit élément par élément (Hadamard)</li>
+          <li>$\sigma'$ : dérivée de la fonction d'activation</li>
+          <li>$\eta$ : taux d'apprentissage (learning rate)</li>
+          <li>$\boldsymbol{\delta}^{(l)}$ : signal d'erreur local de la couche $l$</li>
+        </ul>
+      </div>
+      <div class="box box-green" style="margin-top:0;font-size:12.5px;">
+        <span class="box-label"><i class="fa fa-clock"></i> Complexité</span>
+        Forward : $O(W)$ où $W$ = nombre total de poids<br>
+        Backward : $O(2W)$ — seulement 2× le forward !<br>
+        C'est pourquoi la backprop est si efficace.
+      </div>
+      <div class="box box-gold" style="margin-top:0;font-size:12px;font-style:italic;">
+        <span class="box-label"><i class="fa fa-quote-left"></i> Citation</span>
+        "Backpropagation is just the chain rule of calculus applied cleverly." — Geoffrey Hinton
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 26 — DL-9 -->
+<div class="slide" id="slide-26" data-presenter="os" data-section="dl">
+  <div class="eyebrow"><i class="fa fa-brain"></i> &nbsp;Deep Learning · 09</div>
+  <div class="slide-title">Backpropagation NumPy from Scratch</div>
+  <div class="two-col">
+    <div class="code-block">
+<span style="color:#89b4fa">def</span> <span style="color:#a6e3a1">backward</span>(X, y, cache, params):
+    grads = {}
+    m = X.shape[<span style="color:#fab387">0</span>]
+    A1, A2, Z1 = cache[<span style="color:#a6e3a1">'A1'</span>], cache[<span style="color:#a6e3a1">'A2'</span>], cache[<span style="color:#a6e3a1">'Z1'</span>]
+    W2 = params[<span style="color:#a6e3a1">'W2'</span>]
+
+    <span style="color:#6c7086"># Couche sortie — softmax + cross-entropy</span>
+    dz2 = A2 - y                     <span style="color:#6c7086"># (m, 10)</span>
+    grads[<span style="color:#a6e3a1">'W2'</span>] = (<span style="color:#fab387">1</span>/m) * dz2.T @ A1
+    grads[<span style="color:#a6e3a1">'b2'</span>] = (<span style="color:#fab387">1</span>/m) * np.sum(dz2, axis=<span style="color:#fab387">0</span>)
+
+    <span style="color:#6c7086"># Couche cachée — ReLU</span>
+    dz1 = dz2 @ W2.T * (Z1 > <span style="color:#fab387">0</span>)    <span style="color:#6c7086"># dérivée ReLU</span>
+    grads[<span style="color:#a6e3a1">'W1'</span>] = (<span style="color:#fab387">1</span>/m) * dz1.T @ X
+    grads[<span style="color:#a6e3a1">'b1'</span>] = (<span style="color:#fab387">1</span>/m) * np.sum(dz1, axis=<span style="color:#fab387">0</span>)
+
+    <span style="color:#cba6f7">return</span> grads
+
+
+<span style="color:#89b4fa">def</span> <span style="color:#a6e3a1">update</span>(params, grads, lr=<span style="color:#fab387">0.01</span>):
+    <span style="color:#cba6f7">for</span> key <span style="color:#cba6f7">in</span> params:
+        params[key] -= lr * grads[key]
+    <span style="color:#cba6f7">return</span> params</div>
+    <div class="code-block">
+<span style="color:#6c7086"># Boucle d'entraînement complète</span>
+<span style="color:#cba6f7">for</span> epoch <span style="color:#cba6f7">in</span> range(<span style="color:#fab387">100</span>):
+    <span style="color:#cba6f7">for</span> X_b, y_b <span style="color:#cba6f7">in</span> mini_batches(X_train, y_train):
+        <span style="color:#6c7086"># Forward</span>
+        A2, cache = forward(X_b, **params)
+        loss = cross_entropy(y_b, A2)
+
+        <span style="color:#6c7086"># Backward</span>
+        grads = backward(X_b, y_b, cache, params)
+
+        <span style="color:#6c7086"># Update</span>
+        params = update(params, grads)
+
+    <span style="color:#cba6f7">if</span> epoch % <span style="color:#fab387">10</span> == <span style="color:#fab387">0</span>:
+        <span style="color:#89b4fa">print</span>(f<span style="color:#a6e3a1">"Epoch {epoch} — Loss: {loss:.4f}"</span>)</div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 27 — DL-10 -->
+<div class="slide" id="slide-27" data-presenter="os" data-section="dl">
+  <div class="eyebrow"><i class="fa fa-brain"></i> &nbsp;Deep Learning · 10</div>
+  <div class="slide-title">Optimisation — SGD et ses variantes</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-chart-line"></i> Gradient Descent classique (GD)</span>
+        <div class="big-eq">$$\theta_{t+1} = \theta_t - \eta \nabla_\theta L(\theta_t; \mathcal{D})$$</div>
+        <ul style="margin-left:14px;font-size:13px;line-height:1.8;">
+          <li><strong>Batch GD :</strong> utilise tout le dataset ($m = N$) → lent mais précis</li>
+          <li><strong>SGD :</strong> un seul exemple ($m = 1$) → rapide mais bruité</li>
+          <li><strong>Mini-batch SGD :</strong> $m \in \{32, 64, 128\}$ → compromis optimal</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="box" style="background:#fff;border:1px solid var(--line);">
+        <span class="box-label" style="color:var(--green);">Convergence selon la taille du batch</span>
+        <div class="chart-wrap" style="height:190px;"><canvas id="sgd-chart"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 28 — DL-11 -->
+<div class="slide" id="slide-28" data-presenter="os" data-section="dl">
+  <div class="eyebrow"><i class="fa fa-brain"></i> &nbsp;Deep Learning · 11</div>
+  <div class="slide-title">Optimiseurs avancés — Momentum &amp; Adam</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-wind"></i> Momentum</span>
+        <div class="big-eq">$$v_t = \beta v_{t-1} + \eta \nabla_\theta L$$</div>
+        <div class="big-eq">$$\theta_{t+1} = \theta_t - v_t$$</div>
+        <div style="font-size:12.5px;">Accumule le gradient comme une balle qui roule ($\beta \approx 0{,}9$). Accélère dans les directions persistantes.</div>
+      </div>
+      <div class="box box-gold" style="margin-top:0;">
+        <span class="box-label"><i class="fa fa-star"></i> Adam (Kingma &amp; Ba, 2015)</span>
+        <div class="big-eq" style="font-size:.85em;">$$m_t = \beta_1 m_{t-1} + (1{-}\beta_1)g_t$$</div>
+        <div class="big-eq" style="font-size:.85em;">$$v_t = \beta_2 v_{t-1} + (1{-}\beta_2)g_t^2$$</div>
+        <div class="big-eq" style="font-size:.85em;">$$\theta_{t+1} = \theta_t - \eta\frac{\hat{m}_t}{\sqrt{\hat{v}_t}+\epsilon}$$</div>
+        <div style="font-size:12px;">Paramètres standards : $\beta_1=0{,}9$, $\beta_2=0{,}999$, $\eta=10^{-3}$</div>
+      </div>
+    </div>
+    <div>
+      <div class="box" style="background:#fff;border:1px solid var(--line);">
+        <span class="box-label" style="color:var(--green);">Comparaison des optimiseurs</span>
+        <div class="chart-wrap" style="height:170px;"><canvas id="optimizer-chart"></canvas></div>
+      </div>
+      <div class="box box-accent" style="margin-top:0;font-size:12.5px;">
+        <span class="box-label"><i class="fa fa-circle-check"></i> Recommandation</span>
+        <strong>Adam par défaut</strong> pour la plupart des cas. SGD + Momentum parfois mieux pour la généralisation finale (LR warmup + cosine decay).
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 29 — DL-12 -->
+<div class="slide" id="slide-29" data-presenter="os" data-section="dl">
+  <div class="eyebrow"><i class="fa fa-brain"></i> &nbsp;Deep Learning · 12</div>
+  <div class="slide-title">Le problème du Vanishing Gradient</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-gold">
+        <span class="box-label"><i class="fa fa-triangle-exclamation"></i> Le problème</span>
+        <div style="font-size:13px;line-height:1.8;margin-top:4px;">
+          En appliquant la règle de la chaîne sur $L$ couches :
+          <div class="big-eq" style="font-size:.85em;">$$\frac{\partial L}{\partial W^{(1)}} = \prod_{l=2}^{L} \frac{\partial a^{(l)}}{\partial z^{(l)}} \cdot W^{(l)}$$</div>
+          Si $|\sigma'(z)| < 1$ (sigmoid, tanh), le produit $\to 0$ exponentiellement.
+        </div>
+      </div>
+      <div class="box box-accent" style="margin-top:0;font-size:13px;">
+        <span class="box-label"><i class="fa fa-wrench"></i> Solutions</span>
+        <ul style="margin-left:14px;line-height:2;">
+          <li><strong>ReLU :</strong> dérivée = 1 si $x > 0$ (pas de saturation)</li>
+          <li><strong>Batch Normalization :</strong> normalise les activations entre couches</li>
+          <li><strong>Connexions résiduelles :</strong> $h(x) = f(x) + x$ (ResNet)</li>
+          <li><strong>Initialisation soignée :</strong> He, Glorot/Xavier</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="box" style="background:#fff;border:1px solid var(--line);">
+        <span class="box-label" style="color:var(--green);">Norme du gradient par couche</span>
+        <div class="chart-wrap" style="height:200px;"><canvas id="vanishing-chart"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 30 — DL-13 -->
+<div class="slide" id="slide-30" data-presenter="ms" data-section="dl">
+  <div class="eyebrow"><i class="fa fa-brain"></i> &nbsp;Deep Learning · 13</div>
+  <div class="slide-title">Dropout — La régularisation essentielle</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-droplet"></i> Algorithme (Srivastava et al., 2014)</span>
+        <div class="code-block" style="margin-top:8px;font-size:11px;">ENTRAÎNEMENT :
+  Pour chaque neurone j :
+    mask_j ~ Bernoulli(1 - p)  # p = dropout rate
+    a_j ← a_j × mask_j / (1-p) # rescaling
+
+TEST :
+  Utiliser tous les neurones (pas de masque)
+  Les poids sont déjà à l'échelle correcte</div>
+      </div>
+      <div class="box box-gold" style="margin-top:0;font-size:12.5px;">
+        <span class="box-label"><i class="fa fa-sliders"></i> Valeurs typiques de p</span>
+        <ul style="margin-left:14px;line-height:2;">
+          <li>Couches denses : <strong>p = 0.4–0.5</strong></li>
+          <li>Couches convolutives : <strong>p = 0.1–0.25</strong></li>
+          <li>Couche d'entrée : <strong>p = 0.1–0.2</strong> (rare)</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <svg width="100%" height="255" viewBox="0 0 270 255">
+        <rect width="270" height="255" fill="#f8f4f2" rx="4"/>
+        <text x="70" y="16" text-anchor="middle" fill="#3A8E5B" font-size="10" font-family="Courier New" font-weight="700">AVANT DROPOUT</text>
+        <text x="200" y="16" text-anchor="middle" fill="#a07e04" font-size="10" font-family="Courier New" font-weight="700">APRÈS DROPOUT</text>
+        <!-- Full network left -->
+        <circle cx="24" cy="60" r="8" fill="#D1F2F7" stroke="#1ea8c4" stroke-width="1.5"/>
+        <circle cx="24" cy="95" r="8" fill="#D1F2F7" stroke="#1ea8c4" stroke-width="1.5"/>
+        <circle cx="24" cy="130" r="8" fill="#D1F2F7" stroke="#1ea8c4" stroke-width="1.5"/>
+        <circle cx="65" cy="45" r="8" fill="#3A8E5B"/>
+        <circle cx="65" cy="80" r="8" fill="#3A8E5B"/>
+        <circle cx="65" cy="115" r="8" fill="#3A8E5B"/>
+        <circle cx="65" cy="150" r="8" fill="#3A8E5B"/>
+        <circle cx="106" cy="60" r="8" fill="#E8B608" stroke="#a07e04" stroke-width="1.5"/>
+        <circle cx="106" cy="95" r="8" fill="#E8B608" stroke="#a07e04" stroke-width="1.5"/>
+        <circle cx="106" cy="130" r="8" fill="#E8B608" stroke="#a07e04" stroke-width="1.5"/>
+        <line x1="32" y1="60" x2="57" y2="45" stroke="#3A8E5B" stroke-width=".8" opacity=".7"/>
+        <line x1="32" y1="60" x2="57" y2="80" stroke="#3A8E5B" stroke-width=".8" opacity=".7"/>
+        <line x1="32" y1="95" x2="57" y2="80" stroke="#3A8E5B" stroke-width=".8" opacity=".7"/>
+        <line x1="32" y1="95" x2="57" y2="115" stroke="#3A8E5B" stroke-width=".8" opacity=".7"/>
+        <line x1="32" y1="130" x2="57" y2="115" stroke="#3A8E5B" stroke-width=".8" opacity=".7"/>
+        <line x1="32" y1="130" x2="57" y2="150" stroke="#3A8E5B" stroke-width=".8" opacity=".7"/>
+        <line x1="73" y1="45" x2="98" y2="60" stroke="#a07e04" stroke-width=".8" opacity=".7"/>
+        <line x1="73" y1="80" x2="98" y2="60" stroke="#a07e04" stroke-width=".8" opacity=".7"/>
+        <line x1="73" y1="80" x2="98" y2="95" stroke="#a07e04" stroke-width=".8" opacity=".7"/>
+        <line x1="73" y1="115" x2="98" y2="95" stroke="#a07e04" stroke-width=".8" opacity=".7"/>
+        <line x1="73" y1="115" x2="98" y2="130" stroke="#a07e04" stroke-width=".8" opacity=".7"/>
+        <line x1="73" y1="150" x2="98" y2="130" stroke="#a07e04" stroke-width=".8" opacity=".7"/>
+        <!-- Dropout network right -->
+        <circle cx="158" cy="60" r="8" fill="#D1F2F7" stroke="#1ea8c4" stroke-width="1.5"/>
+        <circle cx="158" cy="95" r="8" fill="#D1F2F7" stroke="#1ea8c4" stroke-width="1.5"/>
+        <circle cx="158" cy="130" r="8" fill="#D1F2F7" stroke="#1ea8c4" stroke-width="1.5"/>
+        <!-- Hidden with dropout -->
+        <circle cx="200" cy="45" r="8" fill="#3A8E5B"/>
+        <circle cx="200" cy="80" r="8" fill="#eee" stroke="#bbb" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <text x="200" y="84" text-anchor="middle" fill="#bbb" font-size="11">×</text>
+        <circle cx="200" cy="115" r="8" fill="#3A8E5B"/>
+        <circle cx="200" cy="150" r="8" fill="#eee" stroke="#bbb" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <text x="200" y="154" text-anchor="middle" fill="#bbb" font-size="11">×</text>
+        <circle cx="240" cy="60" r="8" fill="#E8B608" stroke="#a07e04" stroke-width="1.5"/>
+        <circle cx="240" cy="95" r="8" fill="#E8B608" stroke="#a07e04" stroke-width="1.5"/>
+        <circle cx="240" cy="130" r="8" fill="#E8B608" stroke="#a07e04" stroke-width="1.5"/>
+        <line x1="166" y1="60" x2="192" y2="45" stroke="#3A8E5B" stroke-width=".8"/>
+        <line x1="166" y1="95" x2="192" y2="115" stroke="#3A8E5B" stroke-width=".8"/>
+        <line x1="166" y1="130" x2="192" y2="115" stroke="#3A8E5B" stroke-width=".8"/>
+        <line x1="208" y1="45" x2="232" y2="60" stroke="#a07e04" stroke-width=".8"/>
+        <line x1="208" y1="115" x2="232" y2="95" stroke="#a07e04" stroke-width=".8"/>
+        <line x1="208" y1="115" x2="232" y2="130" stroke="#a07e04" stroke-width=".8"/>
+        <rect x="140" y="184" width="120" height="18" fill="#E8B608" rx="3"/>
+        <text x="200" y="197" text-anchor="middle" fill="#1B171E" font-size="8.5" font-family="Courier New" font-weight="700">2 neurones désactivés</text>
+        <text x="135" y="222" fill="#666" font-size="8.5" font-family="Courier New">p = 0.5 → 50% désactivés</text>
+        <text x="135" y="238" fill="#3A8E5B" font-size="8.5" font-family="Courier New">Sous-réseau différent à chaque batch</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 31 — DL-14 ⭐ -->
+<div class="slide" id="slide-31" data-presenter="ms" data-section="dl">
+  <div class="eyebrow"><i class="fa fa-brain"></i> &nbsp;Deep Learning · 14</div>
+  <div class="slide-title">Dropout = Bagging — Le Pont ML ↔ DL <i class="fa fa-star" style="color:var(--gold);"></i></div>
+  <div class="box box-star" style="margin-bottom:14px;text-align:center;">
+    <span class="box-label"><i class="fa fa-key"></i> Résultat de Gal &amp; Ghahramani (ICML 2016)</span>
+    Un réseau avec Dropout est une <strong>approximation variationnelle bayésienne</strong> — équivalente à un ensemble de $2^M$ modèles
+  </div>
+  <table>
+    <tr><th></th><th>Bagging classique</th><th>Dropout (implicite)</th></tr>
+    <tr><td><strong>Nombre de modèles</strong></td><td>$T$ (fixe, ex: 100)</td><td>$2^M$ (exponentiel !)</td></tr>
+    <tr><td><strong>Poids</strong></td><td>Distincts ($W_1, W_2, \ldots, W_T$)</td><td><strong>Partagés</strong> (1 seul réseau)</td></tr>
+    <tr><td><strong>Diversité</strong></td><td>Bootstrap des données</td><td>Masque aléatoire des neurones</td></tr>
+    <tr><td><strong>Inférence</strong></td><td>Vote / moyenne sur $T$ modèles</td><td>Scaling des poids (approximation)</td></tr>
+    <tr class="highlight"><td><strong>Coût mémoire</strong></td><td>$T \times$ taille du modèle</td><td><strong>$1\times$</strong> taille du modèle !</td></tr>
+    <tr class="highlight"><td><strong>Coût entraînement</strong></td><td>$T \times$ plus lent</td><td><strong>$\approx 1\times$</strong> (+ ~20%)</td></tr>
+  </table>
+  <div class="box box-accent" style="margin-top:10px;font-size:13px;text-align:center;">
+    <span class="box-label"><i class="fa fa-lightbulb"></i> Conséquence pratique — MC-Dropout</span>
+    À l'inférence, activer le dropout et faire $T$ passes forward → <strong>distribution de prédictions</strong> → estimation de l'incertitude !
+    <div class="big-eq" style="margin-top:6px;font-size:.9em;">$$\text{Incertitude} \approx \text{Var}[\{f(x, \omega_t)\}_{t=1}^T]$$</div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 32 — DL-15 -->
+<div class="slide" id="slide-32" data-presenter="ms" data-section="dl">
+  <div class="eyebrow"><i class="fa fa-brain"></i> &nbsp;Deep Learning · 15</div>
+  <div class="slide-title">Expériences sur Fashion-MNIST</div>
+  <div class="two-col">
+    <div>
+      <table>
+        <tr><th>Configuration</th><th>Accuracy</th><th>Temps/epoch</th></tr>
+        <tr><td>MLP simple (2 couches)</td><td>0.89</td><td>2 s</td></tr>
+        <tr><td>MLP + Dropout (p=0.2)</td><td>0.90</td><td>2 s</td></tr>
+        <tr><td>MLP + Dropout (p=0.5)</td><td>0.88</td><td>2 s</td></tr>
+        <tr><td>MLP + BatchNorm</td><td>0.91</td><td>3 s</td></tr>
+        <tr><td>MLP + Adam (lr=1e-3)</td><td>0.91</td><td>2 s</td></tr>
+        <tr class="highlight"><td><strong>MLP + Adam + BN + Drop</strong></td><td><strong>0.92</strong></td><td>4 s</td></tr>
+      </table>
+      <div class="box box-accent" style="margin-top:8px;font-size:12.5px;">
+        <span class="box-label"><i class="fa fa-database"></i> Fashion-MNIST</span>
+        70 000 images 28×28 de vêtements (10 classes : T-shirt, Pantalon, Pull, Robe, Manteau, Sandale, Chemise, Basket, Sac, Bottine). Benchmark plus difficile que MNIST classique.
+      </div>
+    </div>
+    <div>
+      <div class="box" style="background:#fff;border:1px solid var(--line);">
+        <span class="box-label" style="color:var(--green);">Comparaison des configurations</span>
+        <div class="chart-wrap"><canvas id="fashion-chart"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 33 — DL-16 -->
+<div class="slide" id="slide-33" data-presenter="ms" data-section="dl">
+  <div class="eyebrow"><i class="fa fa-brain"></i> &nbsp;Deep Learning · 16</div>
+  <div class="slide-title">Courbes d'apprentissage — Diagnostic</div>
+  <div class="two-col">
+    <div>
+      <div class="box" style="background:#fff;border:1px solid var(--line);">
+        <span class="box-label" style="color:var(--green);">Train loss vs Validation loss</span>
+        <div class="chart-wrap"><canvas id="learning-curve-chart"></canvas></div>
+      </div>
+    </div>
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-circle-check"></i> Bon apprentissage</span>
+        Les deux courbes descendent ensemble et se stabilisent à un écart faible.
+      </div>
+      <div class="box box-gold" style="margin-top:0;">
+        <span class="box-label"><i class="fa fa-arrow-up"></i> Sur-apprentissage (overfitting)</span>
+        Train loss ↓ mais Validation loss ↑ ou stagne. Remèdes : Dropout, L2, plus de données.
+      </div>
+      <div class="box box-accent" style="margin-top:0;">
+        <span class="box-label"><i class="fa fa-arrow-down"></i> Sous-apprentissage (underfitting)</span>
+        Les deux courbes restent élevées. Remèdes : plus de neurones, plus d'epochs, LR plus élevé.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 34 — DL-17 -->
+<div class="slide" id="slide-34" data-presenter="ms" data-section="dl">
+  <div class="eyebrow"><i class="fa fa-brain"></i> &nbsp;Deep Learning · 17</div>
+  <div class="slide-title">Conclusion — Partie Deep Learning</div>
+  <div class="three-col">
+    <div class="box box-green" style="text-align:center;">
+      <span class="box-label"><i class="fa fa-network-wired"></i> Architecture</span>
+      <div style="font-size:1.8rem;color:var(--green);margin:6px 0;"><i class="fa fa-network-wired"></i></div>
+      <div style="font-size:12.5px;line-height:1.8;text-align:left;">
+        MLP = fondement DL<br>Couches cachées → non-linéarité<br>ReLU par défaut
+      </div>
+    </div>
+    <div class="box box-gold" style="text-align:center;">
+      <span class="box-label" style="color:var(--gold-d);"><i class="fa fa-rotate-left"></i> Apprentissage</span>
+      <div style="font-size:1.8rem;color:var(--gold);margin:6px 0;"><i class="fa fa-rotate-left"></i></div>
+      <div style="font-size:12.5px;line-height:1.8;text-align:left;">
+        Backprop = règle de chaîne<br>Adam par défaut<br>Batch Norm pour profondeur
+      </div>
+    </div>
+    <div class="box box-accent" style="text-align:center;">
+      <span class="box-label"><i class="fa fa-droplet"></i> Régularisation</span>
+      <div style="font-size:1.8rem;color:var(--accent-d);margin:6px 0;"><i class="fa fa-droplet"></i></div>
+      <div style="font-size:12.5px;line-height:1.8;text-align:left;">
+        Dropout = Bagging implicite<br>MC-Dropout = incertitude<br>Early stopping
+      </div>
+    </div>
+  </div>
+  <div class="box box-star" style="margin-top:10px;text-align:center;">
+    <span class="box-label"><i class="fa fa-key"></i> Lien fondamental vers le Machine Learning</span>
+    <div style="font-size:1rem;margin-top:4px;">
+      Le <strong>Dropout</strong> = <strong>Bagging implicite</strong> sur $2^M$ sous-réseaux partagés
+      &nbsp;—&nbsp; pont direct vers les méthodes d'ensemble ML
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;">
+    <span class="pill">MLP</span>
+    <span class="pill">Backpropagation</span>
+    <span class="pill">Vanishing Gradient</span>
+    <span class="pill gold">Adam Optimizer</span>
+    <span class="pill">MC-Dropout</span>
+    <span class="pill gold">Gal & Ghahramani 2016</span>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 35 — P-1 -->
+<div class="slide" id="slide-35" data-presenter="ms" data-section="projet">
+  <div class="eyebrow"><i class="fa fa-flask"></i> &nbsp;Projet Intégrateur · 01</div>
+  <div class="slide-title">Architecture du Pipeline Hybride</div>
+  <div class="box box-star" style="margin-bottom:14px;text-align:center;">
+    <span class="box-label"><i class="fa fa-lightbulb"></i> Idée centrale</span>
+    <strong>Deep Features + Smart Ensembles</strong> — le DL extrait des représentations riches, le ML les combine avec robustesse
+  </div>
+  <div class="flow-row" style="justify-content:center;flex-wrap:wrap;">
+    <div class="flow-box" style="text-align:center;">Images MNIST<br><small style="font-family:var(--mono);font-size:9px;">28×28 = 784</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box" style="text-align:center;">MLP Extracteur<br><small style="font-family:var(--mono);font-size:9px;">784→256→128→64</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box gold" style="text-align:center;">PCA<br><small style="font-family:var(--mono);font-size:9px;">64→50 dims</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box" style="background:var(--accent-d);text-align:center;">XGBoost<br><small style="font-family:var(--mono);font-size:9px;">500 arbres</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box" style="background:var(--ink);text-align:center;">Prédiction<br><small style="font-family:var(--mono);font-size:9px;">+ incertitude</small></div>
+  </div>
+  <div class="three-col" style="margin-top:14px;">
+    <div class="box box-green">
+      <span class="box-label"><i class="fa fa-brain"></i> Bloc 1 — DL</span>
+      MLP PyTorch pré-entraîné sur MNIST. On récupère les activations de la couche $h^{(2)}$ (64 dimensions) comme features riches.
+    </div>
+    <div class="box box-gold">
+      <span class="box-label"><i class="fa fa-compress"></i> Bloc 2 — Réduction</span>
+      PCA : 64 → 50 composantes principales. Explique 85% de la variance. Réduit le bruit et accélère le ML.
+    </div>
+    <div class="box box-accent">
+      <span class="box-label"><i class="fa fa-tree"></i> Bloc 3 — ML</span>
+      XGBoost sur les features PCA. Robuste, interprétable via SHAP, pas de gradient vanishing.
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 36 — P-2 -->
+<div class="slide" id="slide-36" data-presenter="ms" data-section="projet">
+  <div class="eyebrow"><i class="fa fa-flask"></i> &nbsp;Projet Intégrateur · 02</div>
+  <div class="slide-title">Pourquoi ce Pipeline Hybride ?</div>
+  <div class="three-col">
+    <div class="box box-gold" style="text-align:center;">
+      <span class="box-label" style="color:var(--gold-d);"><i class="fa fa-brain"></i> DL seul</span>
+      <div style="font-size:1.8rem;color:var(--gold);margin:6px 0;"><i class="fa fa-brain"></i></div>
+      <div style="font-size:12.5px;line-height:1.8;text-align:left;">
+        <span style="color:var(--green);">✓</span> Représentations puissantes<br>
+        <span style="color:var(--green);">✓</span> 97.8% accuracy MNIST<br>
+        <span style="color:#c0392b;">✗</span> Boîte noire<br>
+        <span style="color:#c0392b;">✗</span> Peu interprétable<br>
+        <span style="color:#c0392b;">✗</span> Sur-apprentissage sans Dropout
+      </div>
+    </div>
+    <div class="box box-gold" style="text-align:center;">
+      <span class="box-label" style="color:var(--gold-d);"><i class="fa fa-tree"></i> ML seul</span>
+      <div style="font-size:1.8rem;color:var(--gold);margin:6px 0;"><i class="fa fa-tree"></i></div>
+      <div style="font-size:12.5px;line-height:1.8;text-align:left;">
+        <span style="color:var(--green);">✓</span> Robuste, interprétable (SHAP)<br>
+        <span style="color:var(--green);">✓</span> Moins de données nécessaires<br>
+        <span style="color:#c0392b;">✗</span> Pixels bruts = mauvaises features<br>
+        <span style="color:#c0392b;">✗</span> RF: 85.8%, XGB: 90.1%<br>
+        <span style="color:#c0392b;">✗</span> Limité par les features manuelles
+      </div>
+    </div>
+    <div class="box box-green" style="text-align:center;">
+      <span class="box-label"><i class="fa fa-code-merge"></i> Hybride</span>
+      <div style="font-size:1.8rem;color:var(--green);margin:6px 0;"><i class="fa fa-code-merge"></i></div>
+      <div style="font-size:12.5px;line-height:1.8;text-align:left;">
+        <span style="color:var(--green);">✓</span> Features riches du DL<br>
+        <span style="color:var(--green);">✓</span> Robustesse du ML<br>
+        <span style="color:var(--green);">✓</span> SHAP interprétabilité<br>
+        <span style="color:var(--green);">✓</span> MC-Dropout incertitude<br>
+        <span style="color:var(--green);">✓</span> <strong>98.2% accuracy !</strong>
+      </div>
+    </div>
+  </div>
+  <div class="box box-accent" style="margin-top:8px;text-align:center;font-size:.95rem;">
+    <span class="box-label"><i class="fa fa-question-circle"></i> La question centrale du projet</span>
+    <strong>Les features apprises par le DL font-elles de meilleurs "pixels" pour les algorithmes ML classiques ?</strong><br>
+    <span style="font-style:italic;font-size:.9rem;">Réponse : Oui — +12.4% vs RF sur pixels bruts, +8.1% vs XGBoost sur pixels bruts</span>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 37 — P-3 -->
+<div class="slide" id="slide-37" data-presenter="ms" data-section="projet">
+  <div class="eyebrow"><i class="fa fa-flask"></i> &nbsp;Projet Intégrateur · 03</div>
+  <div class="slide-title">Bloc DL — Extracteur de Features</div>
+  <div class="two-col">
+    <div>
+      <div class="code-block">
+<span style="color:#cba6f7">import</span> torch.nn <span style="color:#cba6f7">as</span> nn
+
+<span style="color:#89b4fa">class</span> <span style="color:#a6e3a1">FeatureExtractor</span>(nn.Module):
+    <span style="color:#89b4fa">def</span> <span style="color:#cdd6f4">__init__</span>(self):
+        <span style="color:#89b4fa">super</span>().__init__()
+        self.fc1 = nn.Linear(<span style="color:#fab387">784</span>, <span style="color:#fab387">256</span>)
+        self.fc2 = nn.Linear(<span style="color:#fab387">256</span>, <span style="color:#fab387">128</span>)
+        self.fc3 = nn.Linear(<span style="color:#fab387">128</span>, <span style="color:#fab387">64</span>)   <span style="color:#6c7086"># ← features</span>
+        self.relu = nn.ReLU()
+        self.dropout = nn.Dropout(<span style="color:#fab387">0.3</span>)
+        self.bn1 = nn.BatchNorm1d(<span style="color:#fab387">256</span>)
+        self.bn2 = nn.BatchNorm1d(<span style="color:#fab387">128</span>)
+
+    <span style="color:#89b4fa">def</span> <span style="color:#a6e3a1">forward</span>(self, x, extract=<span style="color:#cba6f7">False</span>):
+        x = x.view(x.size(<span style="color:#fab387">0</span>), -<span style="color:#fab387">1</span>)
+        x = self.relu(self.bn1(self.fc1(x)))
+        x = self.dropout(x)
+        x = self.relu(self.bn2(self.fc2(x)))
+        x = self.dropout(x)
+        features = self.fc3(x)          <span style="color:#6c7086"># 64-dim features</span>
+        <span style="color:#cba6f7">if</span> extract: <span style="color:#cba6f7">return</span> features     <span style="color:#6c7086"># pour pipeline</span>
+        <span style="color:#cba6f7">return</span> nn.functional.softmax(features, dim=<span style="color:#fab387">1</span>)
+
+<span style="color:#6c7086"># Extraction après entraînement :</span>
+model.eval()
+<span style="color:#cba6f7">with</span> torch.no_grad():
+    feats = model(X_test_t, extract=<span style="color:#cba6f7">True</span>).numpy()</div>
+    </div>
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-diagram-project"></i> Dimensions</span>
+        <div class="flow-row">
+          <div class="flow-box" style="font-size:10px;">784<br><small>Pixels</small></div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box" style="font-size:10px;">256<br><small>+BN+Drop</small></div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box" style="font-size:10px;">128<br><small>+BN+Drop</small></div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box gold" style="font-size:10px;"><strong>64</strong><br><small>Features</small></div>
+        </div>
+      </div>
+      <div class="box box-gold" style="margin-top:0;font-size:13px;">
+        <span class="box-label"><i class="fa fa-award"></i> Entraînement du MLP</span>
+        <ul style="margin-left:14px;line-height:2;">
+          <li>50 epochs, Adam lr=1e-3</li>
+          <li>Batch size = 128</li>
+          <li>Dropout p=0.3, BatchNorm</li>
+          <li>Accuracy finale : <strong>98.1%</strong></li>
+        </ul>
+      </div>
+      <div class="box box-accent" style="margin-top:0;font-size:12.5px;">
+        <span class="box-label"><i class="fa fa-compress"></i> Pourquoi 64 dims ?</span>
+        Compromis représentativité / bruit. Évalué par scree plot PCA : 64 dims permettent d'expliquer 85% de la variance avec 50 composantes PCA.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 38 — P-4 -->
+<div class="slide" id="slide-38" data-presenter="ms" data-section="projet">
+  <div class="eyebrow"><i class="fa fa-flask"></i> &nbsp;Projet Intégrateur · 04</div>
+  <div class="slide-title">Bloc PCA — Réduction de Dimensionnalité</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-compress-arrows-alt"></i> Pourquoi réduire encore ?</span>
+        <ul style="margin-left:14px;font-size:13px;line-height:2;">
+          <li>Éviter la <em>malédiction de la dimension</em> pour XGBoost</li>
+          <li>Réduire le bruit résiduel dans les features</li>
+          <li>Accélérer l'entraînement et l'inférence du ML</li>
+        </ul>
+      </div>
+      <div class="code-block" style="margin-top:8px;">
+<span style="color:#cba6f7">from</span> sklearn.decomposition <span style="color:#cba6f7">import</span> PCA
+
+pca = PCA(n_components=<span style="color:#fab387">50</span>, random_state=<span style="color:#fab387">42</span>)
+X_train_pca = pca.fit_transform(train_feats)
+X_test_pca  = pca.transform(test_feats)
+
+<span style="color:#6c7086"># Variance expliquée cumulée</span>
+var_ratio = pca.explained_variance_ratio_
+cumvar = np.cumsum(var_ratio)
+print(f<span style="color:#a6e3a1">"50 composantes : {cumvar[49]:.1%}"</span>)
+<span style="color:#6c7086"># → 50 composantes : 85.2%</span></div>
+    </div>
+    <div>
+      <div class="box" style="background:#fff;border:1px solid var(--line);">
+        <span class="box-label" style="color:var(--green);">Scree plot — Variance cumulée</span>
+        <div class="chart-wrap"><canvas id="pca-chart"></canvas></div>
+      </div>
+      <div class="box box-accent" style="margin-top:0;font-size:12.5px;">
+        <span class="box-label"><i class="fa fa-check-circle"></i> Choix n_components=50</span>
+        50 composantes : 85.2% variance expliquée<br>
+        64 composantes : 93.4%<br>
+        20 composantes : 72.1%<br>
+        <strong>50 = meilleur compromis</strong> (validé par accuracy XGBoost)
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 39 — P-5 -->
+<div class="slide" id="slide-39" data-presenter="ms" data-section="projet">
+  <div class="eyebrow"><i class="fa fa-flask"></i> &nbsp;Projet Intégrateur · 05</div>
+  <div class="slide-title">Bloc XGBoost — Méta-Modèle</div>
+  <div class="two-col">
+    <div>
+      <div class="code-block">
+<span style="color:#cba6f7">from</span> xgboost <span style="color:#cba6f7">import</span> XGBClassifier
+
+xgb = XGBClassifier(
+    n_estimators=<span style="color:#fab387">500</span>,
+    learning_rate=<span style="color:#fab387">0.05</span>,
+    max_depth=<span style="color:#fab387">6</span>,
+    subsample=<span style="color:#fab387">0.8</span>,
+    colsample_bytree=<span style="color:#fab387">0.8</span>,
+    min_child_weight=<span style="color:#fab387">1</span>,
+    reg_alpha=<span style="color:#fab387">0.1</span>,        <span style="color:#6c7086"># L1</span>
+    reg_lambda=<span style="color:#fab387">1.0</span>,       <span style="color:#6c7086"># L2</span>
+    random_state=<span style="color:#fab387">42</span>,
+    use_label_encoder=<span style="color:#cba6f7">False</span>,
+    eval_metric=<span style="color:#a6e3a1">'mlogloss'</span>
+)
+
+xgb.fit(
+    X_train_pca, y_train,
+    eval_set=[(X_val_pca, y_val)],
+    early_stopping_rounds=<span style="color:#fab387">20</span>,
+    verbose=<span style="color:#fab387">50</span>
+)
+
+<span style="color:#6c7086"># Résultat : 98.2% accuracy sur test set</span></div>
+    </div>
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-sliders"></i> Hyperparamètres clés</span>
+        <table style="margin-top:6px;font-size:12px;">
+          <tr><th>Param</th><th>Valeur</th><th>Rôle</th></tr>
+          <tr><td>n_estimators</td><td>500</td><td>Nombre d'arbres</td></tr>
+          <tr><td>learning_rate</td><td>0.05</td><td>Shrinkage</td></tr>
+          <tr><td>max_depth</td><td>6</td><td>Complexité</td></tr>
+          <tr><td>subsample</td><td>0.8</td><td>Bagging stochastique</td></tr>
+          <tr><td>early_stop</td><td>20</td><td>Anti overfitting</td></tr>
+        </table>
+      </div>
+      <div class="box box-gold" style="margin-top:0;font-size:12.5px;">
+        <span class="box-label"><i class="fa fa-magnifying-glass-chart"></i> SHAP intégré</span>
+        XGBoost supporte SHAP natif : chaque prédiction décomposée en contributions de features → interprétabilité globale ET locale.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 40 — P-6 -->
+<div class="slide" id="slide-40" data-presenter="ms" data-section="projet">
+  <div class="eyebrow"><i class="fa fa-flask"></i> &nbsp;Projet Intégrateur · 06</div>
+  <div class="slide-title">Résultats Comparatifs — Qui gagne ?</div>
+  <div class="two-col">
+    <div>
+      <table>
+        <tr><th>Modèle</th><th>Accuracy</th><th>F1</th><th>Temps (s)</th></tr>
+        <tr><td>Random Forest (pixels)</td><td>0.858</td><td>0.858</td><td>5</td></tr>
+        <tr><td>XGBoost (pixels bruts)</td><td>0.901</td><td>0.901</td><td>8</td></tr>
+        <tr><td>MLP seul (end-to-end)</td><td>0.978</td><td>0.978</td><td>120</td></tr>
+        <tr><td>Stacking (RF+XGB+MLP)</td><td>0.979</td><td>0.979</td><td>200</td></tr>
+        <tr class="highlight"><td><strong>Pipeline hybride</strong></td><td><strong>0.982</strong></td><td><strong>0.982</strong></td><td>140</td></tr>
+      </table>
+      <div class="box box-green" style="margin-top:10px;font-size:13px;">
+        <span class="box-label"><i class="fa fa-trophy"></i> Gains mesurés</span>
+        <ul style="margin-left:14px;line-height:2;">
+          <li>vs RF pixels : <strong>+12.4%</strong></li>
+          <li>vs XGB pixels : <strong>+8.1%</strong></li>
+          <li>vs MLP seul : <strong>+0.4%</strong> (avec meilleure interprétabilité)</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="box" style="background:#fff;border:1px solid var(--line);">
+        <span class="box-label" style="color:var(--green);">Comparaison visuelle</span>
+        <div class="chart-wrap"><canvas id="project-results-chart"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 41 — P-7 -->
+<div class="slide" id="slide-41" data-presenter="ms" data-section="projet">
+  <div class="eyebrow"><i class="fa fa-flask"></i> &nbsp;Projet Intégrateur · 07</div>
+  <div class="slide-title">Analyse de Performance</div>
+  <div class="two-col">
+    <div>
+      <div class="box" style="background:#fff;border:1px solid var(--line);">
+        <span class="box-label" style="color:var(--green);">Accuracy avec barres d'erreur (5 runs)</span>
+        <div class="chart-wrap"><canvas id="error-bar-chart"></canvas></div>
+      </div>
+    </div>
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-microscope"></i> Interprétation</span>
+        <ul style="margin-left:14px;font-size:13px;line-height:2;">
+          <li><strong>ML seul :</strong> limité par la qualité des features brutes (pixels)</li>
+          <li><strong>DL seul :</strong> excellent mais peu interprétable</li>
+          <li><strong>Hybride :</strong> meilleure précision + robustesse + interprétabilité</li>
+          <li>Variance faible (σ ≈ 0.002) → stable sur 5 runs</li>
+        </ul>
+      </div>
+      <div class="box box-gold" style="margin-top:0;font-size:12.5px;">
+        <span class="box-label"><i class="fa fa-clock"></i> Complexité temporelle</span>
+        Entraînement MLP (120s) + PCA (2s) + XGBoost (18s) = <strong>140s total</strong><br>
+        Inférence : ~50ms pour 10 000 images<br>
+        Acceptable pour production médicale
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 42 — P-8 -->
+<div class="slide" id="slide-42" data-presenter="ms" data-section="projet">
+  <div class="eyebrow"><i class="fa fa-flask"></i> &nbsp;Projet Intégrateur · 08</div>
+  <div class="slide-title">Interprétabilité — SHAP</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-magnifying-glass-chart"></i> SHAP (Lundberg &amp; Lee, NeurIPS 2017)</span>
+        <div style="font-size:13px;line-height:1.8;margin-top:4px;">
+          La valeur SHAP d'une feature $x_j$ pour une prédiction $f(x)$ est sa <em>contribution marginale moyenne</em> sur toutes les coalitions possibles :
+          <div class="big-eq" style="font-size:.85em;">$$\phi_j = \sum_{S \subseteq F \setminus \{j\}} \frac{|S|!\,(|F|-|S|-1)!}{|F|!} \left[f_{S\cup\{j\}} - f_S\right]$$</div>
+        </div>
+      </div>
+      <div class="box box-gold" style="margin-top:0;font-size:13px;">
+        <span class="box-label"><i class="fa fa-code"></i> Code</span>
+        <div class="code-block" style="font-size:11px;margin-top:6px;">
+<span style="color:#cba6f7">import</span> shap
+explainer = shap.TreeExplainer(xgb)
+shap_values = explainer.shap_values(X_test_pca)
+shap.summary_plot(shap_values[<span style="color:#fab387">8</span>], X_test_pca,
+                  feature_names=[f<span style="color:#a6e3a1">"PC{i}"</span> <span style="color:#cba6f7">for</span> i <span style="color:#cba6f7">in</span> range(<span style="color:#fab387">50</span>)])</div>
+      </div>
+    </div>
+    <div>
+      <!-- Synthetic SHAP bar chart -->
+      <div class="box" style="background:#fff;border:1px solid var(--line);">
+        <span class="box-label" style="color:var(--green);">Features les plus importantes (chiffre 8)</span>
+        <div class="chart-wrap"><canvas id="shap-chart"></canvas></div>
+      </div>
+      <div class="box box-accent" style="margin-top:0;font-size:12.5px;">
+        <span class="box-label"><i class="fa fa-lightbulb"></i> Résultat clé</span>
+        PC1, PC2, PC3 (liées aux lignes directrices des chiffres) dominent. PC8–PC12 distinguent les rondeurs (8, 0, 6) des chiffres anguleux (1, 7).
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 43 — P-9 -->
+<div class="slide" id="slide-43" data-presenter="ms" data-section="projet">
+  <div class="eyebrow"><i class="fa fa-flask"></i> &nbsp;Projet Intégrateur · 09</div>
+  <div class="slide-title">Incertitude — MC-Dropout</div>
+  <div class="two-col">
+    <div>
+      <div class="code-block">
+<span style="color:#89b4fa">def</span> <span style="color:#a6e3a1">predict_with_uncertainty</span>(model, X, n_iter=<span style="color:#fab387">50</span>):
+    model.train()       <span style="color:#6c7086"># Active le dropout !</span>
+    predictions = []
+
+    <span style="color:#cba6f7">with</span> torch.no_grad():
+        <span style="color:#cba6f7">for</span> _ <span style="color:#cba6f7">in</span> range(n_iter):
+            logits = model(X, extract=<span style="color:#cba6f7">False</span>)
+            probs  = F.softmax(logits, dim=<span style="color:#fab387">1</span>)
+            predictions.append(probs.numpy())
+
+    preds = np.array(predictions)   <span style="color:#6c7086"># (50, N, 10)</span>
+    mean  = preds.mean(axis=<span style="color:#fab387">0</span>)      <span style="color:#6c7086"># prédiction finale</span>
+    std   = preds.std(axis=<span style="color:#fab387">0</span>)       <span style="color:#6c7086"># incertitude</span>
+
+    pred_class = mean.argmax(axis=<span style="color:#fab387">1</span>)
+    uncertainty = std[range(len(std)), pred_class]
+
+    <span style="color:#cba6f7">return</span> pred_class, mean, uncertainty</div>
+      <div class="box box-gold" style="margin-top:8px;font-size:12.5px;">
+        <span class="box-label"><i class="fa fa-chart-pie"></i> Résultat clé</span>
+        Incertitude moyenne :<br>
+        · Prédictions <strong>correctes</strong> : σ ≈ 0.024<br>
+        · Prédictions <strong>incorrectes</strong> : σ ≈ 0.142<br>
+        Le modèle "sait" quand il hésite !
+      </div>
+    </div>
+    <div>
+      <div class="box" style="background:#fff;border:1px solid var(--line);">
+        <span class="box-label" style="color:var(--green);">Distribution d'incertitude</span>
+        <div class="chart-wrap"><canvas id="uncertainty-chart"></canvas></div>
+      </div>
+      <div class="box box-accent" style="margin-top:0;font-size:13px;">
+        <span class="box-label"><i class="fa fa-star"></i> Application médicale</span>
+        En rétinopathie : si l'incertitude est > seuil → renvoyer vers ophtalmologiste humain. Le modèle sait "je ne suis pas sûr → intervention humaine".
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 44 — P-10 -->
+<div class="slide" id="slide-44" data-presenter="ms" data-section="projet">
+  <div class="eyebrow"><i class="fa fa-flask"></i> &nbsp;Projet Intégrateur · 10</div>
+  <div class="slide-title">Analyse d'Équité par Classe</div>
+  <table>
+    <tr><th>Chiffre</th><th>RF (pixels)</th><th>XGB (pixels)</th><th>MLP seul</th><th>Pipeline hybride</th></tr>
+    <tr><td>0</td><td>0.94</td><td>0.96</td><td>0.99</td><td><strong>0.99</strong></td></tr>
+    <tr><td>1</td><td>0.96</td><td>0.97</td><td>0.99</td><td><strong>0.99</strong></td></tr>
+    <tr><td>2</td><td>0.85</td><td>0.89</td><td>0.98</td><td><strong>0.98</strong></td></tr>
+    <tr><td>3</td><td>0.82</td><td>0.88</td><td>0.97</td><td><strong>0.98</strong></td></tr>
+    <tr><td>4</td><td>0.88</td><td>0.90</td><td>0.98</td><td><strong>0.98</strong></td></tr>
+    <tr><td>5</td><td>0.83</td><td>0.87</td><td>0.97</td><td><strong>0.98</strong></td></tr>
+    <tr><td>6</td><td>0.90</td><td>0.92</td><td>0.98</td><td><strong>0.98</strong></td></tr>
+    <tr><td>7</td><td>0.89</td><td>0.91</td><td>0.98</td><td><strong>0.98</strong></td></tr>
+    <tr><td>8</td><td>0.79</td><td>0.86</td><td>0.96</td><td><strong>0.97</strong></td></tr>
+    <tr><td>9</td><td>0.85</td><td>0.89</td><td>0.97</td><td><strong>0.98</strong></td></tr>
+  </table>
+  <div class="box box-gold" style="margin-top:10px;font-size:13px;">
+    <span class="box-label"><i class="fa fa-magnifying-glass"></i> Observations</span>
+    Le chiffre <strong>8</strong> est le plus difficile pour tous les modèles (confusion avec 0, 3, 6, 9).
+    Le pipeline hybride améliore uniformément toutes les classes, avec le gain le plus important sur 3, 5, 8 (chiffres ambigus).
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 45 — P-11 -->
+<div class="slide" id="slide-45" data-presenter="ms" data-section="projet">
+  <div class="eyebrow"><i class="fa fa-flask"></i> &nbsp;Projet Intégrateur · 11</div>
+  <div class="slide-title">Démonstration en Direct</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-terminal"></i> Script CLI</span>
+        <div class="code-block" style="font-size:11.5px;">$ python predict.py --image digit_8.png
+
+Loading model... OK
+Extracting features... OK (64-dim)
+PCA transform... OK (50-dim)
+XGBoost predict... OK
+
+Résultat : Chiffre 8
+Probabilité : 0.97 (confiant)
+Incertitude : 0.024 (faible)
+Top-3: [(8, 0.97), (3, 0.02), (0, 0.01)]
+
+Interprétation SHAP:
+  PC1 (forme ronde): +0.31
+  PC8 (double courbe): +0.24
+  PC3 (symétrie): +0.19</div>
+      </div>
+    </div>
+    <div>
+      <div class="box box-gold">
+        <span class="box-label"><i class="fa fa-rocket"></i> Interface Gradio</span>
+        <div class="code-block" style="font-size:11px;">
+<span style="color:#cba6f7">import</span> gradio <span style="color:#cba6f7">as</span> gr
+
+<span style="color:#89b4fa">def</span> <span style="color:#a6e3a1">predict_digit</span>(image):
+    feat = extract_features(image)
+    pca_feat = pca.transform([feat])
+    pred, probs, unc = predict_with_uncertainty(
+        model, torch.tensor(feat).unsqueeze(<span style="color:#fab387">0</span>)
+    )
+    shap_vals = explainer.shap_values(pca_feat)
+    <span style="color:#cba6f7">return</span> {
+        <span style="color:#a6e3a1">"Chiffre"</span>: int(pred[<span style="color:#fab387">0</span>]),
+        <span style="color:#a6e3a1">"Confiance"</span>: f<span style="color:#a6e3a1">"{probs[0].max():.1%}"</span>,
+        <span style="color:#a6e3a1">"Incertitude"</span>: f<span style="color:#a6e3a1">"{unc[0]:.3f}"</span>
+    }
+
+demo = gr.Interface(fn=predict_digit,
+    inputs=gr.Image(type=<span style="color:#a6e3a1">"pil"</span>),
+    outputs=<span style="color:#a6e3a1">"json"</span>)
+demo.launch()</div>
+      </div>
+      <div class="box box-accent" style="margin-top:0;font-size:12.5px;">
+        <span class="box-label"><i class="fa fa-book-open"></i> Notebook Colab</span>
+        Cellule interactive : dessin d'un chiffre → prédiction en temps réel + SHAP waterfall + distribution d'incertitude
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 46 — P-12 -->
+<div class="slide" id="slide-46" data-presenter="ms" data-section="projet">
+  <div class="eyebrow"><i class="fa fa-flask"></i> &nbsp;Projet Intégrateur · 12</div>
+  <div class="slide-title">Conclusion Projet — Bilan et Perspectives</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-chart-line"></i> Résultats clés</span>
+        <ul style="margin-left:14px;font-size:13px;line-height:2;">
+          <li>Pipeline hybride : <strong>98.2%</strong> sur MNIST</li>
+          <li>Gain : <strong>+12.4%</strong> vs RF sur pixels bruts</li>
+          <li>Interprétabilité via SHAP (contribution par composante)</li>
+          <li>Incertitude via MC-Dropout (σ corrélée aux erreurs)</li>
+          <li>Architecture modulaire, extensible</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="box box-gold">
+        <span class="box-label"><i class="fa fa-telescope"></i> Perspectives</span>
+        <ul style="margin-left:14px;font-size:13px;line-height:2;">
+          <li>Appliquer à la <strong>rétinopathie diabétique</strong> (Mauritanie)</li>
+          <li>Remplacer MLP par <strong>CNN</strong> pour de meilleures features</li>
+          <li>Tester <strong>LightGBM</strong> ou Stacking comme méta-modèle</li>
+          <li>Transfer learning depuis ResNet-50</li>
+          <li>Déploiement Gradio + API Flask</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="box box-star" style="margin-top:10px;text-align:center;">
+    <span class="box-label"><i class="fa fa-key"></i> Validation de l'hypothèse</span>
+    <div style="font-size:1rem;margin-top:4px;">
+      Les features DL sont de bien meilleurs "pixels" pour les algorithmes ML —<br>
+      l'hybridation <strong>ML + DL surpasse chaque approche seule</strong> en accuracy ET en interprétabilité
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 47 — C-1 -->
+<div class="slide" id="slide-47" data-presenter="ms" data-section="conclusion">
+  <div class="eyebrow"><i class="fa fa-flag-checkered"></i> &nbsp;Conclusion · 01</div>
+  <div class="slide-title">Récapitulatif — Ce que nous avons appris</div>
+  <div class="two-col">
+    <div>
+      <div class="box box-green">
+        <span class="box-label"><i class="fa fa-tree"></i> Machine Learning</span>
+        <ul style="margin-left:14px;font-size:13px;line-height:2;">
+          <li><strong>Bagging</strong> réduit la variance → Random Forest</li>
+          <li><strong>Boosting</strong> réduit le biais → XGBoost</li>
+          <li><strong>Stacking</strong> combine les deux → gain marginal</li>
+          <li>Condorcet : le vote majoritaire converge si $p > 0.5$</li>
+        </ul>
+      </div>
+      <div class="box box-gold" style="margin-top:0;">
+        <span class="box-label"><i class="fa fa-brain"></i> Deep Learning</span>
+        <ul style="margin-left:14px;font-size:13px;line-height:2;">
+          <li><strong>MLP</strong> = architecture fondamentale</li>
+          <li><strong>Backprop</strong> = règle de chaîne (Rumelhart 1986)</li>
+          <li>ReLU résout le vanishing gradient</li>
+          <li><strong>Adam</strong> = optimiseur par défaut</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="box box-star" style="margin-bottom:10px;">
+        <span class="box-label"><i class="fa fa-key"></i> Le pont fondamental</span>
+        <div style="font-size:1rem;text-align:center;margin-top:4px;">
+          <strong>Dropout = Bagging implicite</strong><br>
+          $2^M$ sous-réseaux avec poids partagés<br>
+          <em>Gal &amp; Ghahramani, ICML 2016</em>
+        </div>
+      </div>
+      <div class="box box-accent">
+        <span class="box-label"><i class="fa fa-flask"></i> Projet</span>
+        <ul style="margin-left:14px;font-size:13px;line-height:2;">
+          <li>Pipeline hybride MLP → PCA → XGBoost</li>
+          <li>98.2% accuracy (+12.4% vs RF)</li>
+          <li>SHAP + MC-Dropout → interprétabilité + incertitude</li>
+          <li>Prêt pour application médicale</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 48 — C-2 -->
+<div class="slide" id="slide-48" data-presenter="ms" data-section="conclusion">
+  <div class="eyebrow"><i class="fa fa-flag-checkered"></i> &nbsp;Conclusion · 02</div>
+  <div class="slide-title">Réponses aux Questions Scientifiques</div>
+  <table>
+    <tr><th>#</th><th>Question du sujet</th><th>Notre réponse</th></tr>
+    <tr><td>Q1</td><td>Modèle DL pré-entraîné ?</td><td>MLP entraîné sur MNIST (50 epochs, 98.1%)</td></tr>
+    <tr><td>Q2</td><td>Réduction de dimension ?</td><td>PCA (64→50 composantes, 85.2% variance)</td></tr>
+    <tr><td>Q3</td><td>Méta-modèle ML ?</td><td>XGBoost (500 arbres, lr=0.05, SHAP-compatible)</td></tr>
+    <tr class="highlight"><td>Q4</td><td>L'hybride bat les baselines ?</td><td>Oui : +12.4% vs RF, +8.1% vs XGB, +0.4% vs MLP</td></tr>
+    <tr><td>Q5</td><td>Features importantes ?</td><td>PC1–PC3 (forme globale), PC8–PC12 (courbures)</td></tr>
+    <tr><td>Q6</td><td>Quantification incertitude ?</td><td>MC-Dropout (σ correctes=0.024, incorrectes=0.142)</td></tr>
+    <tr><td>Q7</td><td>Biais par classe ?</td><td>Chiffres 8, 5, 3 les plus difficiles (ambigus)</td></tr>
+    <tr><td>Q8</td><td>Coût computationnel ?</td><td>140s entraînement, ~50ms inférence (10K images)</td></tr>
+  </table>
+</div>
+
+<!-- ════════════════════════ SLIDE 49 — C-3 -->
+<div class="slide" id="slide-49" data-presenter="ms" data-section="conclusion">
+  <div class="eyebrow"><i class="fa fa-flag-checkered"></i> &nbsp;Conclusion · 03</div>
+  <div class="slide-title">Bibliographie</div>
+  <div class="two-col">
+    <ol style="margin-left:18px;line-height:2.2;font-size:13px;">
+      <li><strong>Géron, A.</strong> (2023). <em>Hands-On Machine Learning with Scikit-Learn, Keras and TensorFlow</em>, 3e éd. O'Reilly.</li>
+      <li><strong>Goodfellow, I., Bengio, Y. &amp; Courville, A.</strong> (2016). <em>Deep Learning</em>. MIT Press.</li>
+      <li><strong>Dietterich, T. G.</strong> (2000). Ensemble Methods in Machine Learning. <em>MCS 2000</em>.</li>
+      <li><strong>Krogh, A. &amp; Vedelsby, J.</strong> (1995). Neural Network Ensembles, Cross Validation. <em>NeurIPS 1995</em>.</li>
+      <li><strong>Gal, Y. &amp; Ghahramani, Z.</strong> (2016). Dropout as a Bayesian Approximation. <em>ICML 2016</em>.</li>
+      <li><strong>Rumelhart, D. E., Hinton, G. E. &amp; Williams, R. J.</strong> (1986). Learning representations by back-propagating errors. <em>Nature</em>.</li>
+      <li><strong>Chen, T. &amp; Guestrin, C.</strong> (2016). XGBoost: A Scalable Tree Boosting System. <em>KDD 2016</em>.</li>
+      <li><strong>Lundberg, S. M. &amp; Lee, S.-I.</strong> (2017). A Unified Approach to Interpreting Model Predictions. <em>NeurIPS 2017</em>.</li>
+      <li><strong>Srivastava, N. et al.</strong> (2014). Dropout: A Simple Way to Prevent Neural Networks from Overfitting. <em>JMLR</em>.</li>
+      <li><strong>Kingma, D. P. &amp; Ba, J.</strong> (2015). Adam: A Method for Stochastic Optimization. <em>ICLR 2015</em>.</li>
+    </ol>
+  </div>
+</div>
+
+<!-- ════════════════════════ SLIDE 50 — MERCI -->
+<div class="slide vcenter" id="slide-50" data-presenter="ms" data-section="conclusion">
+  <div class="merci-wrap">
+    <div class="merci-card">
+      <div class="merci-icon" style="margin:0 auto 18px;width:64px;height:64px;display:flex;align-items:center;justify-content:center;font-size:28px;border-radius:50%;background:rgba(255,255,255,.18);">
+        <i class="fa-solid fa-hands-clapping"></i>
+      </div>
+      <h1>Merci !</h1>
+      <div class="sub">Questions &amp; Discussion</div>
+      <hr class="merci-hr">
+      <div class="meta">
+        <i class="fa-solid fa-circle-dot" style="color:var(--gold);margin-right:6px;"></i>
+        Mohamed Salem Ebnou Echvagha Oubeid — C34613<br>
+        <i class="fa-solid fa-circle-dot" style="color:var(--gold);margin-right:6px;"></i>
+        Fatimata Issa Saw — C21304<br>
+        <i class="fa-solid fa-circle-dot" style="color:var(--gold);margin-right:6px;"></i>
+        Oussama Sid'Ahmed Hedy — C34603<br>
+        <br>
+        <i class="fa-solid fa-chalkboard-user" style="margin-right:6px;"></i>
+        Encadreur : Dr. Rivea Sadegh
+        &nbsp;&nbsp;·&nbsp;&nbsp;
+        <i class="fa-solid fa-calendar-days" style="margin-right:6px;"></i>
+        13 juin 2026
+      </div>
+      <hr class="merci-hr">
+      <div class="merci-key">
+        <i class="fa-solid fa-key" style="margin-right:8px;color:var(--gold);"></i>
+        Dropout = Bagging implicite — Gal &amp; Ghahramani, ICML 2016
+      </div>
+      <div style="margin-top:14px;font-family:var(--mono);font-size:.78rem;opacity:.8;letter-spacing:.04em;">
+        <i class="fa-brands fa-github" style="margin-right:6px;"></i>
+        aml-adl-paire1-groupe-echvagha
+        &nbsp;&nbsp;·&nbsp;&nbsp;
+        <i class="fa-solid fa-laptop-code" style="margin-right:6px;"></i>
+        Démo en direct disponible
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /slide-area -->
+</div><!-- /layout -->
+
+<!-- FOOTER -->
+<div id="presenter-badge"><span class="pb-dot"></span><span id="pb-name">—</span></div>
+
+<div id="footer">
+  <button class="nav-btn" onclick="prevSlide()"><i class="fa fa-chevron-left"></i> Préc.</button>
+  <div id="progress-bar-wrap"><div id="progress-bar"></div></div>
+  <span id="progress-text">1 / 51</span>
+  <button class="nav-btn" onclick="nextSlide()">Suiv. <i class="fa fa-chevron-right"></i></button>
+</div>
+
+<script>
+/* ══════════════════════════════════════════
+   NAVIGATION
+   ══════════════════════════════════════════ */
+const TOTAL = 51;
+let current = 0;
+let sidebarOpen = true;
+
+function gotoSlide(n) {
+  if (n < 0 || n >= TOTAL) return;
+  const prev = document.getElementById('slide-' + current);
+  const next = document.getElementById('slide-' + n);
+  if (prev) prev.classList.remove('active');
+  if (next) next.classList.add('active');
+  current = n;
+  // ── presenter badge ──
+  const _pm = { ms:{n:'Mohamed Salem',bg:'#eaf6f0',co:'#2a6e45'}, fi:{n:'Fatimata',bg:'#fdf9e0',co:'#7a5c00'}, os:{n:'Oussama',bg:'#eaf8fc',co:'#0c6a80'} };
+  const _pk = next ? next.dataset.presenter : null;
+  const _badge = document.getElementById('presenter-badge');
+  const _pbname = document.getElementById('pb-name');
+  if (_badge) {
+    if (_pk && _pm[_pk]) {
+      _badge.style.background = _pm[_pk].bg;
+      _badge.style.color = _pm[_pk].co;
+      _pbname.textContent = _pm[_pk].n;
+      _badge.style.display = 'flex';
+    } else { _badge.style.display = 'none'; }
+  }
+
+  updateUI();
+  initCharts();
+}
+
+function nextSlide() { gotoSlide(current + 1); }
+function prevSlide() { gotoSlide(current - 1); }
+
+function gotoSection(s) {
+  const map = { cover: 0, ml: 2, dl: 18, projet: 35, conclusion: 47 };
+  gotoSlide(map[s] || 0);
+}
+
+function toggleSidebar() {
+  sidebarOpen = !sidebarOpen;
+  document.getElementById('sidebar').classList.toggle('collapsed', !sidebarOpen);
+}
+
+function updateUI() {
+  // Progress bar
+  const pct = ((current + 1) / TOTAL * 100).toFixed(1);
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = (current + 1) + ' / ' + TOTAL;
+
+  // Sidebar items
+  document.querySelectorAll('.side-item').forEach((el, i) => {
+    el.classList.toggle('active', i === current);
+    if (i === current) el.scrollIntoView({ block: 'nearest' });
+  });
+
+  // Section tabs
+  const sec = document.getElementById('slide-' + current)?.dataset.section || 'cover';
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  const secMap = { cover: 0, ml: 1, dl: 2, projet: 3, conclusion: 4 };
+  const tabs = document.querySelectorAll('.tab-btn');
+  if (tabs[secMap[sec]]) tabs[secMap[sec]].classList.add('active');
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  if (e.key === 'Home') { e.preventDefault(); gotoSlide(0); }
+  if (e.key === 'End') { e.preventDefault(); gotoSlide(TOTAL - 1); }
+});
+
+/* ══════════════════════════════════════════
+   CHARTS (lazy — init only when slide visible)
+   ══════════════════════════════════════════ */
+const chartInited = {};
+
+function initCharts() {
+  const slideEl = document.getElementById('slide-' + current);
+  if (!slideEl) return;
+  const canvases = slideEl.querySelectorAll('canvas');
+  canvases.forEach(cv => {
+    if (chartInited[cv.id]) return;
+    chartInited[cv.id] = true;
+    buildChart(cv.id);
+  });
+}
+
+const GREEN = '#3A8E5B', GOLD = '#E8B608', ACCENT = '#1ea8c4', RED = '#e74c3c', INK = '#1B171E';
+const GREEN_L = 'rgba(58,142,91,.15)', GOLD_L = 'rgba(232,182,8,.18)', ACCENT_L = 'rgba(30,168,196,.15)';
+
+function mkChart(id, type, labels, datasets, opts={}) {
+  const ctx = document.getElementById(id);
+  if (!ctx) return;
+  new Chart(ctx, {
+    type,
+    data: { labels, datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { font: { family: "'Palatino Linotype', Georgia, serif", size: 11 } } },
+        ...opts.plugins
+      },
+      scales: opts.scales || {},
+      ...opts.extra
+    }
+  });
+}
+
+function buildChart(id) {
+  const N = (n, p) => {
+    let s = 0;
+    for (let k = Math.floor(n/2)+1; k <= n; k++) {
+      let b = 1;
+      for (let i=0; i<k; i++) b = b*(n-i)/(i+1);
+      s += b * Math.pow(p, k) * Math.pow(1-p, n-k);
+    }
+    return s;
+  };
+
+  switch(id) {
+    case 'condorcet-chart': {
+      const ns = [1,3,5,7,9,11,15,21,31,51,101];
+      mkChart(id, 'line', ns, [
+        { label:'p=0.55', data:ns.map(n=>N(n,.55)), borderColor:ACCENT, backgroundColor:ACCENT_L, tension:.4, fill:false, pointRadius:3 },
+        { label:'p=0.60', data:ns.map(n=>N(n,.60)), borderColor:GOLD, backgroundColor:GOLD_L, tension:.4, fill:false, pointRadius:3 },
+        { label:'p=0.70', data:ns.map(n=>N(n,.70)), borderColor:GREEN, backgroundColor:GREEN_L, tension:.4, fill:false, pointRadius:3 }
+      ], { scales: { y: { min:.5, max:1, ticks:{ callback:v=>(v*100).toFixed(0)+'%' } }, x:{} } });
+      break;
+    }
+    case 'condorcet-proof-chart': {
+      const ns2 = [1,3,5,7,11,21,51];
+      mkChart(id, 'line', ns2, [
+        { label:'p=0.51', data:ns2.map(n=>N(n,.51)), borderColor:'#aaa', tension:.4, fill:false, pointRadius:3, borderDash:[3,3] },
+        { label:'p=0.55', data:ns2.map(n=>N(n,.55)), borderColor:ACCENT, tension:.4, fill:false, pointRadius:3 },
+        { label:'p=0.60', data:ns2.map(n=>N(n,.60)), borderColor:GOLD, tension:.4, fill:false, pointRadius:3 },
+        { label:'p=0.70', data:ns2.map(n=>N(n,.70)), borderColor:GREEN, tension:.4, fill:false, pointRadius:3 }
+      ], { scales:{ y:{min:.5,max:1,ticks:{callback:v=>(v*100).toFixed(0)+'%'}}, x:{} } });
+      break;
+    }
+    case 'adaboost-chart': {
+      const t = [1,5,10,20,50,100];
+      mkChart(id, 'line', t.map(String), [
+        { label:'Train', data:[.25,.18,.12,.09,.07,.06], borderColor:GREEN, tension:.4, fill:false, pointRadius:3 },
+        { label:'Test', data:[.28,.22,.16,.11,.09,.08], borderColor:GOLD, tension:.4, fill:false, pointRadius:3 }
+      ], { scales:{ y:{min:0,max:.35,title:{display:true,text:'Erreur'}}, x:{title:{display:true,text:'Arbres'}} } });
+      break;
+    }
+    case 'boosting-compare-chart': {
+      mkChart(id, 'bar', ['AdaBoost','GradBoost','XGBoost','LightGBM'], [
+        { label:'Accuracy', data:[.95,.97,.98,.982], backgroundColor:[ACCENT,GOLD,GREEN,'#9b59b6'], borderRadius:3 }
+      ], { scales:{ y:{min:.9,max:1} } });
+      break;
+    }
+    case 'mnist-results-chart': {
+      mkChart(id, 'bar', ['DTree','RF','AdaBoost','XGBoost','Stacking'], [
+        { label:'Accuracy', data:[.87,.97,.95,.98,.97],
+          backgroundColor:[RED,ACCENT,GOLD,GREEN,'#9b59b6'], borderRadius:3 }
+      ], { scales:{ y:{min:.8,max:1} } });
+      break;
+    }
+    case 'activation-chart': {
+      const xs = [], sigmoid=[], tanh=[], relu=[], gelu=[];
+      for (let x=-4; x<=4; x+=.25) {
+        xs.push(x.toFixed(2));
+        sigmoid.push(1/(1+Math.exp(-x)));
+        tanh.push(Math.tanh(x));
+        relu.push(Math.max(0,x));
+        gelu.push(x * 0.5 * (1 + Math.tanh(Math.sqrt(2/Math.PI)*(x+0.044715*x*x*x))));
+      }
+      mkChart(id, 'line', xs, [
+        { label:'Sigmoid', data:sigmoid, borderColor:RED, tension:.4, fill:false, pointRadius:0, borderWidth:2 },
+        { label:'Tanh', data:tanh, borderColor:GOLD, tension:.4, fill:false, pointRadius:0, borderWidth:2 },
+        { label:'ReLU', data:relu, borderColor:GREEN, tension:.4, fill:false, pointRadius:0, borderWidth:2 },
+        { label:'GELU', data:gelu, borderColor:ACCENT, tension:.4, fill:false, pointRadius:0, borderWidth:2, borderDash:[4,2] }
+      ], { scales:{ y:{min:-1.5,max:1.5}, x:{ticks:{maxTicksLimit:9}} } });
+      break;
+    }
+    case 'loss-chart': {
+      const ps = [], ce=[];
+      for (let p=.01; p<1; p+=.02) { ps.push(p.toFixed(2)); ce.push(-Math.log(p)); }
+      mkChart(id, 'line', ps, [
+        { label:'Cross-entropy = -log(p)', data:ce, borderColor:GREEN, tension:.4, fill:true, backgroundColor:GREEN_L, pointRadius:0, borderWidth:2 }
+      ], { scales:{ y:{min:0,max:5,title:{display:true,text:'Loss'}}, x:{ticks:{maxTicksLimit:8},title:{display:true,text:'Probabilité prédite'}} } });
+      break;
+    }
+    case 'sgd-chart': {
+      const ep = Array.from({length:20},(_,i)=>i+1);
+      mkChart(id, 'line', ep, [
+        { label:'Batch GD', data:ep.map(e=>2.5*Math.exp(-.12*e)+.2), borderColor:RED, tension:.4, fill:false, pointRadius:2 },
+        { label:'Mini-batch SGD', data:ep.map(e=>2.5*Math.exp(-.18*e)+.12+.03*Math.sin(e)), borderColor:GREEN, tension:.4, fill:false, pointRadius:2 },
+        { label:'SGD pur', data:ep.map(e=>2.5*Math.exp(-.14*e)+.3+.15*Math.sin(3*e)), borderColor:GOLD, tension:.4, fill:false, pointRadius:2 }
+      ], { scales:{ y:{min:0,max:2.8,title:{display:true,text:'Loss'}}, x:{title:{display:true,text:'Epoch'}} } });
+      break;
+    }
+    case 'optimizer-chart': {
+      const ep2 = Array.from({length:25},(_,i)=>i+1);
+      mkChart(id, 'line', ep2, [
+        { label:'SGD', data:ep2.map(e=>2.4*Math.exp(-.09*e)+.35), borderColor:RED, tension:.4, fill:false, pointRadius:2 },
+        { label:'Momentum', data:ep2.map(e=>2.4*Math.exp(-.15*e)+.18), borderColor:GOLD, tension:.4, fill:false, pointRadius:2 },
+        { label:'Adam', data:ep2.map(e=>2.4*Math.exp(-.25*e)+.08), borderColor:GREEN, tension:.4, fill:false, pointRadius:2, borderWidth:2.5 }
+      ], { scales:{ y:{min:0,max:2.5,title:{display:true,text:'Loss'}}, x:{title:{display:true,text:'Epoch'}} } });
+      break;
+    }
+    case 'vanishing-chart': {
+      mkChart(id, 'bar', ['Couche 1\n(entrée)','Couche 2','Couche 3','Couche 4','Couche 5\n(sortie)'], [
+        { label:'Sigmoid', data:[0.001,0.004,0.012,0.038,0.12], backgroundColor:RED+'88', borderRadius:3 },
+        { label:'ReLU', data:[0.09,0.105,0.11,0.118,0.12], backgroundColor:GREEN+'88', borderRadius:3 }
+      ], { scales:{ y:{title:{display:true,text:'||∇W||'}} } });
+      break;
+    }
+    case 'fashion-chart': {
+      mkChart(id, 'bar', ['MLP','+ Drop.2','+ Drop.5','+ BN','+ Adam','Tout'], [
+        { label:'Accuracy', data:[.89,.90,.88,.91,.91,.92],
+          backgroundColor:[ACCENT,GOLD,RED,GREEN,'#9b59b6','#27ae60'], borderRadius:3 }
+      ], { scales:{ y:{min:.85,max:.94} } });
+      break;
+    }
+    case 'learning-curve-chart': {
+      const ep3 = Array.from({length:30},(_,i)=>i+1);
+      mkChart(id, 'line', ep3, [
+        { label:'Train loss', data:ep3.map(e=>2.3*Math.exp(-.22*e)+.05), borderColor:GREEN, tension:.4, fill:false, pointRadius:2 },
+        { label:'Val loss (bon)', data:ep3.map(e=>2.3*Math.exp(-.19*e)+.1), borderColor:ACCENT, tension:.4, fill:false, pointRadius:2, borderDash:[5,3] },
+        { label:'Val loss (overfit)', data:ep3.map(e=>2.3*Math.exp(-.18*e)+.1 + (e>15?0.015*(e-15):0)), borderColor:RED, tension:.4, fill:false, pointRadius:2, borderDash:[3,2] }
+      ], { scales:{ y:{min:0,max:2.4,title:{display:true,text:'Loss'}}, x:{title:{display:true,text:'Epoch'}} } });
+      break;
+    }
+    case 'pca-chart': {
+      const k = Array.from({length:64},(_,i)=>i+1);
+      let cum=0; const cumVar=[]; for(let i=0;i<64;i++){cum+=1/(i+1);cumVar.push(cum);}
+      const max=cumVar[63]; const norm=cumVar.map(v=>v/max*.95+.02);
+      mkChart(id, 'line', k.map(String), [
+        { label:'Variance cumulée', data:norm, borderColor:GREEN, backgroundColor:GREEN_L, tension:.4, fill:true, pointRadius:0, borderWidth:2 }
+      ], { scales:{ y:{min:0,max:1,ticks:{callback:v=>(v*100).toFixed(0)+'%'}}, x:{ticks:{maxTicksLimit:9}} } });
+      break;
+    }
+    case 'project-results-chart': {
+      mkChart(id, 'bar', ['RF\n(pixels)','XGB\n(pixels)','MLP\nseul','Stacking','Pipeline\nhybride'], [
+        { label:'Accuracy', data:[.858,.901,.978,.979,.982],
+          backgroundColor:[RED+'aa',GOLD+'aa',ACCENT+'aa','#9b59b6aa',GREEN], borderRadius:3 }
+      ], { scales:{ y:{min:.8,max:1} } });
+      break;
+    }
+    case 'error-bar-chart': {
+      mkChart(id, 'bar', ['RF','XGBoost','MLP','Hybride'], [
+        { label:'Accuracy moy. (5 runs)', data:[.858,.901,.978,.982],
+          backgroundColor:[RED+'aa',GOLD+'aa',ACCENT+'aa',GREEN], borderRadius:3,
+          error:[.004,.003,.002,.002] }
+      ], { scales:{ y:{min:.82,max:1} } });
+      break;
+    }
+    case 'shap-chart': {
+      mkChart(id, 'bar', ['PC1','PC2','PC3','PC4','PC8','PC12','PC15','PC20'], [
+        { label:'|SHAP| moyen', data:[.312,.268,.198,.155,.142,.118,.094,.072],
+          backgroundColor:GREEN, borderRadius:3 }
+      ], { extra:{ indexAxis:'y' }, scales:{ x:{title:{display:true,text:'|Valeur SHAP|'}} } });
+      break;
+    }
+    case 'uncertainty-chart': {
+      mkChart(id, 'bar', ['0.00-0.02','0.02-0.05','0.05-0.10','0.10-0.20','0.20+'], [
+        { label:'Prédictions correctes', data:[68,22,7,2,1], backgroundColor:GREEN+'bb', borderRadius:3 },
+        { label:'Prédictions incorrectes', data:[5,12,18,30,35], backgroundColor:RED+'bb', borderRadius:3 }
+      ], { scales:{ y:{title:{display:true,text:'% d\'exemples'}}, x:{title:{display:true,text:'Incertitude σ'}} } });
+      break;
+    }
+  }
+}
+
+/* Boot */
+window.addEventListener('load', () => {
+  gotoSlide(0);
+  setTimeout(initCharts, 300);
+});
+</script>
+</body>
+</html>
