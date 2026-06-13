@@ -1,109 +1,136 @@
-# AML & ADL — Paire 1 — Groupe Paire 1
+# AML & ADL — Paire 1 — Groupe Échvagha
 
-**Université de Nouakchott — Faculté des Sciences et Techniques**
+**Université de Nouakchott — Faculté des Sciences et Techniques**  
 Master 1 Intelligence Artificielle — 2025/2026
 
 ---
 
-## 👥 Groupe
+## Groupe
 
 | Nom | Matricule |
 |-----|-----------|
-| Mohamed Salem Ebnou Echvagha Oubeid | C34613 |
+| Mohamed Salem Ebnou Oubeid | C34613 |
 | Fatimata Issa Saw | C21304 |
 | Oussama Sid'Ahmed Hedy | C34603 |
 
-**Encadreur :** Dr. Rivea Sadegh
+**Encadreur :** Dr. Rivea Sadegh  
+**Soutenance :** 13 juin 2026
 
 ---
 
-## 📚 Modules
+## Modules
 
-| Module | Code | Chapitre |
-|--------|------|----------|
-| Advanced Machine Learning | C25M1221 | Méthodes d'ensemble (Bagging, Boosting, Stacking) |
-| Advanced Deep Learning | C25M1222 | Fondements des réseaux profonds (MLP, Backprop, Dropout) |
-
----
-
-## 🔑 Fil conducteur
-
-> **Dropout dans les réseaux de neurones = Bagging implicite**
-> (Gal & Ghahramani, ICML 2016)
+| Module | Code | Contenu |
+|--------|------|---------|
+| Advanced Machine Learning | C25M1221 | Bagging, Boosting, Stacking, Condorcet |
+| Advanced Deep Learning | C25M1222 | MLP, Backprop, Dropout, Adam |
 
 ---
 
-## 📁 Structure du dépôt
+## Fil conducteur
+
+> **Dropout (Deep Learning) = Bagging implicite** — Gal & Ghahramani, ICML 2016
+
+Le projet intégrateur applique ce pont via un pipeline **MLP → PCA → XGBoost** sur **HAM10000** (classification de lésions cutanées, 7 classes).
+
+---
+
+## Structure du dépôt
 
 ```
-aml-adl-paire1/
+aml-adl-paire1-groupe-echvagha/
 ├── presentation/
-│   └── index.html          # Présentation HTML unique (51 slides)
+│   └── index.html              # Présentation HTML (52+ slides, KaTeX, Chart.js)
 ├── notebooks/
-│   ├── 01_notebook_ML.ipynb
-│   ├── 02_notebook_DL.ipynb
-│   └── 03_notebook_projet_integrateur.ipynb
+│   ├── 01_notebook_ML.ipynb    # Condorcet, Bagging, RF, XGBoost (Digits)
+│   ├── 02_notebook_DL.ipynb    # MLP NumPy/PyTorch, Dropout (Fashion-MNIST)
+│   └── 03_notebook_projet_integrateur.ipynb  # Pipeline HAM10000
 ├── rapports/
+│   ├── generate_rapports.py    # Génération PDF (ReportLab)
 │   ├── rapport_ML_DL.pdf
 │   └── rapport_projet_integrateur.pdf
-├── data/
-│   └── .gitkeep
-├── images/
-│   └── logo_un_fst.png
+├── data/                       # HAM10000_metadata.csv (optionnel)
+├── images/                     # Figures générées par les notebooks
 ├── phases.md
-├── README.md
 ├── requirements.txt
-└── .gitignore
+├── verify_env.py
+└── README.md
 ```
 
 ---
 
-## 🚀 Utilisation
+## Installation
+
+```bash
+# Environnement recommandé (Windows, chemin court)
+python -m venv C:\ml_venv
+C:\ml_venv\Scripts\activate
+pip install -r requirements.txt
+python verify_env.py
+```
+
+---
+
+## Utilisation
 
 ### Présentation
-Ouvrir `presentation/index.html` dans un navigateur moderne (Chrome, Firefox, Edge).
 
-**Navigation :**
-- Flèches `←` `→` ou boutons Précédent/Suivant
-- Touches `Home` (premier slide) et `End` (dernier slide)
-- Menu latéral et onglets de section dans le header
+Ouvrir `presentation/index.html` dans Chrome, Firefox ou Edge.
+
+| Touche | Action |
+|--------|--------|
+| ← / → | Slide précédent / suivant |
+| Home / End | Premier / dernier slide |
+| Menu latéral | Saut direct à une section |
 
 ### Notebooks
+
 ```bash
-pip install -r requirements.txt
 jupyter notebook notebooks/
 ```
 
+Le notebook `03_notebook_projet_integrateur.ipynb` fonctionne **sans fichiers HAM10000** : il génère des métadonnées et histogrammes de couleur synthétiques calibrés sur la distribution réelle du dataset.
+
+### Rapports PDF
+
+```bash
+python rapports/generate_rapports.py
+```
+
 ---
 
-## 🔬 Projet Intégrateur — Pipeline Hybride
+## Projet intégrateur — HAM10000
 
 ```
-[Images MNIST 28×28]
+[HAM10000 : métadonnées + 42 features (6 meta + 36 hist. couleur)]
        ↓
-[MLP Extracteur (PyTorch) — 784→256→128→64]
+[MLP extracteur sklearn — 42 → 128 → 64]
        ↓
-[PCA — 64→50 composantes (85% variance)]
+[PCA — 64 → 30 composantes (~85 % variance)]
        ↓
-[XGBoost — 500 arbres, lr=0.05]
+[XGBoost — 300 arbres, lr=0.05]
        ↓
-[Prédiction + Incertitude MC-Dropout]
+[Prédiction + SHAP + Incertitude MC-Bootstrap]
 ```
 
-**Résultats :**
+**Résultats (validation, features simulées / rapport) :**
+
 | Modèle | Accuracy |
 |--------|----------|
-| RF sur pixels bruts | 85.8% |
-| XGBoost sur pixels bruts | 90.1% |
-| MLP seul | 97.8% |
-| **Pipeline hybride** | **98.2%** |
+| Random Forest (features brutes) | 54.1 % |
+| XGBoost (features brutes) | 62.8 % |
+| MLP seul | 73.2 % |
+| **Pipeline hybride (MLP+PCA+XGB)** | **75.8 %** |
+
+Classes : MEL, NV, BCC, AKIEC, BKL, DF, VASC
 
 ---
 
-## 📖 Références clés
+## Références clés
 
-1. Géron (2023) — Hands-On Machine Learning, O'Reilly
-2. Goodfellow et al. (2016) — Deep Learning, MIT Press
-3. Gal & Ghahramani (2016) — Dropout as Bayesian Approximation, ICML
-4. Chen & Guestrin (2016) — XGBoost, KDD
-5. Lundberg & Lee (2017) — SHAP, NeurIPS
+1. Tschandl et al. (2018) — HAM10000, *Scientific Data*
+2. Gal & Ghahramani (2016) — Dropout as Bayesian Approximation, ICML
+3. Chen & Guestrin (2016) — XGBoost, KDD
+4. Lundberg & Lee (2017) — SHAP, NeurIPS
+5. Thwin & Park (2024) — Deep ensemble on HAM10000, *Appl. Sci.*
+6. Fiaz et al. (2025) — Hybrid explainable framework, *Frontiers in Medicine*

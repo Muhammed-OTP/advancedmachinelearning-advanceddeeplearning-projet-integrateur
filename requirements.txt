@@ -24,3 +24,6 @@ ipywidgets>=8.0.0
 
 # Optional: Gradio demo
 gradio>=4.0.0
+
+# PDF reports
+reportlab>=4.0.0

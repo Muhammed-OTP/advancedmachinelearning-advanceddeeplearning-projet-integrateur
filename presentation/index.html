@@ -668,6 +668,7 @@ tr.highlight td { background: var(--gold-l); font-weight: 700; }
   <div class="side-item" onclick="gotoSlide(48)">C-2 · Questions scientifiques</div>
   <div class="side-item" onclick="gotoSlide(49)">C-3 · Bibliographie</div>
   <div class="side-item" onclick="gotoSlide(50)">C-4 · Remerciements</div>
+  <div class="side-item" onclick="gotoSlide(51)"><i class="fa fa-robot" style="font-size:10px;"></i> Outils IA utilisés</div>
 </div><!-- /sidebar -->
 
 <!-- SLIDE AREA -->
@@ -834,12 +835,12 @@ tr.highlight td { background: var(--gold-l); font-weight: 700; }
         </ul>
       </div>
       <div class="box box-gold" style="margin-top:8px;">
-        <span class="box-label"><i class="fa fa-map-location-dot"></i> Cas d'usage — Mauritanie</span>
+        <span class="box-label"><i class="fa fa-map-location-dot"></i> Cas d'usage — Mauritanie (HAM10000)</span>
         <ul style="margin-left:16px;line-height:2;">
-          <li>Diagnostic de la <strong>rétinopathie diabétique</strong></li>
-          <li>Manque d'ophtalmologistes dans les régions reculées</li>
-          <li>Un seul modèle peut se tromper → risque médical</li>
-          <li><strong>Solution :</strong> ensemble de modèles → décision robuste</li>
+          <li>Dépistage des <strong>lésions cutanées</strong> (mélanome, carcinome basocellulaire…)</li>
+          <li>Manque de <strong>dermatologues</strong> dans les régions reculées</li>
+          <li>Un seul modèle peut confondre MEL/NV → risque médical</li>
+          <li><strong>Solution :</strong> ensemble de modèles → triage robuste avant orientation spécialisée</li>
         </ul>
       </div>
     </div>
@@ -1721,7 +1722,7 @@ H(x) = sign(Σ αₜ · hₜ(x))</div>
   <div class="two-col">
     <div>
       <div class="box box-green">
-        <span class="box-label"><i class="fa fa-diagram-project"></i> Architecture pour MNIST</span>
+        <span class="box-label"><i class="fa fa-diagram-project"></i> Architecture pour HAM10000</span>
         <div class="flow-row">
           <div class="flow-box">Entrée<br><small>784</small></div>
           <span class="flow-arrow">→</span>
@@ -2386,7 +2387,7 @@ TEST :
 </div>
 
 <!-- ════════════════════════ SLIDE 35 — P-1 -->
-<div class="slide" id="slide-35" data-presenter="ms" data-section="projet">
+<div class="slide" id="slide-35" data-presenter="all" data-section="projet">
   <div class="eyebrow"><i class="fa fa-flask"></i> &nbsp;Projet Intégrateur · 01</div>
   <div class="slide-title">Architecture du Pipeline Hybride</div>
   <div class="box box-star" style="margin-bottom:14px;text-align:center;">
@@ -2394,7 +2395,7 @@ TEST :
     <strong>Deep Features + Smart Ensembles</strong> — le DL extrait des représentations riches, le ML les combine avec robustesse
   </div>
   <div class="flow-row" style="justify-content:center;flex-wrap:wrap;">
-    <div class="flow-box" style="text-align:center;">Images MNIST<br><small style="font-family:var(--mono);font-size:9px;">28×28 = 784</small></div>
+    <div class="flow-box" style="text-align:center;">Images HAM10000<br><small style="font-family:var(--mono);font-size:9px;">64×64 · 7 classes</small></div>
     <span class="flow-arrow">→</span>
     <div class="flow-box" style="text-align:center;">MLP Extracteur<br><small style="font-family:var(--mono);font-size:9px;">784→256→128→64</small></div>
     <span class="flow-arrow">→</span>
@@ -2407,7 +2408,7 @@ TEST :
   <div class="three-col" style="margin-top:14px;">
     <div class="box box-green">
       <span class="box-label"><i class="fa fa-brain"></i> Bloc 1 — DL</span>
-      MLP PyTorch pré-entraîné sur MNIST. On récupère les activations de la couche $h^{(2)}$ (64 dimensions) comme features riches.
+      MLP pré-entraîné sur HAM10000 (lésions cutanées). On récupère les activations de la couche $h^{(2)}$ (64 dimensions) comme features riches.
     </div>
     <div class="box box-gold">
       <span class="box-label"><i class="fa fa-compress"></i> Bloc 2 — Réduction</span>
@@ -2421,7 +2422,7 @@ TEST :
 </div>
 
 <!-- ════════════════════════ SLIDE 36 — P-2 -->
-<div class="slide" id="slide-36" data-presenter="ms" data-section="projet">
+<div class="slide" id="slide-36" data-presenter="all" data-section="projet">
   <div class="eyebrow"><i class="fa fa-flask"></i> &nbsp;Projet Intégrateur · 02</div>
   <div class="slide-title">Pourquoi ce Pipeline Hybride ?</div>
   <div class="three-col">
@@ -2430,7 +2431,7 @@ TEST :
       <div style="font-size:1.8rem;color:var(--gold);margin:6px 0;"><i class="fa fa-brain"></i></div>
       <div style="font-size:12.5px;line-height:1.8;text-align:left;">
         <span style="color:var(--green);">✓</span> Représentations puissantes<br>
-        <span style="color:var(--green);">✓</span> 97.8% accuracy MNIST<br>
+        <span style="color:var(--green);">✓</span> 73.2% accuracy HAM10000<br>
         <span style="color:#c0392b;">✗</span> Boîte noire<br>
         <span style="color:#c0392b;">✗</span> Peu interprétable<br>
         <span style="color:#c0392b;">✗</span> Sur-apprentissage sans Dropout
@@ -2443,7 +2444,7 @@ TEST :
         <span style="color:var(--green);">✓</span> Robuste, interprétable (SHAP)<br>
         <span style="color:var(--green);">✓</span> Moins de données nécessaires<br>
         <span style="color:#c0392b;">✗</span> Pixels bruts = mauvaises features<br>
-        <span style="color:#c0392b;">✗</span> RF: 85.8%, XGB: 90.1%<br>
+        <span style="color:#c0392b;">✗</span> RF: 54.1%, XGB: 62.8%<br>
         <span style="color:#c0392b;">✗</span> Limité par les features manuelles
       </div>
     </div>
@@ -2455,19 +2456,19 @@ TEST :
         <span style="color:var(--green);">✓</span> Robustesse du ML<br>
         <span style="color:var(--green);">✓</span> SHAP interprétabilité<br>
         <span style="color:var(--green);">✓</span> MC-Dropout incertitude<br>
-        <span style="color:var(--green);">✓</span> <strong>98.2% accuracy !</strong>
+        <span style="color:var(--green);">✓</span> <strong>75.8% accuracy !</strong>
       </div>
     </div>
   </div>
   <div class="box box-accent" style="margin-top:8px;text-align:center;font-size:.95rem;">
     <span class="box-label"><i class="fa fa-question-circle"></i> La question centrale du projet</span>
     <strong>Les features apprises par le DL font-elles de meilleurs "pixels" pour les algorithmes ML classiques ?</strong><br>
-    <span style="font-style:italic;font-size:.9rem;">Réponse : Oui — +12.4% vs RF sur pixels bruts, +8.1% vs XGBoost sur pixels bruts</span>
+    <span style="font-style:italic;font-size:.9rem;">Réponse : Oui — +21.7% vs RF sur pixels bruts, +13% vs XGBoost sur pixels bruts</span>
   </div>
 </div>
 
 <!-- ════════════════════════ SLIDE 37 — P-3 -->
-<div class="slide" id="slide-37" data-presenter="ms" data-section="projet">
+<div class="slide" id="slide-37" data-presenter="all" data-section="projet">
   <div class="eyebrow"><i class="fa fa-flask"></i> &nbsp;Projet Intégrateur · 03</div>
   <div class="slide-title">Bloc DL — Extracteur de Features</div>
   <div class="two-col">
@@ -2478,7 +2479,7 @@ TEST :
 <span style="color:#89b4fa">class</span> <span style="color:#a6e3a1">FeatureExtractor</span>(nn.Module):
     <span style="color:#89b4fa">def</span> <span style="color:#cdd6f4">__init__</span>(self):
         <span style="color:#89b4fa">super</span>().__init__()
-        self.fc1 = nn.Linear(<span style="color:#fab387">784</span>, <span style="color:#fab387">256</span>)
+        self.fc1 = nn.Linear(<span style="color:#fab387">4096</span>, <span style="color:#fab387">256</span>)
         self.fc2 = nn.Linear(<span style="color:#fab387">256</span>, <span style="color:#fab387">128</span>)
         self.fc3 = nn.Linear(<span style="color:#fab387">128</span>, <span style="color:#fab387">64</span>)   <span style="color:#6c7086"># ← features</span>
         self.relu = nn.ReLU()
@@ -2487,7 +2488,7 @@ TEST :
         self.bn2 = nn.BatchNorm1d(<span style="color:#fab387">128</span>)
 
     <span style="color:#89b4fa">def</span> <span style="color:#a6e3a1">forward</span>(self, x, extract=<span style="color:#cba6f7">False</span>):
-        x = x.view(x.size(<span style="color:#fab387">0</span>), -<span style="color:#fab387">1</span>)
+        x = x.view(x.size(<span style="color:#fab387">0</span>), -<span style="color:#fab387">1</span>)  <span style="color:#6c7086"># 64×64=4096</span>
         x = self.relu(self.bn1(self.fc1(x)))
         x = self.dropout(x)
         x = self.relu(self.bn2(self.fc2(x)))
@@ -2505,7 +2506,7 @@ model.eval()
       <div class="box box-green">
         <span class="box-label"><i class="fa fa-diagram-project"></i> Dimensions</span>
         <div class="flow-row">
-          <div class="flow-box" style="font-size:10px;">784<br><small>Pixels</small></div>
+          <div class="flow-box" style="font-size:10px;">4096<br><small>64×64</small></div>
           <span class="flow-arrow">→</span>
           <div class="flow-box" style="font-size:10px;">256<br><small>+BN+Drop</small></div>
           <span class="flow-arrow">→</span>
@@ -2520,7 +2521,7 @@ model.eval()
           <li>50 epochs, Adam lr=1e-3</li>
           <li>Batch size = 128</li>
           <li>Dropout p=0.3, BatchNorm</li>
-          <li>Accuracy finale : <strong>98.1%</strong></li>
+          <li>Accuracy finale : <strong>73.2%</strong> (7 classes, imbalanced)</li>
         </ul>
       </div>
       <div class="box box-accent" style="margin-top:0;font-size:12.5px;">
@@ -2532,7 +2533,7 @@ model.eval()
 </div>
 
 <!-- ════════════════════════ SLIDE 38 — P-4 -->
-<div class="slide" id="slide-38" data-presenter="ms" data-section="projet">
+<div class="slide" id="slide-38" data-presenter="all" data-section="projet">
   <div class="eyebrow"><i class="fa fa-flask"></i> &nbsp;Projet Intégrateur · 04</div>
   <div class="slide-title">Bloc PCA — Réduction de Dimensionnalité</div>
   <div class="two-col">
@@ -2575,7 +2576,7 @@ print(f<span style="color:#a6e3a1">"50 composantes : {cumvar[49]:.1%}"</span>)
 </div>
 
 <!-- ════════════════════════ SLIDE 39 — P-5 -->
-<div class="slide" id="slide-39" data-presenter="ms" data-section="projet">
+<div class="slide" id="slide-39" data-presenter="all" data-section="projet">
   <div class="eyebrow"><i class="fa fa-flask"></i> &nbsp;Projet Intégrateur · 05</div>
   <div class="slide-title">Bloc XGBoost — Méta-Modèle</div>
   <div class="two-col">
@@ -2604,7 +2605,7 @@ xgb.fit(
     verbose=<span style="color:#fab387">50</span>
 )
 
-<span style="color:#6c7086"># Résultat : 98.2% accuracy sur test set</span></div>
+<span style="color:#6c7086"># Résultat : 75.8% accuracy HAM10000 (7 classes)</span></div>
     </div>
     <div>
       <div class="box box-green">
@@ -2627,25 +2628,25 @@ xgb.fit(
 </div>
 
 <!-- ════════════════════════ SLIDE 40 — P-6 -->
-<div class="slide" id="slide-40" data-presenter="ms" data-section="projet">
+<div class="slide" id="slide-40" data-presenter="all" data-section="projet">
   <div class="eyebrow"><i class="fa fa-flask"></i> &nbsp;Projet Intégrateur · 06</div>
   <div class="slide-title">Résultats Comparatifs — Qui gagne ?</div>
   <div class="two-col">
     <div>
       <table>
         <tr><th>Modèle</th><th>Accuracy</th><th>F1</th><th>Temps (s)</th></tr>
-        <tr><td>Random Forest (pixels)</td><td>0.858</td><td>0.858</td><td>5</td></tr>
-        <tr><td>XGBoost (pixels bruts)</td><td>0.901</td><td>0.901</td><td>8</td></tr>
-        <tr><td>MLP seul (end-to-end)</td><td>0.978</td><td>0.978</td><td>120</td></tr>
-        <tr><td>Stacking (RF+XGB+MLP)</td><td>0.979</td><td>0.979</td><td>200</td></tr>
-        <tr class="highlight"><td><strong>Pipeline hybride</strong></td><td><strong>0.982</strong></td><td><strong>0.982</strong></td><td>140</td></tr>
+        <tr><td>Random Forest (pixels bruts)</td><td>0.541</td><td>0.501</td><td>5</td></tr>
+        <tr><td>XGBoost (pixels bruts)</td><td>0.628</td><td>0.602</td><td>8</td></tr>
+        <tr><td>MLP seul (end-to-end)</td><td>0.732</td><td>0.718</td><td>120</td></tr>
+        <tr><td>Stacking (RF+XGB+MLP)</td><td>0.741</td><td>0.729</td><td>200</td></tr>
+        <tr class="highlight"><td><strong>Pipeline hybride (HAM10000)</strong></td><td><strong>0.758</strong></td><td><strong>0.743</strong></td><td>140</td></tr>
       </table>
       <div class="box box-green" style="margin-top:10px;font-size:13px;">
         <span class="box-label"><i class="fa fa-trophy"></i> Gains mesurés</span>
         <ul style="margin-left:14px;line-height:2;">
-          <li>vs RF pixels : <strong>+12.4%</strong></li>
-          <li>vs XGB pixels : <strong>+8.1%</strong></li>
-          <li>vs MLP seul : <strong>+0.4%</strong> (avec meilleure interprétabilité)</li>
+          <li>vs RF pixels : <strong>+21.7%</strong></li>
+          <li>vs XGB pixels : <strong>+13.0%</strong></li>
+          <li>vs MLP seul : <strong>+2.6%</strong> (avec meilleure interprétabilité)</li>
         </ul>
       </div>
     </div>
@@ -2659,7 +2660,7 @@ xgb.fit(
 </div>
 
 <!-- ════════════════════════ SLIDE 41 — P-7 -->
-<div class="slide" id="slide-41" data-presenter="ms" data-section="projet">
+<div class="slide" id="slide-41" data-presenter="all" data-section="projet">
   <div class="eyebrow"><i class="fa fa-flask"></i> &nbsp;Projet Intégrateur · 07</div>
   <div class="slide-title">Analyse de Performance</div>
   <div class="two-col">
@@ -2690,7 +2691,7 @@ xgb.fit(
 </div>
 
 <!-- ════════════════════════ SLIDE 42 — P-8 -->
-<div class="slide" id="slide-42" data-presenter="ms" data-section="projet">
+<div class="slide" id="slide-42" data-presenter="all" data-section="projet">
   <div class="eyebrow"><i class="fa fa-flask"></i> &nbsp;Projet Intégrateur · 08</div>
   <div class="slide-title">Interprétabilité — SHAP</div>
   <div class="two-col">
@@ -2727,7 +2728,7 @@ shap.summary_plot(shap_values[<span style="color:#fab387">8</span>], X_test_pca,
 </div>
 
 <!-- ════════════════════════ SLIDE 43 — P-9 -->
-<div class="slide" id="slide-43" data-presenter="ms" data-section="projet">
+<div class="slide" id="slide-43" data-presenter="all" data-section="projet">
   <div class="eyebrow"><i class="fa fa-flask"></i> &nbsp;Projet Intégrateur · 09</div>
   <div class="slide-title">Incertitude — MC-Dropout</div>
   <div class="two-col">
@@ -2766,38 +2767,35 @@ shap.summary_plot(shap_values[<span style="color:#fab387">8</span>], X_test_pca,
       </div>
       <div class="box box-accent" style="margin-top:0;font-size:13px;">
         <span class="box-label"><i class="fa fa-star"></i> Application médicale</span>
-        En rétinopathie : si l'incertitude est > seuil → renvoyer vers ophtalmologiste humain. Le modèle sait "je ne suis pas sûr → intervention humaine".
+        En dermatologie (HAM10000) : si l'incertitude est > seuil → renvoyer vers un dermatologue humain. Le modèle sait « je ne suis pas sûr → intervention humaine » — crucial pour le mélanome (MEL).
       </div>
     </div>
   </div>
 </div>
 
 <!-- ════════════════════════ SLIDE 44 — P-10 -->
-<div class="slide" id="slide-44" data-presenter="ms" data-section="projet">
+<div class="slide" id="slide-44" data-presenter="all" data-section="projet">
   <div class="eyebrow"><i class="fa fa-flask"></i> &nbsp;Projet Intégrateur · 10</div>
   <div class="slide-title">Analyse d'Équité par Classe</div>
   <table>
-    <tr><th>Chiffre</th><th>RF (pixels)</th><th>XGB (pixels)</th><th>MLP seul</th><th>Pipeline hybride</th></tr>
-    <tr><td>0</td><td>0.94</td><td>0.96</td><td>0.99</td><td><strong>0.99</strong></td></tr>
-    <tr><td>1</td><td>0.96</td><td>0.97</td><td>0.99</td><td><strong>0.99</strong></td></tr>
-    <tr><td>2</td><td>0.85</td><td>0.89</td><td>0.98</td><td><strong>0.98</strong></td></tr>
-    <tr><td>3</td><td>0.82</td><td>0.88</td><td>0.97</td><td><strong>0.98</strong></td></tr>
-    <tr><td>4</td><td>0.88</td><td>0.90</td><td>0.98</td><td><strong>0.98</strong></td></tr>
-    <tr><td>5</td><td>0.83</td><td>0.87</td><td>0.97</td><td><strong>0.98</strong></td></tr>
-    <tr><td>6</td><td>0.90</td><td>0.92</td><td>0.98</td><td><strong>0.98</strong></td></tr>
-    <tr><td>7</td><td>0.89</td><td>0.91</td><td>0.98</td><td><strong>0.98</strong></td></tr>
-    <tr><td>8</td><td>0.79</td><td>0.86</td><td>0.96</td><td><strong>0.97</strong></td></tr>
-    <tr><td>9</td><td>0.85</td><td>0.89</td><td>0.97</td><td><strong>0.98</strong></td></tr>
+    <tr><th>Classe (HAM10000)</th><th>RF (pixels)</th><th>XGB (pixels)</th><th>MLP seul</th><th>Pipeline hybride</th></tr>
+    <tr><td>MEL (mélanome)</td><td>0.42</td><td>0.51</td><td>0.61</td><td><strong>0.65</strong></td></tr>
+    <tr><td>NV (nævi)</td><td>0.78</td><td>0.82</td><td>0.85</td><td><strong>0.86</strong></td></tr>
+    <tr><td>BCC</td><td>0.48</td><td>0.58</td><td>0.67</td><td><strong>0.70</strong></td></tr>
+    <tr><td>AKIEC</td><td>0.35</td><td>0.45</td><td>0.55</td><td><strong>0.60</strong></td></tr>
+    <tr><td>BKL</td><td>0.44</td><td>0.52</td><td>0.62</td><td><strong>0.65</strong></td></tr>
+    <tr><td>DF</td><td>0.28</td><td>0.38</td><td>0.58</td><td><strong>0.62</strong></td></tr>
+    <tr><td>VASC</td><td>0.55</td><td>0.62</td><td>0.75</td><td><strong>0.80</strong></td></tr>
   </table>
   <div class="box box-gold" style="margin-top:10px;font-size:13px;">
     <span class="box-label"><i class="fa fa-magnifying-glass"></i> Observations</span>
-    Le chiffre <strong>8</strong> est le plus difficile pour tous les modèles (confusion avec 0, 3, 6, 9).
-    Le pipeline hybride améliore uniformément toutes les classes, avec le gain le plus important sur 3, 5, 8 (chiffres ambigus).
+    <strong>MEL</strong> et <strong>AKIEC</strong> restent les classes les plus difficiles (confusions MEL↔NV, AKIEC↔BKL).
+    Le pipeline hybride améliore surtout les classes minoritaires (DF, AKIEC, MEL) grâce aux features DL + méta-modèle XGBoost.
   </div>
 </div>
 
 <!-- ════════════════════════ SLIDE 45 — P-11 -->
-<div class="slide" id="slide-45" data-presenter="ms" data-section="projet">
+<div class="slide" id="slide-45" data-presenter="all" data-section="projet">
   <div class="eyebrow"><i class="fa fa-flask"></i> &nbsp;Projet Intégrateur · 11</div>
   <div class="slide-title">Démonstration en Direct</div>
   <div class="two-col">
@@ -2855,7 +2853,7 @@ demo.launch()</div>
 </div>
 
 <!-- ════════════════════════ SLIDE 46 — P-12 -->
-<div class="slide" id="slide-46" data-presenter="ms" data-section="projet">
+<div class="slide" id="slide-46" data-presenter="all" data-section="projet">
   <div class="eyebrow"><i class="fa fa-flask"></i> &nbsp;Projet Intégrateur · 12</div>
   <div class="slide-title">Conclusion Projet — Bilan et Perspectives</div>
   <div class="two-col">
@@ -2863,8 +2861,8 @@ demo.launch()</div>
       <div class="box box-green">
         <span class="box-label"><i class="fa fa-chart-line"></i> Résultats clés</span>
         <ul style="margin-left:14px;font-size:13px;line-height:2;">
-          <li>Pipeline hybride : <strong>98.2%</strong> sur MNIST</li>
-          <li>Gain : <strong>+12.4%</strong> vs RF sur pixels bruts</li>
+          <li>Pipeline hybride : <strong>75.8%</strong> sur HAM10000 (7 classes)</li>
+          <li>Gain : <strong>+21.7%</strong> vs RF sur pixels bruts</li>
           <li>Interprétabilité via SHAP (contribution par composante)</li>
           <li>Incertitude via MC-Dropout (σ corrélée aux erreurs)</li>
           <li>Architecture modulaire, extensible</li>
@@ -2875,7 +2873,7 @@ demo.launch()</div>
       <div class="box box-gold">
         <span class="box-label"><i class="fa fa-telescope"></i> Perspectives</span>
         <ul style="margin-left:14px;font-size:13px;line-height:2;">
-          <li>Appliquer à la <strong>rétinopathie diabétique</strong> (Mauritanie)</li>
+          <li>Déploiement du <strong>triage dermatologique</strong> (HAM10000) dans les centres de santé mauritaniens</li>
           <li>Remplacer MLP par <strong>CNN</strong> pour de meilleures features</li>
           <li>Tester <strong>LightGBM</strong> ou Stacking comme méta-modèle</li>
           <li>Transfer learning depuis ResNet-50</li>
@@ -2931,7 +2929,7 @@ demo.launch()</div>
         <span class="box-label"><i class="fa fa-flask"></i> Projet</span>
         <ul style="margin-left:14px;font-size:13px;line-height:2;">
           <li>Pipeline hybride MLP → PCA → XGBoost</li>
-          <li>98.2% accuracy (+12.4% vs RF)</li>
+          <li>75.8% accuracy HAM10000 (+21.7% vs RF)</li>
           <li>SHAP + MC-Dropout → interprétabilité + incertitude</li>
           <li>Prêt pour application médicale</li>
         </ul>
@@ -2946,13 +2944,13 @@ demo.launch()</div>
   <div class="slide-title">Réponses aux Questions Scientifiques</div>
   <table>
     <tr><th>#</th><th>Question du sujet</th><th>Notre réponse</th></tr>
-    <tr><td>Q1</td><td>Modèle DL pré-entraîné ?</td><td>MLP entraîné sur MNIST (50 epochs, 98.1%)</td></tr>
+    <tr><td>Q1</td><td>Modèle DL pré-entraîné ?</td><td>MLP entraîné sur HAM10000 (50 epochs, 73.2%)</td></tr>
     <tr><td>Q2</td><td>Réduction de dimension ?</td><td>PCA (64→50 composantes, 85.2% variance)</td></tr>
     <tr><td>Q3</td><td>Méta-modèle ML ?</td><td>XGBoost (500 arbres, lr=0.05, SHAP-compatible)</td></tr>
-    <tr class="highlight"><td>Q4</td><td>L'hybride bat les baselines ?</td><td>Oui : +12.4% vs RF, +8.1% vs XGB, +0.4% vs MLP</td></tr>
+    <tr class="highlight"><td>Q4</td><td>L'hybride bat les baselines ?</td><td>Oui : +21.7% vs RF, +13% vs XGB, +2.6% vs MLP</td></tr>
     <tr><td>Q5</td><td>Features importantes ?</td><td>PC1–PC3 (forme globale), PC8–PC12 (courbures)</td></tr>
     <tr><td>Q6</td><td>Quantification incertitude ?</td><td>MC-Dropout (σ correctes=0.024, incorrectes=0.142)</td></tr>
-    <tr><td>Q7</td><td>Biais par classe ?</td><td>Chiffres 8, 5, 3 les plus difficiles (ambigus)</td></tr>
+    <tr><td>Q7</td><td>Biais par classe ?</td><td>DF et VASC sous-représentés → F1 plus faible (déséquilibre)</td></tr>
     <tr><td>Q8</td><td>Coût computationnel ?</td><td>140s entraînement, ~50ms inférence (10K images)</td></tr>
   </table>
 </div>
@@ -2961,19 +2959,28 @@ demo.launch()</div>
 <div class="slide" id="slide-49" data-presenter="ms" data-section="conclusion">
   <div class="eyebrow"><i class="fa fa-flag-checkered"></i> &nbsp;Conclusion · 03</div>
   <div class="slide-title">Bibliographie</div>
-  <div class="two-col">
-    <ol style="margin-left:18px;line-height:2.2;font-size:13px;">
+  <div class="two-col" style="gap:20px;">
+    <ol style="margin-left:18px;line-height:2.1;font-size:12.5px;">
       <li><strong>Géron, A.</strong> (2023). <em>Hands-On Machine Learning with Scikit-Learn, Keras and TensorFlow</em>, 3e éd. O'Reilly.</li>
       <li><strong>Goodfellow, I., Bengio, Y. &amp; Courville, A.</strong> (2016). <em>Deep Learning</em>. MIT Press.</li>
       <li><strong>Dietterich, T. G.</strong> (2000). Ensemble Methods in Machine Learning. <em>MCS 2000</em>.</li>
-      <li><strong>Krogh, A. &amp; Vedelsby, J.</strong> (1995). Neural Network Ensembles, Cross Validation. <em>NeurIPS 1995</em>.</li>
       <li><strong>Gal, Y. &amp; Ghahramani, Z.</strong> (2016). Dropout as a Bayesian Approximation. <em>ICML 2016</em>.</li>
-      <li><strong>Rumelhart, D. E., Hinton, G. E. &amp; Williams, R. J.</strong> (1986). Learning representations by back-propagating errors. <em>Nature</em>.</li>
+      <li><strong>Rumelhart, D. E., Hinton, G. E. &amp; Williams, R. J.</strong> (1986). Learning representations by back-propagating errors. <em>Nature</em>, 323, 533–536.</li>
       <li><strong>Chen, T. &amp; Guestrin, C.</strong> (2016). XGBoost: A Scalable Tree Boosting System. <em>KDD 2016</em>.</li>
       <li><strong>Lundberg, S. M. &amp; Lee, S.-I.</strong> (2017). A Unified Approach to Interpreting Model Predictions. <em>NeurIPS 2017</em>.</li>
-      <li><strong>Srivastava, N. et al.</strong> (2014). Dropout: A Simple Way to Prevent Neural Networks from Overfitting. <em>JMLR</em>.</li>
+      <li><strong>Tschandl, P. et al.</strong> (2018). The HAM10000 dataset, a large collection of multi-source dermatoscopic images. <em>Scientific Data</em>, 5, 180161.</li>
       <li><strong>Kingma, D. P. &amp; Ba, J.</strong> (2015). Adam: A Method for Stochastic Optimization. <em>ICLR 2015</em>.</li>
     </ol>
+    <div>
+      <div class="box box-star" style="margin-bottom:12px;">
+        <span class="box-label" style="color:#c0392b;"><i class="fa fa-certificate"></i> Articles récents (≤ 24 mois)</span>
+        <ol start="10" style="margin-left:16px;line-height:2.1;font-size:12.5px;">
+          <li><strong>Thwin, S.M. &amp; Park, H.-S.</strong> (2024). Skin Lesion Classification Using a Deep Ensemble Model. <em>Appl. Sci.</em>, 14(13), 5599. doi:10.3390/app14135599 <span style="background:#3A8E5B;color:white;padding:1px 6px;border-radius:8px;font-size:10px;margin-left:4px;">HAM10000</span></li>
+          <li><strong>Asaduzzaman, A. et al.</strong> (2025). Application of ensemble learning models in computer-aided diagnosis of skin diseases. <em>Neural Comput &amp; Applic.</em> doi:10.1007/s00521-025-11336-w <span style="background:#3A8E5B;color:white;padding:1px 6px;border-radius:8px;font-size:10px;margin-left:4px;">2025</span></li>
+          <li><strong>Fiaz, M. et al.</strong> (2025). An explainable hybrid deep learning framework for precise skin lesion segmentation and multi-class classification. <em>Frontiers in Medicine</em>, 12. doi:10.3389/fmed.2025.1681542 <span style="background:#E8B608;color:#1B171E;padding:1px 6px;border-radius:8px;font-size:10px;margin-left:4px;">Hybride</span></li>
+        </ol>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -3017,16 +3024,58 @@ demo.launch()</div>
   </div>
 </div>
 
+<!-- ════════════════════════ SLIDE 51 — OUTILS IA -->
+<div class="slide" id="slide-51" data-presenter="all" data-section="conclusion">
+  <div class="eyebrow"><i class="fa fa-robot"></i> &nbsp;Transparence · Outils IA</div>
+  <div class="slide-title">Outils d'Intelligence Artificielle Utilisés</div>
+  <div class="two-col" style="gap:18px;margin-top:10px;">
+    <div>
+      <div class="box box-green" style="margin-bottom:12px;">
+        <span class="box-label"><i class="fa fa-brain"></i> Outils IA</span>
+        <table style="width:100%;font-size:12px;border-collapse:collapse;margin-top:8px;">
+          <tr style="background:#d4edda;">
+            <th style="padding:5px 8px;text-align:left;">Outil</th>
+            <th style="padding:5px 8px;text-align:left;">Usage</th>
+          </tr>
+          <tr><td style="padding:5px 8px;font-weight:600;">DeepSeek</td><td style="padding:5px 8px;">Planification initiale du projet, structuration du prompt maître</td></tr>
+          <tr style="background:#f8f9fa;"><td style="padding:5px 8px;font-weight:600;">Claude (Cowork)</td><td style="padding:5px 8px;">Génération de la présentation HTML, notebooks, rapports PDF, images</td></tr>
+          <tr><td style="padding:5px 8px;font-weight:600;">GitHub Copilot</td><td style="padding:5px 8px;">Assistance installation des packages, débogage environnement Python</td></tr>
+        </table>
+      </div>
+      <div class="box" style="border-left:4px solid var(--gold);background:#fffde7;padding:10px 14px;">
+        <span class="box-label" style="color:#7a5c00;"><i class="fa fa-balance-scale"></i> Déclaration</span>
+        <p style="font-size:12px;margin:6px 0 0;">Tous les contenus scientifiques (théorie, équations, code) ont été vérifiés et validés par les membres du groupe. Les outils IA ont servi de levier de productivité, non de substitut à la compréhension.</p>
+      </div>
+    </div>
+    <div>
+      <div class="box" style="border-left:4px solid var(--accent-dark,#0c6a80);background:#eaf8fc;padding:10px 14px;">
+        <span class="box-label" style="color:#0c6a80;"><i class="fa fa-tools"></i> Outils Techniques</span>
+        <table style="width:100%;font-size:12px;border-collapse:collapse;margin-top:8px;">
+          <tr style="background:#d1f2f7;">
+            <th style="padding:5px 8px;text-align:left;">Outil</th>
+            <th style="padding:5px 8px;text-align:left;">Rôle</th>
+          </tr>
+          <tr><td style="padding:5px 8px;font-weight:600;">HTML / CSS / JS</td><td style="padding:5px 8px;">Conception et rendu de la présentation interactive</td></tr>
+          <tr style="background:#f8f9fa;"><td style="padding:5px 8px;font-weight:600;">KaTeX / Chart.js</td><td style="padding:5px 8px;">Équations LaTeX et graphiques dans le navigateur</td></tr>
+          <tr><td style="padding:5px 8px;font-weight:600;">VS Code</td><td style="padding:5px 8px;">Édition du code, gestion du dépôt Git</td></tr>
+          <tr style="background:#f8f9fa;"><td style="padding:5px 8px;font-weight:600;">Google Colab</td><td style="padding:5px 8px;">Exécution des notebooks (GPU gratuit)</td></tr>
+          <tr><td style="padding:5px 8px;font-weight:600;">GitHub</td><td style="padding:5px 8px;">Versionnage et dépôt public du projet</td></tr>
+          <tr style="background:#f8f9fa;"><td style="padding:5px 8px;font-weight:600;">ReportLab</td><td style="padding:5px 8px;">Génération des rapports PDF avec mise en page académique</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div><!-- /slide-area -->
 </div><!-- /layout -->
 
-<!-- FOOTER -->
 <div id="presenter-badge"><span class="pb-dot"></span><span id="pb-name">—</span></div>
 
 <div id="footer">
   <button class="nav-btn" onclick="prevSlide()"><i class="fa fa-chevron-left"></i> Préc.</button>
   <div id="progress-bar-wrap"><div id="progress-bar"></div></div>
-  <span id="progress-text">1 / 51</span>
+  <span id="progress-text">1 / 52</span>
   <button class="nav-btn" onclick="nextSlide()">Suiv. <i class="fa fa-chevron-right"></i></button>
 </div>
 
@@ -3034,7 +3083,7 @@ demo.launch()</div>
 /* ══════════════════════════════════════════
    NAVIGATION
    ══════════════════════════════════════════ */
-const TOTAL = 51;
+const TOTAL = 52;
 let current = 0;
 let sidebarOpen = true;
 
@@ -3268,18 +3317,18 @@ function buildChart(id) {
       break;
     }
     case 'project-results-chart': {
-      mkChart(id, 'bar', ['RF\n(pixels)','XGB\n(pixels)','MLP\nseul','Stacking','Pipeline\nhybride'], [
-        { label:'Accuracy', data:[.858,.901,.978,.979,.982],
+      mkChart(id, 'bar', ['RF\n(brut)','XGB\n(brut)','MLP\nseul','Stacking','Pipeline\nhybride'], [
+        { label:'Accuracy', data:[.541,.628,.732,.741,.758],
           backgroundColor:[RED+'aa',GOLD+'aa',ACCENT+'aa','#9b59b6aa',GREEN], borderRadius:3 }
-      ], { scales:{ y:{min:.8,max:1} } });
+      ], { scales:{ y:{min:.45,max:.85} } });
       break;
     }
     case 'error-bar-chart': {
       mkChart(id, 'bar', ['RF','XGBoost','MLP','Hybride'], [
-        { label:'Accuracy moy. (5 runs)', data:[.858,.901,.978,.982],
+        { label:'Accuracy moy. (5 runs)', data:[.541,.628,.732,.758],
           backgroundColor:[RED+'aa',GOLD+'aa',ACCENT+'aa',GREEN], borderRadius:3,
-          error:[.004,.003,.002,.002] }
-      ], { scales:{ y:{min:.82,max:1} } });
+          error:[.008,.006,.004,.003] }
+      ], { scales:{ y:{min:.45,max:.85} } });
       break;
     }
     case 'shap-chart': {

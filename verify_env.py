@@ -16,6 +16,7 @@ pkgs = [
     ("jupyter_core","jupyter"),
     ("ipywidgets",  "ipywidgets"),
     ("gradio",      "gradio"),
+    ("reportlab",   "reportlab"),
 ]
 
 all_ok = True
